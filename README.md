@@ -1,4 +1,4 @@
 SchoolIdolFestival_MoDoKi
 =========================
 
-SchoolIdolFestival Modoki
+SchoolIdolFestival Modoki!!
