@@ -59,6 +59,8 @@ void Struct(int MouseX, int MouseY){	// 表示する文字列を作成
 	lstrcat(StrBuf, "　Ｙ "); // StrBufの内容に文字列"　Ｙ "を付け足す
 	_itoa_s(MouseY, StrBuf2, 10); // MouseYの値を文字列にしてStrBuf2に格納
 	lstrcat(StrBuf, StrBuf2); // StrBufの内容にStrBuf2の内容を付け足す
+
+	DrawString(0, 0, StrBuf, GetColor(0, 0, 0));
 }
 
 DATEDATA Date;
