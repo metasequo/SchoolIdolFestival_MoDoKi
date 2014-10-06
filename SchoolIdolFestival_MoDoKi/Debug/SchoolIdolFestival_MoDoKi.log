@@ -1,5 +1,4 @@
-﻿cl : コマンド ライン warning D9028: 簡易リビルド時のエラーです、通常のビルドに戻します
-  Main.cpp
-g:\documents\github\schoolidolfestival_modoki\schoolidolfestival_modoki\main.cpp(100): warning C4101: 'SHandle' : ローカル変数は 1 度も使われていません。
-g:\documents\github\schoolidolfestival_modoki\schoolidolfestival_modoki\main.cpp(46): warning C4715: 'Center' : 値を返さないコントロール パスがあります。
+﻿  Main.cpp
+g:\documents\github\schoolidolfestival_modoki\schoolidolfestival_modoki\main.cpp(77): warning C4101: 'SHandle' : ローカル変数は 1 度も使われていません。
+g:\documents\github\schoolidolfestival_modoki\schoolidolfestival_modoki\main.cpp(180): warning C4715: 'Center' : 値を返さないコントロール パスがあります。
   SchoolIdolFestival_MoDoKi.vcxproj -> G:\Documents\GitHub\SchoolIdolFestival_MoDoKi\Debug\SchoolIdolFestival_MoDoKi.exe

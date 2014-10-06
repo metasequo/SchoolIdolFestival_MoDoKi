@@ -35,6 +35,9 @@
     <Image Include="Graph\Circle_Red.png">
       <Filter>Graph</Filter>
     </Image>
+    <Image Include="Graph\Onpu.png">
+      <Filter>Graph</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <Media Include="..\Debug\Sound\Mizugame.mp3">
