@@ -26,7 +26,13 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="..\Debug\Graph\Circle.png">
+    <Image Include="Graph\Circle_Blue.png">
+      <Filter>Graph</Filter>
+    </Image>
+    <Image Include="Graph\Circle_Green.png">
+      <Filter>Graph</Filter>
+    </Image>
+    <Image Include="Graph\Circle_Red.png">
       <Filter>Graph</Filter>
     </Image>
   </ItemGroup>
@@ -38,6 +44,12 @@
       <Filter>Sound</Filter>
     </Media>
     <Media Include="..\Debug\Sound\Here are Dice.mp3">
+      <Filter>Sound</Filter>
+    </Media>
+    <Media Include="Sound\perfect.mp3">
+      <Filter>Sound</Filter>
+    </Media>
+    <Media Include="Sound\great.mp3">
       <Filter>Sound</Filter>
     </Media>
   </ItemGroup>
