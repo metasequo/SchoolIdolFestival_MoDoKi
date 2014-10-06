@@ -1,8 +1,8 @@
 #include "DxLib.h"
 #include <math.h>
 
-#define Screen_X 1120
-#define Screen_Y 630
+#define Screen_X 1280
+#define Screen_Y 720
 
 //構造体
 typedef struct tagGRAPH
@@ -19,6 +19,7 @@ typedef struct tagGRAPHSIZE
 
 typedef struct tagGRAPHPOINT
 {
+	int Circle_X, Circle_Y;
 	int Onpu_X, Onpu_Y;
 } GRAPHPOINT;
 
@@ -100,6 +101,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	GraphPoint.Onpu_X = Center(GraphSize.Onpu_X, 'X');
 	GraphPoint.Onpu_Y = 100;
 
+	GraphPoint.Circle_X = Center(GraphSize.Circle_X, 'X');
+	GraphPoint.Circle_Y = 100;
+
+
 	// test.mp3のメモリへの読み込みサウンドハンドルをSHandleに保存します
 	Sound.Dice = LoadSoundMem("Sound/Here are Dice.mp3");
 	Sound.pefect = LoadSoundMem("Sound/perfect.mp3");
@@ -122,6 +127,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 		Struct(MouseX, MouseY);
 
 		DrawGraph(GraphPoint.Onpu_X, GraphPoint.Onpu_Y, Graph.Onpu, TRUE);
+		DrawGraph(GraphPoint.Circle_X, GraphPoint.Circle_Y, Graph.Circle_Blue, TRUE);
+
 
 		if (Key[KEY_INPUT_SPACE] == 1){
 			PlaySoundMem(Sound.pefect, DX_PLAYTYPE_BACK);

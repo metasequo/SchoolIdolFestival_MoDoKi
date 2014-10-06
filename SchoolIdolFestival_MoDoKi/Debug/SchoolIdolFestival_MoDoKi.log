@@ -1,4 +1,4 @@
 ﻿  Main.cpp
-g:\documents\github\schoolidolfestival_modoki\schoolidolfestival_modoki\main.cpp(77): warning C4101: 'SHandle' : ローカル変数は 1 度も使われていません。
-g:\documents\github\schoolidolfestival_modoki\schoolidolfestival_modoki\main.cpp(180): warning C4715: 'Center' : 値を返さないコントロール パスがあります。
+g:\documents\github\schoolidolfestival_modoki\schoolidolfestival_modoki\main.cpp(78): warning C4101: 'SHandle' : ローカル変数は 1 度も使われていません。
+g:\documents\github\schoolidolfestival_modoki\schoolidolfestival_modoki\main.cpp(187): warning C4715: 'Center' : 値を返さないコントロール パスがあります。
   SchoolIdolFestival_MoDoKi.vcxproj -> G:\Documents\GitHub\SchoolIdolFestival_MoDoKi\Debug\SchoolIdolFestival_MoDoKi.exe
