@@ -1,8 +1,15 @@
 #include "DxLib.h"
 #include <math.h>
 
+//#define FULLHD
+
+#ifdef FULLHD
+#define Screen_X 1920
+#define Screen_Y 1080
+#else
 #define Screen_X 1280
 #define Screen_Y 720
+#endif
 
 //構造体
 typedef struct tagGRAPH
@@ -102,7 +109,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	GraphPoint.Onpu_Y = 100;
 
 	GraphPoint.Circle_X = Center(GraphSize.Circle_X, 'X');
-	GraphPoint.Circle_Y = 100;
+	GraphPoint.Circle_Y = 63;
 
 
 	// test.mp3のメモリへの読み込みサウンドハンドルをSHandleに保存します
@@ -111,7 +118,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	Sound.great = LoadSoundMem("Sound/great.mp3");
 
 	// 読みこんだ音をループ再生します(『PlaySoundMem』関数使用)
-	PlaySoundMem(Sound.Dice, DX_PLAYTYPE_LOOP);
+//	PlaySoundMem(Sound.Dice, DX_PLAYTYPE_LOOP);
 
 
 	// ゲームループ開始　エスケープキーが押されたら終了する
