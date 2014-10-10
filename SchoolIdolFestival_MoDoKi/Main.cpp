@@ -1,7 +1,7 @@
 #include "DxLib.h"
 #include <math.h>
 
-//#define FULLHD
+#define FULLHD
 
 #ifdef FULLHD
 #define Screen_X 1920
@@ -41,17 +41,31 @@ typedef struct tagFLAG
 	int Title = 0;
 } FLAG;
 
+typedef struct tagBUTTONPOINT
+{
+	int x, y;
+} BUTTONPOINT;
+
+typedef struct tagCIRCLEPOINT
+{
+	int X, Y, MoveX, MoveY;
+	int button, frame, flag;
+} CIRCLEPOINT;
+
 int BoxHit(int Al, int Ar, int At, int Au, int Bl, int Br, int Bt, int Bu);
 int CircleHit(float Ax, float Ay, float Ar, float Bx, float By, float Br);
 int Center(int GraphSize, char Tipe);
 void MovePoint(int Before_X, int Before_Y, int After_X, int After_Y, int *Move_X, int *Move_Y, int Frame);
 void Struct(int MouseX, int MouseY);
+void DrawCirclGraph(int X, int Y, int Graph, int GsX, int GsY);
 
 DATEDATA Date;
 GRAPH Graph;
-GRAPHSIZE GraphSize;
+GRAPHSIZE Gs;
 SOUND Sound;
-GRAPHPOINT GraphPoint;
+GRAPHPOINT Gp;
+BUTTONPOINT Bp[9];
+CIRCLEPOINT Cp[64];
 
 int UpdateKey(char Key []);
 
@@ -73,8 +87,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	SetDrawScreen(DX_SCREEN_BACK);
 	// ＤＸライブラリの初期化
 	if (DxLib_Init() == -1) return -1;
-	// 画面の初期化
-	ClearDrawScreen();
 	// 透過色を変更(ピンク)
 //	SetTransColor(255, 0, 255);
 	// マウスを表示状態にする
@@ -86,6 +98,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	int White, Black, Gray;
 //	char StrBuf[128], StrBuf2[32];
 	char Key[256];
+	int MemX[32], MemY[32], MoveX[32], MoveY[32];
 
 	// 色の値を取得
 	White = GetColor(255, 255, 255);
@@ -102,15 +115,43 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	Graph.Onpu = LoadGraph("Graph/Onpu.png");
 
 	//画像のサイズを得る
-	GetGraphSize(Graph.Circle_Blue, &GraphSize.Circle_X, &GraphSize.Circle_Y);
-	GetGraphSize(Graph.Onpu, &GraphSize.Onpu_X, &GraphSize.Onpu_Y);
+	GetGraphSize(Graph.Circle_Blue, &Gs.Circle_X, &Gs.Circle_Y);
+	GetGraphSize(Graph.Onpu, &Gs.Onpu_X, &Gs.Onpu_Y);
 
-	GraphPoint.Onpu_X = Center(GraphSize.Onpu_X, 'X');
-	GraphPoint.Onpu_Y = 100;
+	Gp.Onpu_X = Center(Gs.Onpu_X, 'X');
+	Gp.Onpu_Y = 100;
 
-	GraphPoint.Circle_X = Center(GraphSize.Circle_X, 'X');
-	GraphPoint.Circle_Y = 63;
+	Gp.Circle_X = Screen_X / 2;
+	Gp.Circle_Y = 63 + Gs.Circle_Y / 2;
 
+	Bp[0].x = 179;
+	Bp[0].y = 164;
+	Bp[1].x = 229;
+	Bp[1].y = 422;
+	Bp[2].x = 376;
+	Bp[2].y = 640;
+	Bp[3].x = 594;
+	Bp[3].y = 787;
+	Bp[4].x = 853;
+	Bp[4].y = 839;
+	Bp[5].x = 1111;
+	Bp[5].y = 787;
+	Bp[6].x = 1330;
+	Bp[6].y = 640;
+	Bp[7].x = 1477;
+	Bp[7].y = 422;
+	Bp[8].x = 1528;
+	Bp[8].y = 164;
+
+	for (int i = 0; i < 9; i++){
+		Bp[i].x += Gs.Circle_X / 2;
+		Bp[i].y += Gs.Circle_Y / 2;
+	}
+
+	for (int i = 0; i < 64; i++){
+		Cp[i].flag = 0;
+		Cp[i].frame = 0;
+	}
 
 	// test.mp3のメモリへの読み込みサウンドハンドルをSHandleに保存します
 	Sound.Dice = LoadSoundMem("Sound/Here are Dice.mp3");
@@ -124,6 +165,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	// ゲームループ開始　エスケープキーが押されたら終了する
 	while (ProcessMessage() == 0 && CheckHitKey(KEY_INPUT_ESCAPE) == 0)
 	{
+		// 画面の初期化
+		ClearDrawScreen();
 		// マウスの位置を取得
 		GetMousePoint(&MouseX, &MouseY);
 		UpdateKey(Key);
@@ -133,16 +176,74 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
 		Struct(MouseX, MouseY);
 
-		DrawGraph(GraphPoint.Onpu_X, GraphPoint.Onpu_Y, Graph.Onpu, TRUE);
-		DrawGraph(GraphPoint.Circle_X, GraphPoint.Circle_Y, Graph.Circle_Blue, TRUE);
+		DrawGraph(Gp.Onpu_X, Gp.Onpu_Y, Graph.Onpu, TRUE);
+//		DrawGraph(Gp.Circle_X, Gp.Circle_Y, Graph.Circle_Blue, TRUE);
+		DrawCirclGraph(Gp.Circle_X, Gp.Circle_Y, Graph.Circle_Blue, Gs.Circle_X, Gs.Circle_Y);
 
+
+		for (int i = 0; i < 9; i++){
+			DrawCirclGraph(Bp[i].x, Bp[i].y, Graph.Circle_Green, Gs.Circle_X, Gs.Circle_Y);
+		}
+
+		if (Key[KEY_INPUT_A]==1){
+			for (int j = 0; j < 64; j++){
+				if (Cp[j].flag == 0){
+					Cp[j].flag = 1;
+					Cp[j].button = j % 9;
+					Cp[j].button = 4;
+					break;
+				}
+			}
+		}
+
+		for (int i = 0; i < 64; i++){
+			int BPM = 133;
+			float Frame;
+			int button = Cp[i].button;
+
+			if (Cp[i].flag == 1){
+				//MoveNote();
+				Cp[i].X = Gp.Circle_X;
+				Cp[i].Y = Gp.Circle_Y;
+				Cp[i].flag = 2;
+			}
+
+			if (Cp[i].flag == 2){
+				Frame = BPM / ((float)BPM / 60) - Cp[i].frame;
+				Frame = 60 - Cp[i].frame;
+				if (Frame < 5)	Cp[i].flag = 3;
+				MovePoint(Cp[i].X, Cp[i].Y, Bp[button].x, Bp[button].y, &Cp[i].MoveX, &Cp[i].MoveY, (int)Frame);
+			}
+		
+			if (Cp[i].flag >= 2){
+				Cp[i].X += Cp[i].MoveX;
+				Cp[i].Y += Cp[i].MoveY;
+				Cp[i].frame++;
+			}
+
+			if (Cp[i].flag >= 1){
+				DrawCirclGraph(Cp[i].X, Cp[i].Y, Graph.Circle_Red, Gs.Circle_X, Gs.Circle_Y);
+				if (Cp[i].X < 0 || Screen_X < Cp[i].X || Screen_Y < Cp[i].Y){
+					Cp[i].flag = 0;
+					Cp[i].frame = 0;
+					Cp[i].X = Gp.Circle_X;
+					Cp[i].Y = Gp.Circle_Y;
+				}
+			}
+
+			MemX[31]++;
+			if (MemX[31] % (BPM * 10) == 0) PlaySoundMem(Sound.pefect, DX_PLAYTYPE_BACK);
+
+		}
 
 		if (Key[KEY_INPUT_SPACE] == 1){
 			PlaySoundMem(Sound.pefect, DX_PLAYTYPE_BACK);
 		}
+		
 
+		ScreenFlip();
 		// 一定時間待つ
-		WaitTimer(20);
+//		WaitTimer(20);
 
 		// メッセージ処理
 		if (ProcessMessage() == -1)	break;	// エラーが起きたらループを抜ける
@@ -209,4 +310,8 @@ void Struct(int MouseX, int MouseY){	// 表示する文字列を作成
 	lstrcat(StrBuf, StrBuf2); // StrBufの内容にStrBuf2の内容を付け足す
 
 	DrawString(0, 0, StrBuf, GetColor(0, 0, 0));
+}
+
+void DrawCirclGraph(int X, int Y, int Graph, int GsX, int GsY){
+	DrawGraph(X - GsX / 2, Y - GsY / 2, Graph, TRUE);
 }
