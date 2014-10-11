@@ -1,7 +1,7 @@
 #include "DxLib.h"
 #include <math.h>
 
-#define FULLHD
+//#define FULLHD
 
 #ifdef FULLHD
 #define Screen_X 1920
@@ -94,11 +94,14 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
 	int DateSum;
 	int MouseX, MouseY;
-	int SHandle;
 	int White, Black, Gray;
 //	char StrBuf[128], StrBuf2[32];
 	char Key[256];
-	int MemX[32], MemY[32], MoveX[32], MoveY[32];
+	int MemX[32] = {0}, MemY[32], MoveX[32], MoveY[32];
+	float Frame;
+	int BPM;
+	int StartTime;
+	StartTime = GetNowCount();
 
 	// 色の値を取得
 	White = GetColor(255, 255, 255);
@@ -177,7 +180,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 		Struct(MouseX, MouseY);
 
 		DrawGraph(Gp.Onpu_X, Gp.Onpu_Y, Graph.Onpu, TRUE);
-//		DrawGraph(Gp.Circle_X, Gp.Circle_Y, Graph.Circle_Blue, TRUE);
 		DrawCirclGraph(Gp.Circle_X, Gp.Circle_Y, Graph.Circle_Blue, Gs.Circle_X, Gs.Circle_Y);
 
 
@@ -197,8 +199,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 		}
 
 		for (int i = 0; i < 64; i++){
-			int BPM = 133;
-			float Frame;
+			BPM = 155;
 			int button = Cp[i].button;
 
 			if (Cp[i].flag == 1){
@@ -209,8 +210,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 			}
 
 			if (Cp[i].flag == 2){
-				Frame = BPM / ((float)BPM / 60) - Cp[i].frame;
-				Frame = 60 - Cp[i].frame;
+				Frame = 60 / (BPM / 60) - Cp[i].frame;
+//				Frame = 60 - Cp[i].frame;
 				if (Frame < 5)	Cp[i].flag = 3;
 				MovePoint(Cp[i].X, Cp[i].Y, Bp[button].x, Bp[button].y, &Cp[i].MoveX, &Cp[i].MoveY, (int)Frame);
 			}
@@ -231,19 +232,19 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 				}
 			}
 
-			MemX[31]++;
-			if (MemX[31] % (BPM * 10) == 0) PlaySoundMem(Sound.pefect, DX_PLAYTYPE_BACK);
-
 		}
 
+		if ((GetNowCount() - StartTime) % (60000 / BPM) <= 50){
+			if (CheckSoundMem(Sound.pefect) == 0)
+				PlaySoundMem(Sound.pefect, DX_PLAYTYPE_BACK);
+			StartTime = GetNowCount();
+		}
 		if (Key[KEY_INPUT_SPACE] == 1){
 			PlaySoundMem(Sound.pefect, DX_PLAYTYPE_BACK);
 		}
 		
 
 		ScreenFlip();
-		// 一定時間待つ
-//		WaitTimer(20);
 
 		// メッセージ処理
 		if (ProcessMessage() == -1)	break;	// エラーが起きたらループを抜ける
@@ -292,6 +293,7 @@ int CircleHit(float Ax, float Ay, float Ar, float Bx, float By, float Br){
 int Center(int GraphSize, char Tipe){
 	if (Tipe == 'X')	return((Screen_X - GraphSize) / 2);
 	if (Tipe == 'Y')	return((Screen_Y - GraphSize) / 2);
+	else return 0;
 }
 
 void MovePoint(int Before_X, int Before_Y, int After_X, int After_Y, int *Move_X, int *Move_Y, int Frame){

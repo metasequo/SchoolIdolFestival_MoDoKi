@@ -1,8 +1,1 @@
-﻿  Main.cpp
-g:\documents\github\schoolidolfestival_modoki\schoolidolfestival_modoki\main.cpp(213): warning C4244: '=' : 'int' から 'float' への変換です。データが失われる可能性があります。
-g:\documents\github\schoolidolfestival_modoki\schoolidolfestival_modoki\main.cpp(101): warning C4101: 'MoveX' : ローカル変数は 1 度も使われていません。
-g:\documents\github\schoolidolfestival_modoki\schoolidolfestival_modoki\main.cpp(97): warning C4101: 'SHandle' : ローカル変数は 1 度も使われていません。
-g:\documents\github\schoolidolfestival_modoki\schoolidolfestival_modoki\main.cpp(101): warning C4101: 'MemY' : ローカル変数は 1 度も使われていません。
-g:\documents\github\schoolidolfestival_modoki\schoolidolfestival_modoki\main.cpp(101): warning C4101: 'MoveY' : ローカル変数は 1 度も使われていません。
-g:\documents\github\schoolidolfestival_modoki\schoolidolfestival_modoki\main.cpp(295): warning C4715: 'Center' : 値を返さないコントロール パスがあります。
-  SchoolIdolFestival_MoDoKi.vcxproj -> G:\Documents\GitHub\SchoolIdolFestival_MoDoKi\Debug\SchoolIdolFestival_MoDoKi.exe
+﻿  SchoolIdolFestival_MoDoKi.vcxproj -> G:\Documents\GitHub\SchoolIdolFestival_MoDoKi\Debug\SchoolIdolFestival_MoDoKi.exe
