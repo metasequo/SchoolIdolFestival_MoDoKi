@@ -1,5 +1,6 @@
 #include "DxLib.h"
 #include <math.h>
+#include <string.h>
 
 //#define FULLHD
 
@@ -49,7 +50,7 @@ typedef struct tagBUTTONPOINT
 typedef struct tagCIRCLEPOINT
 {
 	int X, Y, MoveX, MoveY;
-	int button, frame, flag;
+	int button, frame, flag, judge;
 } CIRCLEPOINT;
 
 int BoxHit(int Al, int Ar, int At, int Au, int Bl, int Br, int Bt, int Bu);
@@ -58,6 +59,8 @@ int Center(int GraphSize, char Tipe);
 void MovePoint(int Before_X, int Before_Y, int After_X, int After_Y, int *Move_X, int *Move_Y, int Frame);
 void Struct(int MouseX, int MouseY);
 void DrawCirclGraph(int X, int Y, int Graph, int GsX, int GsY);
+int UpdateKey(char Key []);
+int NoteHit(int circle, int button);
 
 DATEDATA Date;
 GRAPH Graph;
@@ -67,7 +70,6 @@ GRAPHPOINT Gp;
 BUTTONPOINT Bp[9];
 CIRCLEPOINT Cp[64];
 
-int UpdateKey(char Key []);
 
 // WinMain 関数
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
@@ -95,6 +97,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	int DateSum;
 	int MouseX, MouseY;
 	int White, Black, Gray;
+	int i, j, k;
 //	char StrBuf[128], StrBuf2[32];
 	char Key[256];
 	int MemX[32] = {0}, MemY[32], MoveX[32], MoveY[32];
@@ -146,12 +149,12 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	Bp[8].x = 1528;
 	Bp[8].y = 164;
 
-	for (int i = 0; i < 9; i++){
+	for (i = 0; i < 9; i++){
 		Bp[i].x += Gs.Circle_X / 2;
 		Bp[i].y += Gs.Circle_Y / 2;
 	}
 
-	for (int i = 0; i < 64; i++){
+	for (i = 0; i < 64; i++){
 		Cp[i].flag = 0;
 		Cp[i].frame = 0;
 	}
@@ -183,7 +186,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 		DrawCirclGraph(Gp.Circle_X, Gp.Circle_Y, Graph.Circle_Blue, Gs.Circle_X, Gs.Circle_Y);
 
 
-		for (int i = 0; i < 9; i++){
+		for (i = 0; i < 9; i++){
 			DrawCirclGraph(Bp[i].x, Bp[i].y, Graph.Circle_Green, Gs.Circle_X, Gs.Circle_Y);
 		}
 
@@ -198,52 +201,129 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 			}
 		}
 
-		for (int i = 0; i < 64; i++){
+		//ノート（サークル）動作
+		for (i = 0; i < 64; i++){
 			BPM = 155;
 			int button = Cp[i].button;
 
-			if (Cp[i].flag == 1){
-				//MoveNote();
-				Cp[i].X = Gp.Circle_X;
-				Cp[i].Y = Gp.Circle_Y;
-				Cp[i].flag = 2;
-			}
-
-			if (Cp[i].flag == 2){
-				Frame = 60 / (BPM / 60) - Cp[i].frame;
-//				Frame = 60 - Cp[i].frame;
-				if (Frame < 5)	Cp[i].flag = 3;
-				MovePoint(Cp[i].X, Cp[i].Y, Bp[button].x, Bp[button].y, &Cp[i].MoveX, &Cp[i].MoveY, (int)Frame);
-			}
-		
-			if (Cp[i].flag >= 2){
-				Cp[i].X += Cp[i].MoveX;
-				Cp[i].Y += Cp[i].MoveY;
-				Cp[i].frame++;
-			}
-
-			if (Cp[i].flag >= 1){
-				DrawCirclGraph(Cp[i].X, Cp[i].Y, Graph.Circle_Red, Gs.Circle_X, Gs.Circle_Y);
-				if (Cp[i].X < 0 || Screen_X < Cp[i].X || Screen_Y < Cp[i].Y){
-					Cp[i].flag = 0;
-					Cp[i].frame = 0;
+			if (Cp[i].flag != 0){
+				if (Cp[i].flag == 1){
+					//MoveNote();
 					Cp[i].X = Gp.Circle_X;
 					Cp[i].Y = Gp.Circle_Y;
+					Cp[i].flag = 2;
+				}
+
+				if (Cp[i].flag == 2){
+					Frame = 60 / (BPM / 60) - Cp[i].frame;
+					//				Frame = 60 - Cp[i].frame;
+					if (Frame < 5)	Cp[i].flag = 3;
+					MovePoint(Cp[i].X, Cp[i].Y, Bp[button].x, Bp[button].y, &Cp[i].MoveX, &Cp[i].MoveY, (int) Frame);
+				}
+
+				if (Cp[i].flag >= 2){
+					Cp[i].X += Cp[i].MoveX;
+					Cp[i].Y += Cp[i].MoveY;
+					Cp[i].frame++;
+				}
+
+				if (Cp[i].flag >= 1){
+					DrawCirclGraph(Cp[i].X, Cp[i].Y, Graph.Circle_Red, Gs.Circle_X, Gs.Circle_Y);
+					if (Cp[i].X < 0 || Screen_X < Cp[i].X || Screen_Y < Cp[i].Y){
+						Cp[i].flag = 0;
+						Cp[i].frame = 0;
+						Cp[i].X = Gp.Circle_X;
+						Cp[i].Y = Gp.Circle_Y;
+					}
 				}
 			}
-
 		}
 
-		if ((GetNowCount() - StartTime) % (60000 / BPM) <= 50){
+		//ボタン判定
+		for (i = 0; i < 64; i++){
+			if (Cp[i].flag){
+				switch (Cp[i].button){
+				case 0:
+					if (Key[KEY_INPUT_4] == 1){
+						Cp[i].judge = NoteHit(i, Cp[i].button);
+					}
+					break;
+				case 1:
+					if (Key[KEY_INPUT_R] == 1){
+						Cp[i].judge = NoteHit(i, Cp[i].button);
+					}
+					break;
+				case 2:
+					if (Key[KEY_INPUT_F] == 1){
+						Cp[i].judge = NoteHit(i, Cp[i].button);
+					}
+					break;
+				case 3:
+					if (Key[KEY_INPUT_V] == 1){
+						Cp[i].judge = NoteHit(i, Cp[i].button);
+					}
+					break;
+				case 4:
+					if (Key[KEY_INPUT_SPACE] == 1 || Key[KEY_INPUT_B]){
+						Cp[i].judge = NoteHit(i, Cp[i].button);
+					}
+					break;
+				case 5:
+					if (Key[KEY_INPUT_N] == 1){
+						Cp[i].judge = NoteHit(i, Cp[i].button);
+					}
+					break;
+				case 6:
+					if (Key[KEY_INPUT_J] == 1){
+						Cp[i].judge = NoteHit(i, Cp[i].button);
+					}
+					break;
+				case 7:
+					if (Key[KEY_INPUT_I] == 1){
+						Cp[i].judge = NoteHit(i, Cp[i].button);
+					}
+					break;
+				case 8:
+					if (Key[KEY_INPUT_9] == 1){
+						Cp[i].judge = NoteHit(i, Cp[i].button);
+					}
+					break;
+				}
+			}
+		}
+		
+		//判定ごとの音
+		for (i = 0; i < 64; i++){
+			if (Cp[i].judge != 0){
+				switch (Cp[i].judge){
+				case 1:
+					PlaySoundMem(Sound.pefect, DX_PLAYTYPE_BACK);
+					break;
+				case 2:
+					PlaySoundMem(Sound.great, DX_PLAYTYPE_BACK);
+					break;
+				case 3:
+					PlaySoundMem(Sound.pefect, DX_PLAYTYPE_BACK);
+					break;
+				case 4:
+					PlaySoundMem(Sound.pefect, DX_PLAYTYPE_BACK);
+					break;
+				}
+			}
+		}
+
+/*		if ((GetNowCount() - StartTime) % (60000 / BPM) <= 50){
 			if (CheckSoundMem(Sound.pefect) == 0)
 				PlaySoundMem(Sound.pefect, DX_PLAYTYPE_BACK);
 			StartTime = GetNowCount();
 		}
+		*/
+
 		if (Key[KEY_INPUT_SPACE] == 1){
 			PlaySoundMem(Sound.pefect, DX_PLAYTYPE_BACK);
 		}
-		
 
+		//裏画面描画
 		ScreenFlip();
 
 		// メッセージ処理
@@ -257,19 +337,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	return 0;
 }
 
-int UpdateKey(char Key[]){
-	char tmpKey[256]; // 現在のキーの入力状態を格納する
-	GetHitKeyStateAll(tmpKey); // 全てのキーの入力状態を得る
-	for (int i = 0; i<256; i++){
-		if (tmpKey[i] != 0){ // i番のキーコードに対応するキーが押されていたら
-			Key[i]++;     // 加算
-		}
-		else {              // 押されていなければ
-			Key[i] = 0;   // 0にする
-		}
-	}
-	return 0;
-}
 
 
 
@@ -314,6 +381,41 @@ void Struct(int MouseX, int MouseY){	// 表示する文字列を作成
 	DrawString(0, 0, StrBuf, GetColor(0, 0, 0));
 }
 
+int UpdateKey(char Key[]){
+	char tmpKey[256]; // 現在のキーの入力状態を格納する
+	GetHitKeyStateAll(tmpKey); // 全てのキーの入力状態を得る
+	for (int i = 0; i<256; i++){
+		if (tmpKey[i] != 0){ // i番のキーコードに対応するキーが押されていたら
+			Key[i]++;     // 加算
+		}
+		else {              // 押されていなければ
+			Key[i] = 0;   // 0にする
+		}
+	}
+	return 0;
+}
+
 void DrawCirclGraph(int X, int Y, int Graph, int GsX, int GsY){
 	DrawGraph(X - GsX / 2, Y - GsY / 2, Graph, TRUE);
+}
+
+int NoteHit(int circle, int button){
+	int Xp, Xm, Yp, Ym;
+	int judge[4] , i;
+
+	Xp = Cp[circle].X - Bp[button].x;
+	Xm = Bp[button].x - Cp[circle].X;
+	Yp = Cp[circle].Y - Bp[button].y;
+	Ym = Bp[button].y - Cp[circle].Y;
+
+	judge[0] = Gs.Circle_X / 6;
+	judge[1] = Gs.Circle_X / 4;
+	judge[2] = Gs.Circle_X / 2;
+	judge[3] = Gs.Circle_X;
+
+	for (i = 0; i < 4; i++){
+		if ((Xp <= judge[i] || Xm <= judge[i]) && (Yp <= judge[i] || Ym <= judge[i])){
+			return i + 1;
+		}
+	}
 }
