@@ -2,7 +2,7 @@
 #include <math.h>
 #include <string.h>
 
-//#define FULLHD
+#define FULLHD
 
 #ifdef FULLHD
 #define Screen_X 1920
@@ -190,12 +190,13 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 			DrawCirclGraph(Bp[i].x, Bp[i].y, Graph.Circle_Green, Gs.Circle_X, Gs.Circle_Y);
 		}
 
-		if (Key[KEY_INPUT_A]==1){
+		if (Key[KEY_INPUT_A]==1 || CheckKeyInput(KEY_INPUT_A)){
 			for (int j = 0; j < 64; j++){
 				if (Cp[j].flag == 0){
 					Cp[j].flag = 1;
 					Cp[j].button = j % 9;
-					Cp[j].button = 4;
+					Cp[j].button = GetRand(9);
+//					Cp[j].button = 4;
 					break;
 				}
 			}
