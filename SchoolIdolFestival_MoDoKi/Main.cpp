@@ -12,23 +12,31 @@
 #define Screen_Y 720
 #endif
 
+#define Perfect 11
+#define Great 33
+#define Good 100
+
 //構造体
 typedef struct tagGRAPH
 {
 	int Circle_Blue, Circle_Green, Circle_Red;
 	int Onpu;
+	int Number[10], combo;
 } GRAPH;
 
 typedef struct tagGRAPHSIZE
 {
 	int Circle_X, Circle_Y;
 	int Onpu_X, Onpu_Y;
+	int Number_X, Number_Y;
+	int combo_X, combo_Y;
 } GRAPHSIZE;
 
 typedef struct tagGRAPHPOINT
 {
 	int Circle_X, Circle_Y;
 	int Onpu_X, Onpu_Y;
+	int combo_X, combo_Y;
 } GRAPHPOINT;
 
 typedef struct tagSOUND
@@ -113,22 +121,26 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	//乱数の初期設定(元凶)
 	GetDateTime(&Date);
 	DateSum = Date.Year + Date.Mon + Date.Day + Date.Hour + Date.Min + Date.Sec;
+	SRand(DateSum);
 
 	//画像読み込み
 	Graph.Circle_Blue = LoadGraph("Graph/Circle_Blue.png");
 	Graph.Circle_Green = LoadGraph("Graph/Circle_Green.png");
 	Graph.Circle_Red = LoadGraph("Graph/Circle_Red.png");
 	Graph.Onpu = LoadGraph("Graph/Onpu.png");
+	LoadDivGraph("Graph/Number.png", 10, 5, 2, 90, 86, Graph.Number);
+	Graph.combo = LoadGraph("Graph/combo.png");
 
 	//画像のサイズを得る
 	GetGraphSize(Graph.Circle_Blue, &Gs.Circle_X, &Gs.Circle_Y);
 	GetGraphSize(Graph.Onpu, &Gs.Onpu_X, &Gs.Onpu_Y);
-
-	Gp.Onpu_X = Center(Gs.Onpu_X, 'X');
-	Gp.Onpu_Y = 100;
+	GetGraphSize(Graph.Number[0], &Gs.Number_X, &Gs.Number_Y);
+	GetGraphSize(Graph.combo, &Gs.combo_X, &Gs.combo_Y);
 
 	Gp.Circle_X = Screen_X / 2;
-	Gp.Circle_Y = 63 + Gs.Circle_Y / 2;
+	Gp.Circle_Y = 164 + Gs.Circle_X / 2;
+	Gp.Onpu_X = Screen_X / 2;
+	Gp.Onpu_Y = Gp.Circle_Y;
 
 	Bp[0].x = 179;
 	Bp[0].y = 164;
@@ -182,20 +194,19 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
 		Struct(MouseX, MouseY);
 
-		DrawGraph(Gp.Onpu_X, Gp.Onpu_Y, Graph.Onpu, TRUE);
+		DrawCirclGraph(Gp.Onpu_X, Gp.Onpu_Y, Graph.Onpu, Gs.Onpu_X, Gs.Onpu_Y);
 		DrawCirclGraph(Gp.Circle_X, Gp.Circle_Y, Graph.Circle_Blue, Gs.Circle_X, Gs.Circle_Y);
-
 
 		for (i = 0; i < 9; i++){
 			DrawCirclGraph(Bp[i].x, Bp[i].y, Graph.Circle_Green, Gs.Circle_X, Gs.Circle_Y);
 		}
 
-		if (Key[KEY_INPUT_A]==1 || CheckKeyInput(KEY_INPUT_A)){
+		if (Key[KEY_INPUT_A]==1 || CheckKeyInput(KEY_INPUT_A) != 0){
 			for (int j = 0; j < 64; j++){
 				if (Cp[j].flag == 0){
 					Cp[j].flag = 1;
 					Cp[j].button = j % 9;
-					Cp[j].button = GetRand(9);
+//					Cp[j].button = GetRand(9);
 //					Cp[j].button = 4;
 					break;
 				}
@@ -204,7 +215,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
 		//ノート（サークル）動作
 		for (i = 0; i < 64; i++){
-			BPM = 155;
+			BPM = 60;
 			int button = Cp[i].button;
 
 			if (Cp[i].flag != 0){
@@ -217,7 +228,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
 				if (Cp[i].flag == 2){
 					Frame = 60 / (BPM / 60) - Cp[i].frame;
-					//				Frame = 60 - Cp[i].frame;
+//					Frame = 60 - Cp[i].frame;
 					if (Frame < 5)	Cp[i].flag = 3;
 					MovePoint(Cp[i].X, Cp[i].Y, Bp[button].x, Bp[button].y, &Cp[i].MoveX, &Cp[i].MoveY, (int) Frame);
 				}
@@ -401,22 +412,21 @@ void DrawCirclGraph(int X, int Y, int Graph, int GsX, int GsY){
 }
 
 int NoteHit(int circle, int button){
-	int Xp, Xm, Yp, Ym;
+	double X, Y, Z;
 	int judge[4] , i;
 
-	Xp = Cp[circle].X - Bp[button].x;
-	Xm = Bp[button].x - Cp[circle].X;
-	Yp = Cp[circle].Y - Bp[button].y;
-	Ym = Bp[button].y - Cp[circle].Y;
+	X = Bp[button].x - Cp[circle].X;
+	Y = Bp[button].y - Cp[circle].Y;
 
-	judge[0] = Gs.Circle_X / 6;
-	judge[1] = Gs.Circle_X / 4;
-	judge[2] = Gs.Circle_X / 2;
-	judge[3] = Gs.Circle_X;
+	Z = (int) sqrt(pow(X, 2) + pow(Y, 2));
 
-	for (i = 0; i < 4; i++){
-		if ((Xp <= judge[i] || Xm <= judge[i]) && (Yp <= judge[i] || Ym <= judge[i])){
-			return i + 1;
-		}
-	}
+	judge[0] = Perfect;
+	judge[1] = Great;
+	judge[2] = Good;
+	judge[3] = Gs.Circle_X / 2;
+
+	for (i = 0; i < 4; i++)
+		if (Z <= judge[i] && Z <= judge[i])		return i + 1;
+	
+	return i;
 }

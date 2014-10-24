@@ -1,9 +1,9 @@
-﻿  Main.cpp
-g:\documents\github\schoolidolfestival_modoki\schoolidolfestival_modoki\main.cpp(219): warning C4244: '=' : 'int' から 'float' への変換です。データが失われる可能性があります。
-g:\documents\github\schoolidolfestival_modoki\schoolidolfestival_modoki\main.cpp(103): warning C4101: 'MoveX' : ローカル変数は 1 度も使われていません。
-g:\documents\github\schoolidolfestival_modoki\schoolidolfestival_modoki\main.cpp(103): warning C4101: 'MemY' : ローカル変数は 1 度も使われていません。
-g:\documents\github\schoolidolfestival_modoki\schoolidolfestival_modoki\main.cpp(100): warning C4101: 'k' : ローカル変数は 1 度も使われていません。
-g:\documents\github\schoolidolfestival_modoki\schoolidolfestival_modoki\main.cpp(103): warning C4101: 'MoveY' : ローカル変数は 1 度も使われていません。
-g:\documents\github\schoolidolfestival_modoki\schoolidolfestival_modoki\main.cpp(100): warning C4101: 'j' : ローカル変数は 1 度も使われていません。
-g:\documents\github\schoolidolfestival_modoki\schoolidolfestival_modoki\main.cpp(422): warning C4715: 'NoteHit' : 値を返さないコントロール パスがあります。
-  SchoolIdolFestival_MoDoKi.vcxproj -> G:\Documents\GitHub\SchoolIdolFestival_MoDoKi\Debug\SchoolIdolFestival_MoDoKi.exe
+﻿2014/10/24 15:07:13 にビルドを開始しました。
+     1>ノード 2 上のプロジェクト "C:\Users\K-Hamamoto\Documents\GitHub\SchoolIdolFestival_MoDoKi\SchoolIdolFestival_MoDoKi\SchoolIdolFestival_MoDoKi.vcxproj" (Build ターゲット)。
+     1>Link:
+         SchoolIdolFestival_MoDoKi.vcxproj -> C:\Users\K-Hamamoto\Documents\GitHub\SchoolIdolFestival_MoDoKi\Debug\SchoolIdolFestival_MoDoKi.exe
+     1>プロジェクト "C:\Users\K-Hamamoto\Documents\GitHub\SchoolIdolFestival_MoDoKi\SchoolIdolFestival_MoDoKi\SchoolIdolFestival_MoDoKi.vcxproj" (Build ターゲット) のビルドが完了しました。
+
+ビルドに成功しました。
+
+経過時間 00:00:00.04
