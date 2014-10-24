@@ -12,9 +12,9 @@
 #define Screen_Y 720
 #endif
 
-#define Perfect 11
-#define Great 33
-#define Good 100
+#define Perfect 50
+#define Great 100
+#define Good 150
 
 //構造体
 typedef struct tagGRAPH
@@ -45,14 +45,10 @@ typedef struct tagSOUND
 	int pefect, great;
 } SOUND;
 
-typedef struct tagFLAG
-{
-	int Title = 0;
-} FLAG;
-
 typedef struct tagBUTTONPOINT
 {
 	int x, y;
+	int flag;
 } BUTTONPOINT;
 
 typedef struct tagCIRCLEPOINT
@@ -60,6 +56,18 @@ typedef struct tagCIRCLEPOINT
 	int X, Y, MoveX, MoveY;
 	int button, frame, flag, judge;
 } CIRCLEPOINT;
+
+typedef struct tagFLAG
+{
+	int Title , Select, Game, End;
+} FLAG;
+
+typedef struct tagPLAYER
+{
+	int Music, Level;
+	int Score, Combo, HP;
+} PLAYER;
+
 
 int BoxHit(int Al, int Ar, int At, int Au, int Bl, int Br, int Bt, int Bu);
 int CircleHit(float Ax, float Ay, float Ar, float Bx, float By, float Br);
@@ -77,6 +85,7 @@ SOUND Sound;
 GRAPHPOINT Gp;
 BUTTONPOINT Bp[9];
 CIRCLEPOINT Cp[64];
+PLAYER Player;
 
 
 // WinMain 関数
@@ -164,12 +173,18 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	for (i = 0; i < 9; i++){
 		Bp[i].x += Gs.Circle_X / 2;
 		Bp[i].y += Gs.Circle_Y / 2;
+		Bp[i].flag = 0;
 	}
 
 	for (i = 0; i < 64; i++){
 		Cp[i].flag = 0;
 		Cp[i].frame = 0;
+		Cp[i].judge = 0;
 	}
+
+	Player.Score = 0;
+	Player.Combo = 0;
+	Player.HP = 20;
 
 	// test.mp3のメモリへの読み込みサウンドハンドルをSHandleに保存します
 	Sound.Dice = LoadSoundMem("Sound/Here are Dice.mp3");
@@ -201,13 +216,13 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 			DrawCirclGraph(Bp[i].x, Bp[i].y, Graph.Circle_Green, Gs.Circle_X, Gs.Circle_Y);
 		}
 
-		if (Key[KEY_INPUT_A]==1 || CheckKeyInput(KEY_INPUT_A) != 0){
+		if (Key[KEY_INPUT_A]==1 || CheckKeyInput(KEY_INPUT_A) == 0){
 			for (int j = 0; j < 64; j++){
 				if (Cp[j].flag == 0){
 					Cp[j].flag = 1;
 					Cp[j].button = j % 9;
 //					Cp[j].button = GetRand(9);
-//					Cp[j].button = 4;
+					Cp[j].button = j % 2 + 2;
 					break;
 				}
 			}
@@ -241,11 +256,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
 				if (Cp[i].flag >= 1){
 					DrawCirclGraph(Cp[i].X, Cp[i].Y, Graph.Circle_Red, Gs.Circle_X, Gs.Circle_Y);
-					if (Cp[i].X < 0 || Screen_X < Cp[i].X || Screen_Y < Cp[i].Y){
-						Cp[i].flag = 0;
-						Cp[i].frame = 0;
-						Cp[i].X = Gp.Circle_X;
-						Cp[i].Y = Gp.Circle_Y;
+					if (NoteHit(i, Cp[i].button) == 5){
+						Cp[i].judge = 5;
 					}
 				}
 			}
@@ -253,74 +265,101 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
 		//ボタン判定
 		for (i = 0; i < 64; i++){
-			if (Cp[i].flag){
+			if (Cp[i].flag && Bp[Cp[i].button].flag == 0){
 				switch (Cp[i].button){
 				case 0:
 					if (Key[KEY_INPUT_4] == 1){
 						Cp[i].judge = NoteHit(i, Cp[i].button);
+						Bp[Cp[i].button].flag = 1;
 					}
 					break;
 				case 1:
 					if (Key[KEY_INPUT_R] == 1){
 						Cp[i].judge = NoteHit(i, Cp[i].button);
+						Bp[Cp[i].button].flag = 1;
 					}
 					break;
 				case 2:
 					if (Key[KEY_INPUT_F] == 1){
 						Cp[i].judge = NoteHit(i, Cp[i].button);
+						Bp[Cp[i].button].flag = 1;
 					}
 					break;
 				case 3:
 					if (Key[KEY_INPUT_V] == 1){
 						Cp[i].judge = NoteHit(i, Cp[i].button);
+						Bp[Cp[i].button].flag = 1;
 					}
 					break;
 				case 4:
-					if (Key[KEY_INPUT_SPACE] == 1 || Key[KEY_INPUT_B]){
+					if (Key[KEY_INPUT_SPACE] == 1 || Key[KEY_INPUT_B] == 1){
 						Cp[i].judge = NoteHit(i, Cp[i].button);
+						Bp[Cp[i].button].flag = 1;
 					}
 					break;
 				case 5:
 					if (Key[KEY_INPUT_N] == 1){
 						Cp[i].judge = NoteHit(i, Cp[i].button);
+						Bp[Cp[i].button].flag = 1;
 					}
 					break;
 				case 6:
 					if (Key[KEY_INPUT_J] == 1){
 						Cp[i].judge = NoteHit(i, Cp[i].button);
+						Bp[Cp[i].button].flag = 1;
 					}
 					break;
 				case 7:
 					if (Key[KEY_INPUT_I] == 1){
 						Cp[i].judge = NoteHit(i, Cp[i].button);
+						Bp[Cp[i].button].flag = 1;
 					}
 					break;
 				case 8:
 					if (Key[KEY_INPUT_9] == 1){
 						Cp[i].judge = NoteHit(i, Cp[i].button);
+						Bp[Cp[i].button].flag = 1;
 					}
 					break;
 				}
 			}
 		}
 		
-		//判定ごとの音
+		//判定ごとの処理
 		for (i = 0; i < 64; i++){
 			if (Cp[i].judge != 0){
 				switch (Cp[i].judge){
 				case 1:
 					PlaySoundMem(Sound.pefect, DX_PLAYTYPE_BACK);
+					Player.Combo++;
+					Bp[Cp[i].button].flag = 0;
 					break;
 				case 2:
 					PlaySoundMem(Sound.great, DX_PLAYTYPE_BACK);
+					Player.Combo++;
+					Bp[Cp[i].button].flag = 0;
 					break;
 				case 3:
 					PlaySoundMem(Sound.pefect, DX_PLAYTYPE_BACK);
+					Player.Combo = 0;
+					Bp[Cp[i].button].flag = 0;
 					break;
 				case 4:
-					PlaySoundMem(Sound.pefect, DX_PLAYTYPE_BACK);
+					Player.Combo = 0;
+					Player.HP--;
+					Bp[Cp[i].button].flag = 0;
+					break;
+				case 5:
+					Player.Combo = 0;
+					Player.HP--;
+					Bp[Cp[i].button].flag = 0;
 					break;
 				}
+				Cp[i].flag = 0;
+				Cp[i].frame = 0;
+				Cp[i].judge = 0;
+				Cp[i].X = Gp.Circle_X;
+				Cp[i].Y = Gp.Circle_Y;
 			}
 		}
 
@@ -391,18 +430,39 @@ void Struct(int MouseX, int MouseY){	// 表示する文字列を作成
 	lstrcat(StrBuf, StrBuf2); // StrBufの内容にStrBuf2の内容を付け足す
 
 	DrawString(0, 0, StrBuf, GetColor(0, 0, 0));
+
+	lstrcpy(StrBuf, "HP : ");
+	_itoa_s(Player.HP, StrBuf2, 10);
+	lstrcat(StrBuf, StrBuf2);
+	lstrcat(StrBuf, " Score : ");
+	_itoa_s(Player.Score, StrBuf2, 10);
+	lstrcat(StrBuf, StrBuf2);
+	lstrcat(StrBuf, " Combo : ");
+	_itoa_s(Player.Combo, StrBuf2, 10);
+	lstrcat(StrBuf, StrBuf2);
+
+	DrawString(0, 15, StrBuf, GetColor(0, 0, 0));
+
+	for (int i = 0; i < 64; i++){
+		if (Cp[i].flag != 0){
+			lstrcpy(StrBuf, "judge ");
+			_itoa_s(i, StrBuf2, 10);
+			lstrcat(StrBuf, StrBuf2);
+			lstrcat(StrBuf, " : ");
+			_itoa_s(Cp[i].judge, StrBuf2, 10);
+			lstrcat(StrBuf, StrBuf2);
+			DrawString(0, 30 + i*15, StrBuf, GetColor(0, 0, 0));
+		}
+	}
+
 }
 
 int UpdateKey(char Key[]){
 	char tmpKey[256]; // 現在のキーの入力状態を格納する
 	GetHitKeyStateAll(tmpKey); // 全てのキーの入力状態を得る
 	for (int i = 0; i<256; i++){
-		if (tmpKey[i] != 0){ // i番のキーコードに対応するキーが押されていたら
-			Key[i]++;     // 加算
-		}
-		else {              // 押されていなければ
-			Key[i] = 0;   // 0にする
-		}
+		if (tmpKey[i] != 0)		Key[i]++;
+		else	Key[i] = 0;
 	}
 	return 0;
 }
@@ -413,7 +473,7 @@ void DrawCirclGraph(int X, int Y, int Graph, int GsX, int GsY){
 
 int NoteHit(int circle, int button){
 	double X, Y, Z;
-	int judge[4] , i;
+	int judge[5] , i;
 
 	X = Bp[button].x - Cp[circle].X;
 	Y = Bp[button].y - Cp[circle].Y;
@@ -424,9 +484,9 @@ int NoteHit(int circle, int button){
 	judge[1] = Great;
 	judge[2] = Good;
 	judge[3] = Gs.Circle_X / 2;
+	judge[4] = Gs.Circle_X;
 
 	for (i = 0; i < 4; i++)
 		if (Z <= judge[i] && Z <= judge[i])		return i + 1;
-	
-	return i;
+	if (Z > judge[4] && Z > judge[4])	return 5;
 }
