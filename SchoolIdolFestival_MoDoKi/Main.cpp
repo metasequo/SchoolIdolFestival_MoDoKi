@@ -12,16 +12,14 @@
 #define Screen_Y 720
 #endif
 
-#define Perfect 50
-#define Great 100
-#define Good 150
-
 //構造体
 typedef struct tagGRAPH
 {
 	int Circle_Blue, Circle_Green, Circle_Red;
 	int Onpu;
 	int Number[10], combo;
+	int Perfect, Great, Good, Bad, Miss;
+	int Gameover;
 } GRAPH;
 
 typedef struct tagGRAPHSIZE
@@ -30,6 +28,9 @@ typedef struct tagGRAPHSIZE
 	int Onpu_X, Onpu_Y;
 	int Number_X, Number_Y;
 	int combo_X, combo_Y;
+	int Perfect_X, Great_X, Good_X, Bad_X, Miss_X;
+	int Perfect_Y, Great_Y, Good_Y, Bad_Y, Miss_Y;
+	int Gameover_X, Gameover_Y;
 } GRAPHSIZE;
 
 typedef struct tagGRAPHPOINT
@@ -37,6 +38,9 @@ typedef struct tagGRAPHPOINT
 	int Circle_X, Circle_Y;
 	int Onpu_X, Onpu_Y;
 	int combo_X, combo_Y;
+	int Perfect_X, Great_X, Good_X, Bad_X, Miss_X;
+	int Perfect_Y, Great_Y, Good_Y, Bad_Y, Miss_Y;
+	int Gameover_X, Gameover_Y;
 } GRAPHPOINT;
 
 typedef struct tagSOUND
@@ -66,6 +70,8 @@ typedef struct tagPLAYER
 {
 	int Music, Level;
 	int Score, Combo, HP;
+	int Perfect, Great, Good, Bad, Miss;
+	int jPerfect, jGreat, jGood, jBad, jMiss;
 } PLAYER;
 
 
@@ -77,6 +83,7 @@ void Struct(int MouseX, int MouseY);
 void DrawCirclGraph(int X, int Y, int Graph, int GsX, int GsY);
 int UpdateKey(char Key []);
 int NoteHit(int circle, int button);
+int ScoreCalcu(int judge, int combo);
 
 DATEDATA Date;
 GRAPH Graph;
@@ -139,17 +146,41 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	Graph.Onpu = LoadGraph("Graph/Onpu.png");
 	LoadDivGraph("Graph/Number.png", 10, 5, 2, 90, 86, Graph.Number);
 	Graph.combo = LoadGraph("Graph/combo.png");
+	Graph.Perfect = LoadGraph("Graph/Perfect.png");
+	Graph.Great = LoadGraph("Graph/Great.png");
+	Graph.Good = LoadGraph("Graph/Good.png");
+	Graph.Bad = LoadGraph("Graph/Bad.png");
+	Graph.Miss = LoadGraph("Graph/Miss.png");
+	Graph.Gameover = LoadGraph("Graph/Gameover.png");
 
 	//画像のサイズを得る
 	GetGraphSize(Graph.Circle_Blue, &Gs.Circle_X, &Gs.Circle_Y);
 	GetGraphSize(Graph.Onpu, &Gs.Onpu_X, &Gs.Onpu_Y);
 	GetGraphSize(Graph.Number[0], &Gs.Number_X, &Gs.Number_Y);
 	GetGraphSize(Graph.combo, &Gs.combo_X, &Gs.combo_Y);
+	GetGraphSize(Graph.Perfect, &Gs.Perfect_X, &Gs.Perfect_Y);
+	GetGraphSize(Graph.Great, &Gs.Great_X, &Gs.Great_Y);
+	GetGraphSize(Graph.Good, &Gs.Good_X, &Gs.Good_Y);
+	GetGraphSize(Graph.Bad, &Gs.Bad_X, &Gs.Bad_Y);
+	GetGraphSize(Graph.Miss, &Gs.Miss_X, &Gs.Miss_Y);
+	GetGraphSize(Graph.Gameover, &Gs.Gameover_X, &Gs.Gameover_Y);
 
 	Gp.Circle_X = Screen_X / 2;
 	Gp.Circle_Y = 164 + Gs.Circle_X / 2;
 	Gp.Onpu_X = Screen_X / 2;
 	Gp.Onpu_Y = Gp.Circle_Y;
+	Gp.Perfect_X = Center(Gs.Perfect_X, 'X');
+	Gp.Perfect_Y = 523;
+	Gp.Great_X = Center(Gs.Great_X, 'X');
+	Gp.Great_Y = 523;
+	Gp.Good_X = Center(Gs.Good_X, 'X');
+	Gp.Good_Y = 523;
+	Gp.Bad_X = Center(Gs.Bad_X, 'X');
+	Gp.Bad_Y = 523;
+	Gp.Miss_X = Center(Gs.Miss_X, 'X');
+	Gp.Miss_Y = 523;
+	Gp.Gameover_X = Center(Gs.Gameover_X, 'X');
+	Gp.Gameover_Y = 523;
 
 	Bp[0].x = 179;
 	Bp[0].y = 164;
@@ -185,6 +216,15 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	Player.Score = 0;
 	Player.Combo = 0;
 	Player.HP = 20;
+	Player.Perfect = 0;
+	Player.Great = 0;
+	Player.Good = 0;
+	Player.Bad = 0;
+	Player.Miss = 0;
+	Player.jPerfect = 50;
+	Player.jGreat = 100;
+	Player.jGood = 150;
+
 
 	// test.mp3のメモリへの読み込みサウンドハンドルをSHandleに保存します
 	Sound.Dice = LoadSoundMem("Sound/Here are Dice.mp3");
@@ -222,7 +262,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 					Cp[j].flag = 1;
 					Cp[j].button = j % 9;
 //					Cp[j].button = GetRand(9);
-					Cp[j].button = j % 2 + 2;
+//					Cp[j].button = j % 2 + 2;
 					break;
 				}
 			}
@@ -256,10 +296,33 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
 				if (Cp[i].flag >= 1){
 					DrawCirclGraph(Cp[i].X, Cp[i].Y, Graph.Circle_Red, Gs.Circle_X, Gs.Circle_Y);
-					if (NoteHit(i, Cp[i].button) == 5){
+
+					if (Cp[i].button == 0 || Cp[i].button == 1 || Cp[i].button == 2 || Cp[i].button == 3){
+						if (Cp[i].X < Bp[Cp[i].button].x){
+							if (NoteHit(i, Cp[i].button) == 5){
+								Cp[i].judge = 5;
+							}
+						}
+					}
+					if (Cp[i].button == 5 || Cp[i].button == 6 || Cp[i].button == 7 || Cp[i].button == 8){
+						if (Bp[Cp[i].button].x < Cp[i].X){
+							if (NoteHit(i, Cp[i].button) == 5){
+								Cp[i].judge = 5;
+							}
+						}
+					}
+					if (Cp[i].button == 4){
+						if (Bp[Cp[i].button].y < Cp[i].Y){
+							if (NoteHit(i, Cp[i].button) == 5){
+								Cp[i].judge = 5;
+							}
+						}
+					}
+
+/*					if (NoteHit(i, Cp[i].button) == 5){
 						Cp[i].judge = 5;
 					}
-				}
+	*/			}
 			}
 		}
 
@@ -331,30 +394,52 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 				switch (Cp[i].judge){
 				case 1:
 					PlaySoundMem(Sound.pefect, DX_PLAYTYPE_BACK);
+					DrawGraph(Gp.Perfect_X, Gp.Perfect_Y, Graph.Perfect, TRUE);
 					Player.Combo++;
+					Player.Score += ScoreCalcu(Cp[i].judge, Player.Combo);
 					Bp[Cp[i].button].flag = 0;
 					break;
 				case 2:
 					PlaySoundMem(Sound.great, DX_PLAYTYPE_BACK);
+					DrawGraph(Gp.Great_X, Gp.Great_Y, Graph.Great, TRUE);
 					Player.Combo++;
+					Player.Score += ScoreCalcu(Cp[i].judge, Player.Combo);
 					Bp[Cp[i].button].flag = 0;
 					break;
 				case 3:
 					PlaySoundMem(Sound.pefect, DX_PLAYTYPE_BACK);
+					DrawGraph(Gp.Good_X, Gp.Good_Y, Graph.Good, TRUE);
+					Player.Score += ScoreCalcu(Cp[i].judge, Player.Combo);
 					Player.Combo = 0;
 					Bp[Cp[i].button].flag = 0;
 					break;
 				case 4:
+					DrawGraph(Gp.Bad_X, Gp.Bad_Y, Graph.Bad, TRUE);
+					Player.Score += ScoreCalcu(Cp[i].judge, Player.Combo);
 					Player.Combo = 0;
 					Player.HP--;
 					Bp[Cp[i].button].flag = 0;
 					break;
 				case 5:
+					DrawGraph(Gp.Miss_X, Gp.Miss_Y, Graph.Miss, TRUE);
+					Player.Score += ScoreCalcu(Cp[i].judge, Player.Combo);
 					Player.Combo = 0;
 					Player.HP--;
 					Bp[Cp[i].button].flag = 0;
 					break;
 				}
+				Cp[i].flag = 0;
+				Cp[i].frame = 0;
+				Cp[i].judge = 0;
+				Cp[i].X = Gp.Circle_X;
+				Cp[i].Y = Gp.Circle_Y;
+			}
+		}
+
+		if (Player.HP <= 0){
+			Player.HP = 0;
+			DrawGraph(Gp.Gameover_X, Gp.Gameover_Y, Graph.Gameover, TRUE);
+			for (i = 0; i < 64; i++){
 				Cp[i].flag = 0;
 				Cp[i].frame = 0;
 				Cp[i].judge = 0;
@@ -480,13 +565,46 @@ int NoteHit(int circle, int button){
 
 	Z = (int) sqrt(pow(X, 2) + pow(Y, 2));
 
-	judge[0] = Perfect;
-	judge[1] = Great;
-	judge[2] = Good;
+	judge[0] = Player.jPerfect;
+	judge[1] = Player.jGreat;
+	judge[2] = Player.jGood;
 	judge[3] = Gs.Circle_X / 2;
 	judge[4] = Gs.Circle_X;
 
 	for (i = 0; i < 4; i++)
 		if (Z <= judge[i] && Z <= judge[i])		return i + 1;
 	if (Z > judge[4] && Z > judge[4])	return 5;
+}
+
+int ScoreCalcu(int judge, int combo){
+	float score = 200;
+
+	switch (judge)
+	{
+	case 1:
+		score *= 1.0;
+		break;
+	case 2:
+		score *= 0.88;
+		break;
+	case 3:
+		score *= 0.8;
+		break;
+	case 4:
+		score *= 0.4;
+		break;
+	case 5:
+		score *= 0.0;
+		break;
+	}
+
+	if (combo <= 50)	score *= 1.0;
+	else if (combo <= 100)	score *= 1.1;
+	else if (combo <= 200)	score *= 1.15;
+	else if (combo <= 400)	score *= 1.2;
+	else if (combo <= 600)	score *= 1.25;
+	else if (combo <= 800)	score *= 1.3;
+	else if (combo <= 1000)	score *= 1.35;
+
+	return score;
 }
