@@ -1,3 +1,4 @@
+#define _CRT_SECURE_NO_WARNINGS 1
 #include "DxLib.h"
 #include <math.h>
 #include <string.h>
@@ -45,7 +46,7 @@ typedef struct tagGRAPHPOINT
 
 typedef struct tagSOUND
 {
-	int Dice;
+	int Dice, Mizugame;
 	int pefect, great;
 } SOUND;
 
@@ -61,6 +62,12 @@ typedef struct tagCIRCLEPOINT
 	int button, frame, flag, judge;
 } CIRCLEPOINT;
 
+typedef struct tagNOTE
+{
+	int min, sec, mill, button;
+	int flag;
+} NOTE;
+
 typedef struct tagFLAG
 {
 	int Title , Select, Game, End;
@@ -69,6 +76,8 @@ typedef struct tagFLAG
 typedef struct tagPLAYER
 {
 	int Music, Level;
+	int pMin, pSec, pMill;
+	int sMin, sSec, sMill;
 	int Score, Combo, HP;
 	int Perfect, Great, Good, Bad, Miss;
 	int jPerfect, jGreat, jGood, jBad, jMiss;
@@ -84,6 +93,7 @@ void DrawCirclGraph(int X, int Y, int Graph, int GsX, int GsY);
 int UpdateKey(char Key []);
 int NoteHit(int circle, int button);
 int ScoreCalcu(int judge, int combo);
+void ChartRead(int *min, int *sec, int *mill);
 
 DATEDATA Date;
 GRAPH Graph;
@@ -92,6 +102,7 @@ SOUND Sound;
 GRAPHPOINT Gp;
 BUTTONPOINT Bp[9];
 CIRCLEPOINT Cp[64];
+NOTE Note[800];
 PLAYER Player;
 
 
@@ -224,12 +235,18 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	Player.jPerfect = 50;
 	Player.jGreat = 100;
 	Player.jGood = 150;
+	Player.pSec = 0;
+	Player.pMin = 0;
+	Player.pMill = 0;
 
 
 	// test.mp3のメモリへの読み込みサウンドハンドルをSHandleに保存します
-	Sound.Dice = LoadSoundMem("Sound/Here are Dice.mp3");
+	Sound.Mizugame = LoadSoundMem("Sound/Mizugame_short.mp3");
 	Sound.pefect = LoadSoundMem("Sound/perfect.mp3");
 	Sound.great = LoadSoundMem("Sound/great.mp3");
+
+	ChartRead(&Player.sSec, &Player.sMin, &Player.sMill);
+	
 
 	// 読みこんだ音をループ再生します(『PlaySoundMem』関数使用)
 //	PlaySoundMem(Sound.Dice, DX_PLAYTYPE_LOOP);
@@ -536,7 +553,28 @@ void Struct(int MouseX, int MouseY){	// 表示する文字列を作成
 			lstrcat(StrBuf, " : ");
 			_itoa_s(Cp[i].judge, StrBuf2, 10);
 			lstrcat(StrBuf, StrBuf2);
-			DrawString(0, 30 + i*15, StrBuf, GetColor(0, 0, 0));
+			DrawString(0, 30 + i * 15, StrBuf, GetColor(0, 0, 0));
+		}
+	}
+
+	for (int i = 0; i < 800; i++){
+		if (Note[i].flag != 0){
+			lstrcpy(StrBuf, "flag ");
+			_itoa_s(i, StrBuf2, 10);
+			lstrcat(StrBuf, StrBuf2);
+			lstrcat(StrBuf, " : ");
+			_itoa_s(Note[i].flag, StrBuf2, 10);
+			lstrcat(StrBuf, StrBuf2);
+			lstrcat(StrBuf, " min : ");
+			_itoa_s(Note[i].min, StrBuf2, 10);
+			lstrcat(StrBuf, StrBuf2);
+			lstrcat(StrBuf, " sec : ");
+			_itoa_s(Note[i].sec, StrBuf2, 10);
+			lstrcat(StrBuf, StrBuf2);
+			lstrcat(StrBuf, " mill : ");
+			_itoa_s(Note[i].mill, StrBuf2, 10);
+			lstrcat(StrBuf, StrBuf2);
+			DrawString(1800, 30 + i * 15, StrBuf, GetColor(0, 0, 0));
 		}
 	}
 
@@ -607,4 +645,41 @@ int ScoreCalcu(int judge, int combo){
 	else if (combo <= 1000)	score *= 1.35;
 
 	return score;
+}
+
+void ChartRead(int *min, int *sec, int *mill){
+	int i, Chart, notes, times[8];
+	char read[256], *mem;
+	char cut[] = "[:.] ";
+
+	Chart = FileRead_open("Chart/Mizugame_short.txt");
+
+	FileRead_gets(read, 256, Chart);
+	notes = atoi(read);
+
+	i = 0;
+	FileRead_gets(read, 256, Chart);
+	mem = strtok(read, cut);
+	*min = atoi(mem);
+	mem = strtok(NULL, cut);
+	*sec = atoi(mem);
+	mem = strtok(NULL, cut);
+	*mill = atoi(mem);
+	mem = strtok(NULL, cut);
+
+
+	for (i = 0; i < notes; i++){
+		FileRead_gets(read, 256, Chart);
+		mem = strtok(read, cut);
+		Note[i].sec = atoi(mem);
+		mem = strtok(NULL, cut);
+		Note[i].min = atoi(mem);
+		mem = strtok(NULL, cut);
+		Note[i].mill = atoi(mem);
+		mem = strtok(NULL, cut);
+		Note[i].button = atoi(mem);
+		Note[i].flag = 1;
+	}
+
+	FileRead_close(Chart);
 }
