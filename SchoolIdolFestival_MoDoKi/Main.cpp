@@ -1,4 +1,3 @@
-#define _CRT_SECURE_NO_WARNINGS 1
 #include "DxLib.h"
 #include <math.h>
 #include <string.h>
@@ -661,22 +660,22 @@ void ChartRead(int *min, int *sec, int *mill){
 	FileRead_gets(read, 256, Chart);
 	mem = strtok(read, cut);
 	*min = atoi(mem);
-	mem = strtok(NULL, cut);
+	mem = strtok(read, cut);
 	*sec = atoi(mem);
-	mem = strtok(NULL, cut);
+	mem = strtok(read, cut);
 	*mill = atoi(mem);
-	mem = strtok(NULL, cut);
+	mem = strtok(read, cut);
 
 
 	for (i = 0; i < notes; i++){
 		FileRead_gets(read, 256, Chart);
 		mem = strtok(read, cut);
 		Note[i].sec = atoi(mem);
-		mem = strtok(NULL, cut);
+		mem = strtok(read, cut);
 		Note[i].min = atoi(mem);
-		mem = strtok(NULL, cut);
+		mem = strtok(read, cut);
 		Note[i].mill = atoi(mem);
-		mem = strtok(NULL, cut);
+		mem = strtok(read, cut);
 		Note[i].button = atoi(mem);
 		Note[i].flag = 1;
 	}
