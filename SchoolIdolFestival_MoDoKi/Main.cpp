@@ -74,7 +74,7 @@ typedef struct tagFLAG
 
 typedef struct tagPLAYER
 {
-	int Music, Level;
+	int Music, Level, Notes;
 	int pMin, pSec, pMill;
 	int sMin, sSec, sMill;
 	int Score, Combo, HP;
@@ -92,7 +92,7 @@ void DrawCirclGraph(int X, int Y, int Graph, int GsX, int GsY);
 int UpdateKey(char Key []);
 int NoteHit(int circle, int button);
 int ScoreCalcu(int judge, int combo);
-void ChartRead(int *min, int *sec, int *mill);
+void ChartRead();
 
 DATEDATA Date;
 GRAPH Graph;
@@ -118,7 +118,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	//ウインドウの大きさ設定
 	SetGraphMode(Screen_X, Screen_Y, 32);
 	//ウインドウの大きさを自由に変更出来るかどうかのフラグ
-	//	SetWindowSizeChangeEnableFlag( TRUE ) ;
+		SetWindowSizeChangeEnableFlag( TRUE ) ;
 	// 裏画面を使用
 	SetDrawScreen(DX_SCREEN_BACK);
 	// ＤＸライブラリの初期化
@@ -244,7 +244,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	Sound.pefect = LoadSoundMem("Sound/perfect.mp3");
 	Sound.great = LoadSoundMem("Sound/great.mp3");
 
-	ChartRead(&Player.sSec, &Player.sMin, &Player.sMill);
+	ChartRead();
 	
 
 	// 読みこんだ音をループ再生します(『PlaySoundMem』関数使用)
@@ -522,6 +522,7 @@ void MovePoint(int Before_X, int Before_Y, int After_X, int After_Y, int *Move_X
 
 void Struct(int MouseX, int MouseY){	// 表示する文字列を作成
 	char StrBuf[128], StrBuf2[32];
+	int i;
 
 	lstrcpy(StrBuf, "座標 Ｘ"); // 文字列"座標 Ｘ"をStrBufにコピー	
 	_itoa_s(MouseX, StrBuf2, 10); // MouseXの値を文字列にしてStrBuf2に格納
@@ -544,7 +545,7 @@ void Struct(int MouseX, int MouseY){	// 表示する文字列を作成
 
 	DrawString(0, 15, StrBuf, GetColor(0, 0, 0));
 
-	for (int i = 0; i < 64; i++){
+	for (i = 0; i < 64; i++){
 		if (Cp[i].flag != 0){
 			lstrcpy(StrBuf, "judge ");
 			_itoa_s(i, StrBuf2, 10);
@@ -556,28 +557,46 @@ void Struct(int MouseX, int MouseY){	// 表示する文字列を作成
 		}
 	}
 
-	for (int i = 0; i < 800; i++){
-		if (Note[i].flag != 0){
-			lstrcpy(StrBuf, "flag ");
+	lstrcpy(StrBuf, "Notes : ");
+	_itoa_s(Player.Notes, StrBuf2, 10);
+	lstrcat(StrBuf, StrBuf2);
+	lstrcat(StrBuf, " sTime ");
+	_itoa_s(Player.sMin, StrBuf2, 10);
+	lstrcat(StrBuf, StrBuf2);
+	lstrcat(StrBuf, ":");
+	_itoa_s(Player.sSec, StrBuf2, 10);
+	lstrcat(StrBuf, StrBuf2);
+	lstrcat(StrBuf, ":");
+	_itoa_s(Player.sMill, StrBuf2, 10);
+	lstrcat(StrBuf, StrBuf2);
+	DrawString(300, 0, StrBuf, GetColor(0, 0, 0));
+
+	
+	for (i = 0; i < 800; i++){
+		if (Note[i].flag == 1){
+			lstrcpy(StrBuf, "");
 			_itoa_s(i, StrBuf2, 10);
 			lstrcat(StrBuf, StrBuf2);
-			lstrcat(StrBuf, " : ");
+			lstrcat(StrBuf, " : Flag : ");
 			_itoa_s(Note[i].flag, StrBuf2, 10);
 			lstrcat(StrBuf, StrBuf2);
-			lstrcat(StrBuf, " min : ");
+			lstrcat(StrBuf, " NoteTime ");
 			_itoa_s(Note[i].min, StrBuf2, 10);
 			lstrcat(StrBuf, StrBuf2);
-			lstrcat(StrBuf, " sec : ");
+			lstrcat(StrBuf, ":");
 			_itoa_s(Note[i].sec, StrBuf2, 10);
 			lstrcat(StrBuf, StrBuf2);
-			lstrcat(StrBuf, " mill : ");
+			lstrcat(StrBuf, ":");
 			_itoa_s(Note[i].mill, StrBuf2, 10);
 			lstrcat(StrBuf, StrBuf2);
-			DrawString(1800, 30 + i * 15, StrBuf, GetColor(0, 0, 0));
+			lstrcat(StrBuf, " Button :");
+			_itoa_s(Note[i].button, StrBuf2, 10);
+			lstrcat(StrBuf, StrBuf2);
+			DrawString(300, 15 + i * 15, StrBuf, GetColor(0, 0, 0));
 		}
 	}
 
-}
+	}
 
 int UpdateKey(char Key[]){
 	char tmpKey[256]; // 現在のキーの入力状態を格納する
@@ -646,38 +665,47 @@ int ScoreCalcu(int judge, int combo){
 	return score;
 }
 
-void ChartRead(int *min, int *sec, int *mill){
-	int i, Chart, notes, times[8];
+void ChartRead(){
+	int i, Chart, fullnotes, times[8];
 	char read[256], *token, *nexttoken;
-	char cut[] = "[:.] ";
+	char cut [] = "[:.]; ";
 
 	Chart = FileRead_open("Chart/Mizugame_short.txt");
 
-	FileRead_gets(read, 256, Chart);
-	notes = atoi(read);
-
-	i = 0;
+/*	FileRead_gets(read, 256, Chart);
+//	token = strtok_s(read, cut, &nexttoken);
+	fullnotes = atoi(read);
+	Player.Notes = fullnotes;
+	*/
 	FileRead_gets(read, 256, Chart);
 	token = strtok_s(read, cut, &nexttoken);
-	*min = atoi(token);
+	Player.sMin = atoi(token);
 	token = strtok_s('\0', cut, &nexttoken);
-	*sec = atoi(token);
+	Player.sSec = atoi(token);
 	token = strtok_s('\0', cut, &nexttoken);
-	*mill = atoi(token);
+	Player.sMill = atoi(token);
+	token = strtok_s('\0', cut, &nexttoken);
+	Player.Notes = atoi(token);
 	token = strtok_s('\0', cut, &nexttoken);
 
+	fullnotes = Player.Notes;
 
-	for (i = 0; i < notes; i++){
+	i = 0;
+	for (i = 0; i < fullnotes; i++){
 		FileRead_gets(read, 256, Chart);
-		token = strtok_s(read, cut, &nexttoken);
-		Note[i].sec = atoi(token);
 		token = strtok_s('\0', cut, &nexttoken);
 		Note[i].min = atoi(token);
+		token = strtok_s('\0', cut, &nexttoken);
+		Note[i].sec = atoi(token);
 		token = strtok_s('\0', cut, &nexttoken);
 		Note[i].mill = atoi(token);
 		token = strtok_s('\0', cut, &nexttoken);
 		Note[i].button = atoi(token);
+		token = strtok_s('\0', cut, &nexttoken);
 		Note[i].flag = 1;
+	}
+	for (i+1; i < 800; i++){
+		Note[i].flag = 0;
 	}
 
 	FileRead_close(Chart);
