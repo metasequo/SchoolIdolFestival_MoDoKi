@@ -1,19 +1,19 @@
 ﻿  Main.cpp
-g:\documents\github\schoolidolfestival_modoki\schoolidolfestival_modoki\main.cpp(302): warning C4244: '=' : 'int' から 'float' への変換です。データが失われる可能性があります。
-g:\documents\github\schoolidolfestival_modoki\schoolidolfestival_modoki\main.cpp(138): warning C4101: 'MoveX' : ローカル変数は 1 度も使われていません。
-g:\documents\github\schoolidolfestival_modoki\schoolidolfestival_modoki\main.cpp(138): warning C4101: 'MemY' : ローカル変数は 1 度も使われていません。
-g:\documents\github\schoolidolfestival_modoki\schoolidolfestival_modoki\main.cpp(135): warning C4101: 'k' : ローカル変数は 1 度も使われていません。
-g:\documents\github\schoolidolfestival_modoki\schoolidolfestival_modoki\main.cpp(138): warning C4101: 'MoveY' : ローカル変数は 1 度も使われていません。
-g:\documents\github\schoolidolfestival_modoki\schoolidolfestival_modoki\main.cpp(135): warning C4101: 'j' : ローカル変数は 1 度も使われていません。
-g:\documents\github\schoolidolfestival_modoki\schoolidolfestival_modoki\main.cpp(626): warning C4305: '*=' : 'double' から 'float' へ切り詰めます。
-g:\documents\github\schoolidolfestival_modoki\schoolidolfestival_modoki\main.cpp(629): warning C4305: '*=' : 'double' から 'float' へ切り詰めます。
-g:\documents\github\schoolidolfestival_modoki\schoolidolfestival_modoki\main.cpp(632): warning C4305: '*=' : 'double' から 'float' へ切り詰めます。
+g:\documents\github\schoolidolfestival_modoki\schoolidolfestival_modoki\main.cpp(301): warning C4244: '=' : 'int' から 'float' への変換です。データが失われる可能性があります。
+g:\documents\github\schoolidolfestival_modoki\schoolidolfestival_modoki\main.cpp(137): warning C4101: 'MoveX' : ローカル変数は 1 度も使われていません。
+g:\documents\github\schoolidolfestival_modoki\schoolidolfestival_modoki\main.cpp(137): warning C4101: 'MemY' : ローカル変数は 1 度も使われていません。
+g:\documents\github\schoolidolfestival_modoki\schoolidolfestival_modoki\main.cpp(134): warning C4101: 'k' : ローカル変数は 1 度も使われていません。
+g:\documents\github\schoolidolfestival_modoki\schoolidolfestival_modoki\main.cpp(137): warning C4101: 'MoveY' : ローカル変数は 1 度も使われていません。
+g:\documents\github\schoolidolfestival_modoki\schoolidolfestival_modoki\main.cpp(134): warning C4101: 'j' : ローカル変数は 1 度も使われていません。
+g:\documents\github\schoolidolfestival_modoki\schoolidolfestival_modoki\main.cpp(625): warning C4305: '*=' : 'double' から 'float' へ切り詰めます。
+g:\documents\github\schoolidolfestival_modoki\schoolidolfestival_modoki\main.cpp(628): warning C4305: '*=' : 'double' から 'float' へ切り詰めます。
+g:\documents\github\schoolidolfestival_modoki\schoolidolfestival_modoki\main.cpp(631): warning C4305: '*=' : 'double' から 'float' へ切り詰めます。
+g:\documents\github\schoolidolfestival_modoki\schoolidolfestival_modoki\main.cpp(639): warning C4305: '*=' : 'double' から 'float' へ切り詰めます。
 g:\documents\github\schoolidolfestival_modoki\schoolidolfestival_modoki\main.cpp(640): warning C4305: '*=' : 'double' から 'float' へ切り詰めます。
 g:\documents\github\schoolidolfestival_modoki\schoolidolfestival_modoki\main.cpp(641): warning C4305: '*=' : 'double' から 'float' へ切り詰めます。
-g:\documents\github\schoolidolfestival_modoki\schoolidolfestival_modoki\main.cpp(642): warning C4305: '*=' : 'double' から 'float' へ切り詰めます。
+g:\documents\github\schoolidolfestival_modoki\schoolidolfestival_modoki\main.cpp(643): warning C4305: '*=' : 'double' から 'float' へ切り詰めます。
 g:\documents\github\schoolidolfestival_modoki\schoolidolfestival_modoki\main.cpp(644): warning C4305: '*=' : 'double' から 'float' へ切り詰めます。
-g:\documents\github\schoolidolfestival_modoki\schoolidolfestival_modoki\main.cpp(645): warning C4305: '*=' : 'double' から 'float' へ切り詰めます。
-g:\documents\github\schoolidolfestival_modoki\schoolidolfestival_modoki\main.cpp(647): warning C4244: 'return' : 'float' から 'int' への変換です。データが失われる可能性があります。
-g:\documents\github\schoolidolfestival_modoki\schoolidolfestival_modoki\main.cpp(651): warning C4101: 'times' : ローカル変数は 1 度も使われていません。
-g:\documents\github\schoolidolfestival_modoki\schoolidolfestival_modoki\main.cpp(615): warning C4715: 'NoteHit' : 値を返さないコントロール パスがあります。
+g:\documents\github\schoolidolfestival_modoki\schoolidolfestival_modoki\main.cpp(646): warning C4244: 'return' : 'float' から 'int' への変換です。データが失われる可能性があります。
+g:\documents\github\schoolidolfestival_modoki\schoolidolfestival_modoki\main.cpp(650): warning C4101: 'times' : ローカル変数は 1 度も使われていません。
+g:\documents\github\schoolidolfestival_modoki\schoolidolfestival_modoki\main.cpp(614): warning C4715: 'NoteHit' : 値を返さないコントロール パスがあります。
   SchoolIdolFestival_MoDoKi.vcxproj -> G:\Documents\GitHub\SchoolIdolFestival_MoDoKi\Debug\SchoolIdolFestival_MoDoKi.exe

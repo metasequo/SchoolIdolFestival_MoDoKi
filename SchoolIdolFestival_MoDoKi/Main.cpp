@@ -648,7 +648,7 @@ int ScoreCalcu(int judge, int combo){
 
 void ChartRead(int *min, int *sec, int *mill){
 	int i, Chart, notes, times[8];
-	char read[256], *mem;
+	char read[256], *token, *nexttoken;
 	char cut[] = "[:.] ";
 
 	Chart = FileRead_open("Chart/Mizugame_short.txt");
@@ -658,25 +658,25 @@ void ChartRead(int *min, int *sec, int *mill){
 
 	i = 0;
 	FileRead_gets(read, 256, Chart);
-	mem = strtok(read, cut);
-	*min = atoi(mem);
-	mem = strtok(read, cut);
-	*sec = atoi(mem);
-	mem = strtok(read, cut);
-	*mill = atoi(mem);
-	mem = strtok(read, cut);
+	token = strtok_s(read, cut, &nexttoken);
+	*min = atoi(token);
+	token = strtok_s('\0', cut, &nexttoken);
+	*sec = atoi(token);
+	token = strtok_s('\0', cut, &nexttoken);
+	*mill = atoi(token);
+	token = strtok_s('\0', cut, &nexttoken);
 
 
 	for (i = 0; i < notes; i++){
 		FileRead_gets(read, 256, Chart);
-		mem = strtok(read, cut);
-		Note[i].sec = atoi(mem);
-		mem = strtok(read, cut);
-		Note[i].min = atoi(mem);
-		mem = strtok(read, cut);
-		Note[i].mill = atoi(mem);
-		mem = strtok(read, cut);
-		Note[i].button = atoi(mem);
+		token = strtok_s(read, cut, &nexttoken);
+		Note[i].sec = atoi(token);
+		token = strtok_s('\0', cut, &nexttoken);
+		Note[i].min = atoi(token);
+		token = strtok_s('\0', cut, &nexttoken);
+		Note[i].mill = atoi(token);
+		token = strtok_s('\0', cut, &nexttoken);
+		Note[i].button = atoi(token);
 		Note[i].flag = 1;
 	}
 
