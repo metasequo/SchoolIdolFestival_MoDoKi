@@ -80,6 +80,7 @@ typedef struct tagPLAYER
 	int Score, Combo, HP;
 	int Perfect, Great, Good, Bad, Miss;
 	int jPerfect, jGreat, jGood, jBad, jMiss;
+	char SongName[64];
 } PLAYER;
 
 
@@ -668,45 +669,40 @@ int ScoreCalcu(int judge, int combo){
 void ChartRead(){
 	int i, Chart, fullnotes, times[8];
 	char read[256], *token, *nexttoken;
-	char cut [] = "[:.]; ";
+	char cut [] = "[:.]; \n";
+	char Add[64];
+	char Songname [] = "Mizugame_short";
 
-	Chart = FileRead_open("Chart/Mizugame_short.txt");
-
-/*	FileRead_gets(read, 256, Chart);
-//	token = strtok_s(read, cut, &nexttoken);
-	fullnotes = atoi(read);
-	Player.Notes = fullnotes;
-	*/
-	FileRead_gets(read, 256, Chart);
-	token = strtok_s(read, cut, &nexttoken);
-	Player.sMin = atoi(token);
-	token = strtok_s('\0', cut, &nexttoken);
-	Player.sSec = atoi(token);
-	token = strtok_s('\0', cut, &nexttoken);
-	Player.sMill = atoi(token);
-	token = strtok_s('\0', cut, &nexttoken);
-	Player.Notes = atoi(token);
-	token = strtok_s('\0', cut, &nexttoken);
-
-	fullnotes = Player.Notes;
+	sprintf_s(Add, "Chart/%s.txt", Songname);
+	puts(Add);
+	Chart = FileRead_open(Add);
 
 	i = 0;
-	for (i = 0; i < fullnotes; i++){
-		FileRead_gets(read, 256, Chart);
-		token = strtok_s('\0', cut, &nexttoken);
-		Note[i].min = atoi(token);
-		token = strtok_s('\0', cut, &nexttoken);
-		Note[i].sec = atoi(token);
-		token = strtok_s('\0', cut, &nexttoken);
-		Note[i].mill = atoi(token);
-		token = strtok_s('\0', cut, &nexttoken);
-		Note[i].button = atoi(token);
-		token = strtok_s('\0', cut, &nexttoken);
-		Note[i].flag = 1;
+	while (FileRead_gets(read, 255, Chart) != NULL){
+		if (i){
+			token = strtok_s(read, cut, &nexttoken);
+			Note[i].min = atoi(token);
+			token = strtok_s(NULL, cut, &nexttoken);
+			Note[i].sec = atoi(token);
+			token = strtok_s(NULL, cut, &nexttoken);
+			Note[i].mill = atoi(token);
+			token = strtok_s(NULL, cut, &nexttoken);
+			Note[i].button = atoi(token);
+			Note[i].flag = 1;
+		}
+		else{
+			token = strtok_s(read, cut, &nexttoken);
+//			Player.sMin = atoi(token);
+			token = strtok_s(NULL, cut, &nexttoken);
+			Player.sMin = atoi(token);
+			token = strtok_s(NULL, cut, &nexttoken);
+			Player.sSec = atoi(token);
+			token = strtok_s(NULL, cut, &nexttoken);
+			Player.sMill = atoi(token);
+		}
+		i++;
 	}
-	for (i+1; i < 800; i++){
-		Note[i].flag = 0;
-	}
+	Player.Notes = i - 2;
 
 	FileRead_close(Chart);
 }
