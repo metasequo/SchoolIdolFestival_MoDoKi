@@ -83,6 +83,10 @@ typedef struct tagPLAYER
 	char SongName[64];
 } PLAYER;
 
+typedef struct tagSTATUS
+{
+	int StartTime, NowTime, ElapsedTime;
+} STATUS;
 
 int BoxHit(int Al, int Ar, int At, int Au, int Bl, int Br, int Bt, int Bu);
 int CircleHit(float Ax, float Ay, float Ar, float Bx, float By, float Br);
@@ -104,6 +108,7 @@ BUTTONPOINT Bp[9];
 CIRCLEPOINT Cp[64];
 NOTE Note[800];
 PLAYER Player;
+STATUS Status;
 
 
 // WinMain 関数
@@ -124,8 +129,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	SetDrawScreen(DX_SCREEN_BACK);
 	// ＤＸライブラリの初期化
 	if (DxLib_Init() == -1) return -1;
-	// 透過色を変更(ピンク)
-//	SetTransColor(255, 0, 255);
 	// マウスを表示状態にする
 	SetMouseDispFlag(TRUE);
 
@@ -138,8 +141,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	int MemX[32] = {0}, MemY[32], MoveX[32], MoveY[32];
 	float Frame;
 	int BPM;
-	int StartTime;
-	StartTime = GetNowCount();
 
 	// 色の値を取得
 	White = GetColor(255, 255, 255);
@@ -272,6 +273,12 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 		for (i = 0; i < 9; i++){
 			DrawCirclGraph(Bp[i].x, Bp[i].y, Graph.Circle_Green, Gs.Circle_X, Gs.Circle_Y);
 		}
+
+		if (Key[KEY_INPUT_SPACE] == 1){
+			Status.StartTime = GetNowCount();
+		}
+		Status.NowTime = GetNowCount();
+		Status.ElapsedTime = Status.NowTime - Status.StartTime;
 
 		if (Key[KEY_INPUT_A]==1 || CheckKeyInput(KEY_INPUT_A) == 0){
 			for (int j = 0; j < 64; j++){
@@ -542,6 +549,12 @@ void Struct(int MouseX, int MouseY){	// 表示する文字列を作成
 	lstrcat(StrBuf, StrBuf2);
 	lstrcat(StrBuf, " Combo : ");
 	_itoa_s(Player.Combo, StrBuf2, 10);
+	lstrcat(StrBuf, StrBuf2);
+	lstrcat(StrBuf, " Time : ");
+	_itoa_s((GetNowCount() - Status.StartTime) / 1000, StrBuf2, 10);
+	lstrcat(StrBuf, StrBuf2);
+	lstrcat(StrBuf, ":");
+	_itoa_s((GetNowCount() - Status.StartTime) % 1000 / 10, StrBuf2, 10);
 	lstrcat(StrBuf, StrBuf2);
 
 	DrawString(0, 15, StrBuf, GetColor(0, 0, 0));
