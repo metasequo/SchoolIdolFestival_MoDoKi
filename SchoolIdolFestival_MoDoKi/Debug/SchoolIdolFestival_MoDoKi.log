@@ -1,20 +1,20 @@
 ﻿  Main.cpp
-g:\documents\github\schoolidolfestival_modoki\schoolidolfestival_modoki\main.cpp(309): warning C4244: '=' : 'int' から 'float' への変換です。データが失われる可能性があります。
+g:\documents\github\schoolidolfestival_modoki\schoolidolfestival_modoki\main.cpp(322): warning C4244: '=' : 'int' から 'float' への変換です。データが失われる可能性があります。
 g:\documents\github\schoolidolfestival_modoki\schoolidolfestival_modoki\main.cpp(141): warning C4101: 'MoveX' : ローカル変数は 1 度も使われていません。
 g:\documents\github\schoolidolfestival_modoki\schoolidolfestival_modoki\main.cpp(141): warning C4101: 'MemY' : ローカル変数は 1 度も使われていません。
 g:\documents\github\schoolidolfestival_modoki\schoolidolfestival_modoki\main.cpp(138): warning C4101: 'k' : ローカル変数は 1 度も使われていません。
 g:\documents\github\schoolidolfestival_modoki\schoolidolfestival_modoki\main.cpp(141): warning C4101: 'MoveY' : ローカル変数は 1 度も使われていません。
 g:\documents\github\schoolidolfestival_modoki\schoolidolfestival_modoki\main.cpp(138): warning C4101: 'j' : ローカル変数は 1 度も使われていません。
-g:\documents\github\schoolidolfestival_modoki\schoolidolfestival_modoki\main.cpp(658): warning C4305: '*=' : 'double' から 'float' へ切り詰めます。
-g:\documents\github\schoolidolfestival_modoki\schoolidolfestival_modoki\main.cpp(661): warning C4305: '*=' : 'double' から 'float' へ切り詰めます。
-g:\documents\github\schoolidolfestival_modoki\schoolidolfestival_modoki\main.cpp(664): warning C4305: '*=' : 'double' から 'float' へ切り詰めます。
-g:\documents\github\schoolidolfestival_modoki\schoolidolfestival_modoki\main.cpp(672): warning C4305: '*=' : 'double' から 'float' へ切り詰めます。
-g:\documents\github\schoolidolfestival_modoki\schoolidolfestival_modoki\main.cpp(673): warning C4305: '*=' : 'double' から 'float' へ切り詰めます。
 g:\documents\github\schoolidolfestival_modoki\schoolidolfestival_modoki\main.cpp(674): warning C4305: '*=' : 'double' から 'float' へ切り詰めます。
-g:\documents\github\schoolidolfestival_modoki\schoolidolfestival_modoki\main.cpp(676): warning C4305: '*=' : 'double' から 'float' へ切り詰めます。
 g:\documents\github\schoolidolfestival_modoki\schoolidolfestival_modoki\main.cpp(677): warning C4305: '*=' : 'double' から 'float' へ切り詰めます。
-g:\documents\github\schoolidolfestival_modoki\schoolidolfestival_modoki\main.cpp(679): warning C4244: 'return' : 'float' から 'int' への変換です。データが失われる可能性があります。
-g:\documents\github\schoolidolfestival_modoki\schoolidolfestival_modoki\main.cpp(683): warning C4101: 'fullnotes' : ローカル変数は 1 度も使われていません。
-g:\documents\github\schoolidolfestival_modoki\schoolidolfestival_modoki\main.cpp(683): warning C4101: 'times' : ローカル変数は 1 度も使われていません。
-g:\documents\github\schoolidolfestival_modoki\schoolidolfestival_modoki\main.cpp(647): warning C4715: 'NoteHit' : 値を返さないコントロール パスがあります。
+g:\documents\github\schoolidolfestival_modoki\schoolidolfestival_modoki\main.cpp(680): warning C4305: '*=' : 'double' から 'float' へ切り詰めます。
+g:\documents\github\schoolidolfestival_modoki\schoolidolfestival_modoki\main.cpp(688): warning C4305: '*=' : 'double' から 'float' へ切り詰めます。
+g:\documents\github\schoolidolfestival_modoki\schoolidolfestival_modoki\main.cpp(689): warning C4305: '*=' : 'double' から 'float' へ切り詰めます。
+g:\documents\github\schoolidolfestival_modoki\schoolidolfestival_modoki\main.cpp(690): warning C4305: '*=' : 'double' から 'float' へ切り詰めます。
+g:\documents\github\schoolidolfestival_modoki\schoolidolfestival_modoki\main.cpp(692): warning C4305: '*=' : 'double' から 'float' へ切り詰めます。
+g:\documents\github\schoolidolfestival_modoki\schoolidolfestival_modoki\main.cpp(693): warning C4305: '*=' : 'double' から 'float' へ切り詰めます。
+g:\documents\github\schoolidolfestival_modoki\schoolidolfestival_modoki\main.cpp(695): warning C4244: 'return' : 'float' から 'int' への変換です。データが失われる可能性があります。
+g:\documents\github\schoolidolfestival_modoki\schoolidolfestival_modoki\main.cpp(699): warning C4101: 'fullnotes' : ローカル変数は 1 度も使われていません。
+g:\documents\github\schoolidolfestival_modoki\schoolidolfestival_modoki\main.cpp(699): warning C4101: 'times' : ローカル変数は 1 度も使われていません。
+g:\documents\github\schoolidolfestival_modoki\schoolidolfestival_modoki\main.cpp(663): warning C4715: 'NoteHit' : 値を返さないコントロール パスがあります。
   SchoolIdolFestival_MoDoKi.vcxproj -> G:\Documents\GitHub\SchoolIdolFestival_MoDoKi\Debug\SchoolIdolFestival_MoDoKi.exe

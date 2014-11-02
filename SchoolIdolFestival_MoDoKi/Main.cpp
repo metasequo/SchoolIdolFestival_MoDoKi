@@ -250,7 +250,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	
 
 	// 読みこんだ音をループ再生します(『PlaySoundMem』関数使用)
-//	PlaySoundMem(Sound.Dice, DX_PLAYTYPE_LOOP);
+//	PlaySoundMem(Sound.Mizugame, DX_PLAYTYPE_LOOP);
 
 
 	// ゲームループ開始　エスケープキーが押されたら終了する
@@ -274,19 +274,32 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 			DrawCirclGraph(Bp[i].x, Bp[i].y, Graph.Circle_Green, Gs.Circle_X, Gs.Circle_Y);
 		}
 
-		if (Key[KEY_INPUT_SPACE] == 1){
+		if (Key[KEY_INPUT_A] == 1){
+			StopSoundMem(Sound.Mizugame);
+			PlaySoundMem(Sound.Mizugame, DX_PLAYTYPE_BACK);
 			Status.StartTime = GetNowCount();
 		}
 		Status.NowTime = GetNowCount();
 		Status.ElapsedTime = Status.NowTime - Status.StartTime;
 
-		if (Key[KEY_INPUT_A]==1 || CheckKeyInput(KEY_INPUT_A) == 0){
+//		if (Key[KEY_INPUT_A]==1 || CheckKeyInput(KEY_INPUT_A) == 0)
+		{
 			for (int j = 0; j < 64; j++){
 				if (Cp[j].flag == 0){
-					Cp[j].flag = 1;
-					Cp[j].button = j % 9;
-//					Cp[j].button = GetRand(9);
-//					Cp[j].button = j % 2 + 2;
+					for (i = 0; i <= Player.Notes; i++)
+					{
+						if (Note[i].flag == 1 && Status.ElapsedTime / 60000 == Note[i].min
+							&& Status.ElapsedTime / 1000 == Note[i].sec && Status.ElapsedTime % 1000 / 10 < Note[i].mill)
+						{
+							Cp[j].flag = 1;
+							Cp[j].button = j % 9;
+							//Cp[j].button = GetRand(9);
+							//Cp[j].button = j % 2 + 2;
+							Cp[j].button = Note[i].button;
+							Note[i].flag++;
+							break;
+						}
+					}
 					break;
 				}
 			}
@@ -294,7 +307,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
 		//ノート（サークル）動作
 		for (i = 0; i < 64; i++){
-			BPM = 60;
+			BPM = 77;
 			int button = Cp[i].button;
 
 			if (Cp[i].flag != 0){
@@ -551,7 +564,10 @@ void Struct(int MouseX, int MouseY){	// 表示する文字列を作成
 	_itoa_s(Player.Combo, StrBuf2, 10);
 	lstrcat(StrBuf, StrBuf2);
 	lstrcat(StrBuf, " Time : ");
-	_itoa_s((GetNowCount() - Status.StartTime) / 1000, StrBuf2, 10);
+	_itoa_s((GetNowCount() - Status.StartTime) / 60000, StrBuf2, 10);
+	lstrcat(StrBuf, StrBuf2);
+	lstrcat(StrBuf, ":");
+	_itoa_s((GetNowCount() - Status.StartTime) % 60000 / 1000, StrBuf2, 10);
 	lstrcat(StrBuf, StrBuf2);
 	lstrcat(StrBuf, ":");
 	_itoa_s((GetNowCount() - Status.StartTime) % 1000 / 10, StrBuf2, 10);
@@ -587,7 +603,7 @@ void Struct(int MouseX, int MouseY){	// 表示する文字列を作成
 
 	
 	for (i = 0; i < 800; i++){
-		if (Note[i].flag == 1){
+		if (Note[i].flag >= 1){
 			lstrcpy(StrBuf, "");
 			_itoa_s(i, StrBuf2, 10);
 			lstrcat(StrBuf, StrBuf2);
@@ -715,7 +731,7 @@ void ChartRead(){
 		}
 		i++;
 	}
-	Player.Notes = i - 2;
+	Player.Notes = i - 1;
 
 	FileRead_close(Chart);
 }
