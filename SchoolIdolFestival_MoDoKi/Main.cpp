@@ -86,7 +86,13 @@ typedef struct tagPLAYER
 typedef struct tagSTATUS
 {
 	int StartTime, NowTime, ElapsedTime;
+	int Timing;
+	int DateSum;
+	int White, Black, Gray;
 } STATUS;
+
+void Format();
+void Reset();
 
 int BoxHit(int Al, int Ar, int At, int Au, int Bl, int Br, int Bt, int Bu);
 int CircleHit(float Ax, float Ay, float Ar, float Bx, float By, float Br);
@@ -132,9 +138,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	// マウスを表示状態にする
 	SetMouseDispFlag(TRUE);
 
-	int DateSum;
 	int MouseX, MouseY;
-	int White, Black, Gray;
 	int i, j, k;
 //	char StrBuf[128], StrBuf2[32];
 	char Key[256];
@@ -142,112 +146,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	float Frame;
 	int BPM;
 
-	// 色の値を取得
-	White = GetColor(255, 255, 255);
-	Black = GetColor(0, 0, 0);
-	Gray = GetColor(123, 123, 123);
-	//乱数の初期設定(元凶)
-	GetDateTime(&Date);
-	DateSum = Date.Year + Date.Mon + Date.Day + Date.Hour + Date.Min + Date.Sec;
-	SRand(DateSum);
-
-	//画像読み込み
-	Graph.Circle_Blue = LoadGraph("Graph/Circle_Blue.png");
-	Graph.Circle_Green = LoadGraph("Graph/Circle_Green.png");
-	Graph.Circle_Red = LoadGraph("Graph/Circle_Red.png");
-	Graph.Onpu = LoadGraph("Graph/Onpu.png");
-	LoadDivGraph("Graph/Number.png", 10, 5, 2, 90, 86, Graph.Number);
-	Graph.combo = LoadGraph("Graph/combo.png");
-	Graph.Perfect = LoadGraph("Graph/Perfect.png");
-	Graph.Great = LoadGraph("Graph/Great.png");
-	Graph.Good = LoadGraph("Graph/Good.png");
-	Graph.Bad = LoadGraph("Graph/Bad.png");
-	Graph.Miss = LoadGraph("Graph/Miss.png");
-	Graph.Gameover = LoadGraph("Graph/Gameover.png");
-
-	//画像のサイズを得る
-	GetGraphSize(Graph.Circle_Blue, &Gs.Circle_X, &Gs.Circle_Y);
-	GetGraphSize(Graph.Onpu, &Gs.Onpu_X, &Gs.Onpu_Y);
-	GetGraphSize(Graph.Number[0], &Gs.Number_X, &Gs.Number_Y);
-	GetGraphSize(Graph.combo, &Gs.combo_X, &Gs.combo_Y);
-	GetGraphSize(Graph.Perfect, &Gs.Perfect_X, &Gs.Perfect_Y);
-	GetGraphSize(Graph.Great, &Gs.Great_X, &Gs.Great_Y);
-	GetGraphSize(Graph.Good, &Gs.Good_X, &Gs.Good_Y);
-	GetGraphSize(Graph.Bad, &Gs.Bad_X, &Gs.Bad_Y);
-	GetGraphSize(Graph.Miss, &Gs.Miss_X, &Gs.Miss_Y);
-	GetGraphSize(Graph.Gameover, &Gs.Gameover_X, &Gs.Gameover_Y);
-
-	Gp.Circle_X = Screen_X / 2;
-	Gp.Circle_Y = 164 + Gs.Circle_X / 2;
-	Gp.Onpu_X = Screen_X / 2;
-	Gp.Onpu_Y = Gp.Circle_Y;
-	Gp.Perfect_X = Center(Gs.Perfect_X, 'X');
-	Gp.Perfect_Y = 523;
-	Gp.Great_X = Center(Gs.Great_X, 'X');
-	Gp.Great_Y = 523;
-	Gp.Good_X = Center(Gs.Good_X, 'X');
-	Gp.Good_Y = 523;
-	Gp.Bad_X = Center(Gs.Bad_X, 'X');
-	Gp.Bad_Y = 523;
-	Gp.Miss_X = Center(Gs.Miss_X, 'X');
-	Gp.Miss_Y = 523;
-	Gp.Gameover_X = Center(Gs.Gameover_X, 'X');
-	Gp.Gameover_Y = 523;
-
-	Bp[0].x = 179;
-	Bp[0].y = 164;
-	Bp[1].x = 229;
-	Bp[1].y = 422;
-	Bp[2].x = 376;
-	Bp[2].y = 640;
-	Bp[3].x = 594;
-	Bp[3].y = 787;
-	Bp[4].x = 853;
-	Bp[4].y = 839;
-	Bp[5].x = 1111;
-	Bp[5].y = 787;
-	Bp[6].x = 1330;
-	Bp[6].y = 640;
-	Bp[7].x = 1477;
-	Bp[7].y = 422;
-	Bp[8].x = 1528;
-	Bp[8].y = 164;
-
-	for (i = 0; i < 9; i++){
-		Bp[i].x += Gs.Circle_X / 2;
-		Bp[i].y += Gs.Circle_Y / 2;
-		Bp[i].flag = 0;
-	}
-
-	for (i = 0; i < 64; i++){
-		Cp[i].flag = 0;
-		Cp[i].frame = 0;
-		Cp[i].judge = 0;
-	}
-
-	Player.Score = 0;
-	Player.Combo = 0;
-	Player.HP = 20;
-	Player.Perfect = 0;
-	Player.Great = 0;
-	Player.Good = 0;
-	Player.Bad = 0;
-	Player.Miss = 0;
-	Player.jPerfect = 50;
-	Player.jGreat = 100;
-	Player.jGood = 150;
-	Player.pSec = 0;
-	Player.pMin = 0;
-	Player.pMill = 0;
-
-
-	// test.mp3のメモリへの読み込みサウンドハンドルをSHandleに保存します
-	Sound.Mizugame = LoadSoundMem("Sound/Mizugame_short.mp3");
-	Sound.pefect = LoadSoundMem("Sound/perfect.mp3");
-	Sound.great = LoadSoundMem("Sound/great.mp3");
-
-	ChartRead();
-	
+	Format();
 
 	// 読みこんだ音をループ再生します(『PlaySoundMem』関数使用)
 //	PlaySoundMem(Sound.Mizugame, DX_PLAYTYPE_LOOP);
@@ -263,7 +162,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 		UpdateKey(Key);
 
 		// 画面左上の領域に四角を描き,前に描いてあった文字列を消す
-		DrawBox(0, 0, Screen_X , Screen_Y, White, TRUE);
+		DrawBox(0, 0, Screen_X , Screen_Y, Status.White, TRUE);
 
 		Struct(MouseX, MouseY);
 
@@ -275,12 +174,24 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 		}
 
 		if (Key[KEY_INPUT_A] == 1){
+			Reset();
 			StopSoundMem(Sound.Mizugame);
 			PlaySoundMem(Sound.Mizugame, DX_PLAYTYPE_BACK);
 			Status.StartTime = GetNowCount();
 		}
 		Status.NowTime = GetNowCount();
 		Status.ElapsedTime = Status.NowTime - Status.StartTime;
+
+		//↑ or → でBPMプラス
+		if (Key[KEY_INPUT_UP] != 0 || Key[KEY_INPUT_RIGHT] == 1){
+			Status.Timing += 10;
+		}
+		//↓ or ← でBPMマイナス
+		if (Key[KEY_INPUT_DOWN] != 0 || Key[KEY_INPUT_LEFT] == 1){
+			Status.Timing -= 10;
+			if (BPM < 1)	BPM = 1;
+		}
+
 
 //		if (Key[KEY_INPUT_A]==1 || CheckKeyInput(KEY_INPUT_A) == 0)
 		{
@@ -289,13 +200,14 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 					for (i = 0; i <= Player.Notes; i++)
 					{
 						if (Note[i].flag == 1 && Status.ElapsedTime / 60000 == Note[i].min
-							&& Status.ElapsedTime / 1000 == Note[i].sec && Status.ElapsedTime % 1000 / 10 < Note[i].mill)
+							&& Status.ElapsedTime % 60000 / 1000 == Note[i].sec
+							&& Status.ElapsedTime % 1000 / 10 >= Note[i].mill)
 						{
 							Cp[j].flag = 1;
-							Cp[j].button = j % 9;
+//							Cp[j].button = j % 9;
 							//Cp[j].button = GetRand(9);
 							//Cp[j].button = j % 2 + 2;
-							Cp[j].button = Note[i].button;
+							Cp[j].button = Note[i].button -1;
 							Note[i].flag++;
 							break;
 						}
@@ -483,17 +395,15 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 				Cp[i].X = Gp.Circle_X;
 				Cp[i].Y = Gp.Circle_Y;
 			}
+			StopSoundMem(Sound.Mizugame);
+			Reset();
+			Status.StartTime = 0;
 		}
 
-/*		if ((GetNowCount() - StartTime) % (60000 / BPM) <= 50){
-			if (CheckSoundMem(Sound.pefect) == 0)
-				PlaySoundMem(Sound.pefect, DX_PLAYTYPE_BACK);
-			StartTime = GetNowCount();
-		}
-		*/
-
-		if (Key[KEY_INPUT_SPACE] == 1){
-			PlaySoundMem(Sound.pefect, DX_PLAYTYPE_BACK);
+		if (Player.sMin * 60000 + Player.sSec * 1000 + Player.sMill < Status.ElapsedTime - 2500){
+			StopSoundMem(Sound.Mizugame);
+			Reset();
+			Status.StartTime = 0;
 		}
 
 		//裏画面描画
@@ -540,93 +450,6 @@ void MovePoint(int Before_X, int Before_Y, int After_X, int After_Y, int *Move_X
 	*Move_X = (After_X - Before_X) / Frame;
 	*Move_Y = (After_Y - Before_Y) / Frame;
 }
-
-void Struct(int MouseX, int MouseY){	// 表示する文字列を作成
-	char StrBuf[128], StrBuf2[32];
-	int i;
-
-	lstrcpy(StrBuf, "座標 Ｘ"); // 文字列"座標 Ｘ"をStrBufにコピー	
-	_itoa_s(MouseX, StrBuf2, 10); // MouseXの値を文字列にしてStrBuf2に格納
-	lstrcat(StrBuf, StrBuf2); // StrBufの内容にStrBuf2の内容を付け足す
-	lstrcat(StrBuf, "　Ｙ "); // StrBufの内容に文字列"　Ｙ "を付け足す
-	_itoa_s(MouseY, StrBuf2, 10); // MouseYの値を文字列にしてStrBuf2に格納
-	lstrcat(StrBuf, StrBuf2); // StrBufの内容にStrBuf2の内容を付け足す
-
-	DrawString(0, 0, StrBuf, GetColor(0, 0, 0));
-
-	lstrcpy(StrBuf, "HP : ");
-	_itoa_s(Player.HP, StrBuf2, 10);
-	lstrcat(StrBuf, StrBuf2);
-	lstrcat(StrBuf, " Score : ");
-	_itoa_s(Player.Score, StrBuf2, 10);
-	lstrcat(StrBuf, StrBuf2);
-	lstrcat(StrBuf, " Combo : ");
-	_itoa_s(Player.Combo, StrBuf2, 10);
-	lstrcat(StrBuf, StrBuf2);
-	lstrcat(StrBuf, " Time : ");
-	_itoa_s((GetNowCount() - Status.StartTime) / 60000, StrBuf2, 10);
-	lstrcat(StrBuf, StrBuf2);
-	lstrcat(StrBuf, ":");
-	_itoa_s((GetNowCount() - Status.StartTime) % 60000 / 1000, StrBuf2, 10);
-	lstrcat(StrBuf, StrBuf2);
-	lstrcat(StrBuf, ":");
-	_itoa_s((GetNowCount() - Status.StartTime) % 1000 / 10, StrBuf2, 10);
-	lstrcat(StrBuf, StrBuf2);
-
-	DrawString(0, 15, StrBuf, GetColor(0, 0, 0));
-
-	for (i = 0; i < 64; i++){
-		if (Cp[i].flag != 0){
-			lstrcpy(StrBuf, "judge ");
-			_itoa_s(i, StrBuf2, 10);
-			lstrcat(StrBuf, StrBuf2);
-			lstrcat(StrBuf, " : ");
-			_itoa_s(Cp[i].judge, StrBuf2, 10);
-			lstrcat(StrBuf, StrBuf2);
-			DrawString(0, 30 + i * 15, StrBuf, GetColor(0, 0, 0));
-		}
-	}
-
-	lstrcpy(StrBuf, "Notes : ");
-	_itoa_s(Player.Notes, StrBuf2, 10);
-	lstrcat(StrBuf, StrBuf2);
-	lstrcat(StrBuf, " sTime ");
-	_itoa_s(Player.sMin, StrBuf2, 10);
-	lstrcat(StrBuf, StrBuf2);
-	lstrcat(StrBuf, ":");
-	_itoa_s(Player.sSec, StrBuf2, 10);
-	lstrcat(StrBuf, StrBuf2);
-	lstrcat(StrBuf, ":");
-	_itoa_s(Player.sMill, StrBuf2, 10);
-	lstrcat(StrBuf, StrBuf2);
-	DrawString(300, 0, StrBuf, GetColor(0, 0, 0));
-
-	
-	for (i = 0; i < 800; i++){
-		if (Note[i].flag >= 1){
-			lstrcpy(StrBuf, "");
-			_itoa_s(i, StrBuf2, 10);
-			lstrcat(StrBuf, StrBuf2);
-			lstrcat(StrBuf, " : Flag : ");
-			_itoa_s(Note[i].flag, StrBuf2, 10);
-			lstrcat(StrBuf, StrBuf2);
-			lstrcat(StrBuf, " NoteTime ");
-			_itoa_s(Note[i].min, StrBuf2, 10);
-			lstrcat(StrBuf, StrBuf2);
-			lstrcat(StrBuf, ":");
-			_itoa_s(Note[i].sec, StrBuf2, 10);
-			lstrcat(StrBuf, StrBuf2);
-			lstrcat(StrBuf, ":");
-			_itoa_s(Note[i].mill, StrBuf2, 10);
-			lstrcat(StrBuf, StrBuf2);
-			lstrcat(StrBuf, " Button :");
-			_itoa_s(Note[i].button, StrBuf2, 10);
-			lstrcat(StrBuf, StrBuf2);
-			DrawString(300, 15 + i * 15, StrBuf, GetColor(0, 0, 0));
-		}
-	}
-
-	}
 
 int UpdateKey(char Key[]){
 	char tmpKey[256]; // 現在のキーの入力状態を格納する
@@ -734,4 +557,222 @@ void ChartRead(){
 	Player.Notes = i - 1;
 
 	FileRead_close(Chart);
+}
+
+void Struct(int MouseX, int MouseY){	// 表示する文字列を作成
+	char StrBuf[128], StrBuf2[32];
+	int i, j;
+
+	lstrcpy(StrBuf, "座標 Ｘ"); // 文字列"座標 Ｘ"をStrBufにコピー	
+	_itoa_s(MouseX, StrBuf2, 10); // MouseXの値を文字列にしてStrBuf2に格納
+	lstrcat(StrBuf, StrBuf2); // StrBufの内容にStrBuf2の内容を付け足す
+	lstrcat(StrBuf, "　Ｙ "); // StrBufの内容に文字列"　Ｙ "を付け足す
+	_itoa_s(MouseY, StrBuf2, 10); // MouseYの値を文字列にしてStrBuf2に格納
+	lstrcat(StrBuf, StrBuf2); // StrBufの内容にStrBuf2の内容を付け足す
+
+	DrawString(0, 0, StrBuf, GetColor(0, 0, 0));
+
+	lstrcpy(StrBuf, "HP : ");
+	_itoa_s(Player.HP, StrBuf2, 10);
+	lstrcat(StrBuf, StrBuf2);
+	lstrcat(StrBuf, " Score : ");
+	_itoa_s(Player.Score, StrBuf2, 10);
+	lstrcat(StrBuf, StrBuf2);
+	lstrcat(StrBuf, " Combo : ");
+	_itoa_s(Player.Combo, StrBuf2, 10);
+	lstrcat(StrBuf, StrBuf2);
+	lstrcat(StrBuf, " Timing : ");
+	_itoa_s(Status.Timing, StrBuf2, 10);
+	lstrcat(StrBuf, StrBuf2);
+	lstrcat(StrBuf, " Time : ");
+	_itoa_s((GetNowCount() - Status.StartTime) / 60000, StrBuf2, 10);
+	lstrcat(StrBuf, StrBuf2);
+	lstrcat(StrBuf, ":");
+	_itoa_s((GetNowCount() - Status.StartTime) % 60000 / 1000, StrBuf2, 10);
+	lstrcat(StrBuf, StrBuf2);
+	lstrcat(StrBuf, ":");
+	_itoa_s((GetNowCount() - Status.StartTime) % 1000 / 10, StrBuf2, 10);
+	lstrcat(StrBuf, StrBuf2);
+
+	DrawString(0, 15, StrBuf, GetColor(0, 0, 0));
+
+	for (i = 0; i < 64; i++){
+		if (Cp[i].flag != 0){
+			lstrcpy(StrBuf, "judge ");
+			_itoa_s(i, StrBuf2, 10);
+			lstrcat(StrBuf, StrBuf2);
+			lstrcat(StrBuf, " : ");
+			_itoa_s(Cp[i].judge, StrBuf2, 10);
+			lstrcat(StrBuf, StrBuf2);
+			DrawString(0, 30 + i * 15, StrBuf, GetColor(0, 0, 0));
+		}
+	}
+
+	lstrcpy(StrBuf, "Notes : ");
+	_itoa_s(Player.Notes, StrBuf2, 10);
+	lstrcat(StrBuf, StrBuf2);
+	lstrcat(StrBuf, " sTime ");
+	_itoa_s(Player.sMin, StrBuf2, 10);
+	lstrcat(StrBuf, StrBuf2);
+	lstrcat(StrBuf, ":");
+	_itoa_s(Player.sSec, StrBuf2, 10);
+	lstrcat(StrBuf, StrBuf2);
+	lstrcat(StrBuf, ":");
+	_itoa_s(Player.sMill, StrBuf2, 10);
+	lstrcat(StrBuf, StrBuf2);
+	DrawString(300, 0, StrBuf, GetColor(0, 0, 0));
+
+	j = 0;
+	for (i = 0; i < 800; i++){
+		if (Note[i].flag == 1){
+			lstrcpy(StrBuf, "");
+			_itoa_s(i, StrBuf2, 10);
+			lstrcat(StrBuf, StrBuf2);
+			lstrcat(StrBuf, " : Flag : ");
+			_itoa_s(Note[i].flag, StrBuf2, 10);
+			lstrcat(StrBuf, StrBuf2);
+			lstrcat(StrBuf, " NoteTime ");
+			_itoa_s(Note[i].min, StrBuf2, 10);
+			lstrcat(StrBuf, StrBuf2);
+			lstrcat(StrBuf, ":");
+			_itoa_s(Note[i].sec, StrBuf2, 10);
+			lstrcat(StrBuf, StrBuf2);
+			lstrcat(StrBuf, ":");
+			_itoa_s(Note[i].mill, StrBuf2, 10);
+			lstrcat(StrBuf, StrBuf2);
+			lstrcat(StrBuf, " Button :");
+			_itoa_s(Note[i].button, StrBuf2, 10);
+			lstrcat(StrBuf, StrBuf2);
+			DrawString(300, 30 + j * 15, StrBuf, GetColor(0, 0, 0));
+			j++;
+		}
+	}
+}
+
+void Format(){
+	int i, j;
+	// 色の値を取得
+	Status.White = GetColor(255, 255, 255);
+	Status.Black = GetColor(0, 0, 0);
+	Status.Gray = GetColor(123, 123, 123);
+	//乱数の初期設定(元凶)
+	GetDateTime(&Date);
+	Status.DateSum = Date.Year + Date.Mon + Date.Day + Date.Hour + Date.Min + Date.Sec;
+	SRand(Status.DateSum);
+
+	//音声読み込み
+	Sound.Mizugame = LoadSoundMem("Sound/Mizugame_short.mp3");
+	Sound.pefect = LoadSoundMem("Sound/perfect.mp3");
+	Sound.great = LoadSoundMem("Sound/great.mp3");
+
+	//画像読み込み
+	Graph.Circle_Blue = LoadGraph("Graph/Circle_Blue.png");
+	Graph.Circle_Green = LoadGraph("Graph/Circle_Green.png");
+	Graph.Circle_Red = LoadGraph("Graph/Circle_Red.png");
+	Graph.Onpu = LoadGraph("Graph/Onpu.png");
+	LoadDivGraph("Graph/Number.png", 10, 5, 2, 90, 86, Graph.Number);
+	Graph.combo = LoadGraph("Graph/combo.png");
+	Graph.Perfect = LoadGraph("Graph/Perfect.png");
+	Graph.Great = LoadGraph("Graph/Great.png");
+	Graph.Good = LoadGraph("Graph/Good.png");
+	Graph.Bad = LoadGraph("Graph/Bad.png");
+	Graph.Miss = LoadGraph("Graph/Miss.png");
+	Graph.Gameover = LoadGraph("Graph/Gameover.png");
+
+	//画像のサイズを得る
+	GetGraphSize(Graph.Circle_Blue, &Gs.Circle_X, &Gs.Circle_Y);
+	GetGraphSize(Graph.Onpu, &Gs.Onpu_X, &Gs.Onpu_Y);
+	GetGraphSize(Graph.Number[0], &Gs.Number_X, &Gs.Number_Y);
+	GetGraphSize(Graph.combo, &Gs.combo_X, &Gs.combo_Y);
+	GetGraphSize(Graph.Perfect, &Gs.Perfect_X, &Gs.Perfect_Y);
+	GetGraphSize(Graph.Great, &Gs.Great_X, &Gs.Great_Y);
+	GetGraphSize(Graph.Good, &Gs.Good_X, &Gs.Good_Y);
+	GetGraphSize(Graph.Bad, &Gs.Bad_X, &Gs.Bad_Y);
+	GetGraphSize(Graph.Miss, &Gs.Miss_X, &Gs.Miss_Y);
+	GetGraphSize(Graph.Gameover, &Gs.Gameover_X, &Gs.Gameover_Y);
+
+	Gp.Circle_X = Screen_X / 2;
+	Gp.Circle_Y = 164 + Gs.Circle_X / 2;
+	Gp.Onpu_X = Screen_X / 2;
+	Gp.Onpu_Y = Gp.Circle_Y;
+	Gp.Perfect_X = Center(Gs.Perfect_X, 'X');
+	Gp.Perfect_Y = 523;
+	Gp.Great_X = Center(Gs.Great_X, 'X');
+	Gp.Great_Y = 523;
+	Gp.Good_X = Center(Gs.Good_X, 'X');
+	Gp.Good_Y = 523;
+	Gp.Bad_X = Center(Gs.Bad_X, 'X');
+	Gp.Bad_Y = 523;
+	Gp.Miss_X = Center(Gs.Miss_X, 'X');
+	Gp.Miss_Y = 523;
+	Gp.Gameover_X = Center(Gs.Gameover_X, 'X');
+	Gp.Gameover_Y = 523;
+
+	Bp[0].x = 179;
+	Bp[0].y = 164;
+	Bp[1].x = 229;
+	Bp[1].y = 422;
+	Bp[2].x = 376;
+	Bp[2].y = 640;
+	Bp[3].x = 594;
+	Bp[3].y = 787;
+	Bp[4].x = 853;
+	Bp[4].y = 839;
+	Bp[5].x = 1111;
+	Bp[5].y = 787;
+	Bp[6].x = 1330;
+	Bp[6].y = 640;
+	Bp[7].x = 1477;
+	Bp[7].y = 422;
+	Bp[8].x = 1528;
+	Bp[8].y = 164;
+
+	for (i = 0; i < 9; i++){
+		Bp[i].x += Gs.Circle_X / 2;
+		Bp[i].y += Gs.Circle_Y / 2;
+		Bp[i].flag = 0;
+	}
+
+	Status.Timing = 1000;
+
+	Reset();
+}
+
+void Reset(){
+	int i, j;
+
+	for (i = 0; i < 64; i++){
+		Cp[i].flag = 0;
+		Cp[i].frame = 0;
+		Cp[i].judge = 0;
+	}
+
+	Player.Score = 0;
+	Player.Combo = 0;
+	Player.HP = 20;
+	Player.Perfect = 0;
+	Player.Great = 0;
+	Player.Good = 0;
+	Player.Bad = 0;
+	Player.Miss = 0;
+	Player.jPerfect = 50;
+	Player.jGreat = 100;
+	Player.jGood = 150;
+	Player.pSec = 0;
+	Player.pMin = 0;
+	Player.pMill = 0;
+
+	ChartRead();
+	for (i = 0; i < Player.Notes; i++){
+		Note[i].mill += Status.Timing / 10;
+		if (Note[i].mill >= 100){
+			Note[i].mill = Note[i].mill % 100;
+			Note[i].sec + 1;
+			if (Note[i].sec >= 60){
+				Note[i].sec %= 60;
+				Note[i].min + 1;
+			}
+		}
+	}
+
 }
