@@ -31,6 +31,7 @@ typedef struct tagGRAPHSIZE
 	int Perfect_X, Great_X, Good_X, Bad_X, Miss_X;
 	int Perfect_Y, Great_Y, Good_Y, Bad_Y, Miss_Y;
 	int Gameover_X, Gameover_Y;
+	int Radius;
 } GRAPHSIZE;
 
 typedef struct tagGRAPHPOINT
@@ -51,13 +52,13 @@ typedef struct tagSOUND
 
 typedef struct tagBUTTONPOINT
 {
-	int x, y;
+	int x, y, r;
 	int flag;
 } BUTTONPOINT;
 
 typedef struct tagCIRCLEPOINT
 {
-	int X, Y, MoveX, MoveY;
+	int X, Y, MoveX, MoveY, Radius;
 	int button, frame, flag, judge;
 } CIRCLEPOINT;
 
@@ -100,7 +101,9 @@ int Center(int GraphSize, char Tipe);
 void MovePoint(int Before_X, int Before_Y, int After_X, int After_Y, int *Move_X, int *Move_Y, int Frame);
 void Struct(int MouseX, int MouseY);
 void DrawCirclGraph(int X, int Y, int Graph, int GsX, int GsY);
+void DrawCirclExtendGraph(int X, int Y, int Graph, int Radius);
 int UpdateKey(char Key []);
+int Pythagorean(int Ax, int Ay, int Bx, int By);
 int NoteHit(int circle, int button);
 int ScoreCalcu(int judge, int combo);
 void ChartRead();
@@ -166,8 +169,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
 		Struct(MouseX, MouseY);
 
-		DrawCirclGraph(Gp.Onpu_X, Gp.Onpu_Y, Graph.Onpu, Gs.Onpu_X, Gs.Onpu_Y);
-		DrawCirclGraph(Gp.Circle_X, Gp.Circle_Y, Graph.Circle_Blue, Gs.Circle_X, Gs.Circle_Y);
+//		DrawCirclGraph(Gp.Onpu_X, Gp.Onpu_Y, Graph.Onpu, Gs.Onpu_X, Gs.Onpu_Y);
+//		DrawCirclGraph(Gp.Circle_X, Gp.Circle_Y, Graph.Circle_Blue, Gs.Circle_X, Gs.Circle_Y);
+		DrawCirclExtendGraph(Gp.Onpu_X, Gp.Onpu_Y, Graph.Onpu, Gs.Onpu_X / 2);
+		DrawCirclExtendGraph(Gp.Circle_X, Gp.Circle_Y, Graph.Circle_Blue, Gs.Circle_X / 2);
 
 		for (i = 0; i < 9; i++){
 			DrawCirclGraph(Bp[i].x, Bp[i].y, Graph.Circle_Green, Gs.Circle_X, Gs.Circle_Y);
@@ -219,7 +224,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
 		//ノート（サークル）動作
 		for (i = 0; i < 64; i++){
-			BPM = 77;
+			BPM = 120;
 			int button = Cp[i].button;
 
 			if (Cp[i].flag != 0){
@@ -244,7 +249,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 				}
 
 				if (Cp[i].flag >= 1){
-					DrawCirclGraph(Cp[i].X, Cp[i].Y, Graph.Circle_Red, Gs.Circle_X, Gs.Circle_Y);
+					Cp[i].Radius = (float) Gs.Circle_X * ((Bp[Cp[i].button].r - Pythagorean((float) Cp[i].X, Cp[i].Y, (float) Bp[Cp[i].button].x, (float) Bp[Cp[i].button].y)) / (float) Bp[Cp[i].button].r);
+//					DrawCirclGraph(Cp[i].X, Cp[i].Y, Graph.Circle_Red, Gs.Circle_X, Gs.Circle_Y);
+					DrawCirclExtendGraph(Cp[i].X, Cp[i].Y, Graph.Circle_Red, Cp[i].Radius);
 
 					if (Cp[i].button == 0 || Cp[i].button == 1 || Cp[i].button == 2 || Cp[i].button == 3){
 						if (Cp[i].X < Bp[Cp[i].button].x){
@@ -465,14 +472,18 @@ void DrawCirclGraph(int X, int Y, int Graph, int GsX, int GsY){
 	DrawGraph(X - GsX / 2, Y - GsY / 2, Graph, TRUE);
 }
 
+void DrawCirclExtendGraph(int X, int Y, int Graph, int Radius){
+	DrawExtendGraph(X - (Radius / 2), Y - (Radius / 2), X + (Radius / 2), Y + (Radius / 2), Graph, TRUE);
+}
+
+int Pythagorean(int Ax, int Ay, int Bx, int By){
+	return sqrt(pow(((double) Ax - (double) Bx), 2) + pow(((double) Ay - (double) By), 2));
+}
+
 int NoteHit(int circle, int button){
-	double X, Y, Z;
-	int judge[5] , i;
+	int judge[5], Z, i;
 
-	X = Bp[button].x - Cp[circle].X;
-	Y = Bp[button].y - Cp[circle].Y;
-
-	Z = (int) sqrt(pow(X, 2) + pow(Y, 2));
+	Z = Pythagorean(Bp[button].x, Bp[button].y, Cp[circle].X, Cp[circle].Y);
 
 	judge[0] = Player.jPerfect;
 	judge[1] = Player.jGreat;
@@ -651,6 +662,7 @@ void Struct(int MouseX, int MouseY){	// 表示する文字列を作成
 
 void Format(){
 	int i, j;
+	double X, Y;
 	// 色の値を取得
 	Status.White = GetColor(255, 255, 255);
 	Status.Black = GetColor(0, 0, 0);
@@ -690,6 +702,7 @@ void Format(){
 	GetGraphSize(Graph.Bad, &Gs.Bad_X, &Gs.Bad_Y);
 	GetGraphSize(Graph.Miss, &Gs.Miss_X, &Gs.Miss_Y);
 	GetGraphSize(Graph.Gameover, &Gs.Gameover_X, &Gs.Gameover_Y);
+	Gs.Radius = Gs.Circle_X / 2;
 
 	Gp.Circle_X = Screen_X / 2;
 	Gp.Circle_Y = 164 + Gs.Circle_X / 2;
@@ -731,6 +744,7 @@ void Format(){
 		Bp[i].x += Gs.Circle_X / 2;
 		Bp[i].y += Gs.Circle_Y / 2;
 		Bp[i].flag = 0;
+		Bp[i].r = Pythagorean(Gp.Circle_X, Gp.Circle_Y, Bp[i].x, Bp[i].y);
 	}
 
 	Status.Timing = 1000;
@@ -745,6 +759,7 @@ void Reset(){
 		Cp[i].flag = 0;
 		Cp[i].frame = 0;
 		Cp[i].judge = 0;
+		Cp[i].Radius = 76;
 	}
 
 	Player.Score = 0;
