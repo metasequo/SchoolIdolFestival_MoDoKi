@@ -1,40 +1,29 @@
-﻿2014/11/13 15:22:56 にビルドを開始しました。
-     1>ノード 2 上のプロジェクト "C:\Users\K-Hamamoto\Documents\GitHub\SchoolIdolFestival_MoDoKi\SchoolIdolFestival_MoDoKi\SchoolIdolFestival_MoDoKi.vcxproj" (Build ターゲット)。
-     1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /I"C:\DxLib_VC\プロジェクトに追加すべきファイル_VC用" /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D WIN32 /D _DEBUG /D _WINDOWS /D _MBCS /Gm /EHsc /RTC1 /MTd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt Main.cpp
-         Main.cpp
-     1>c:\users\k-hamamoto\documents\github\schoolidolfestival_modoki\schoolidolfestival_modoki\main.cpp(239): warning C4244: '=' : 'int' から 'float' への変換です。データが失われる可能性があります。
-     1>c:\users\k-hamamoto\documents\github\schoolidolfestival_modoki\schoolidolfestival_modoki\main.cpp(252): warning C4244: '引数' : 'float' から 'int' への変換です。データが失われる可能性があります。
-     1>c:\users\k-hamamoto\documents\github\schoolidolfestival_modoki\schoolidolfestival_modoki\main.cpp(252): warning C4244: '=' : 'float' から 'int' への変換です。データが失われる可能性があります。
-     1>c:\users\k-hamamoto\documents\github\schoolidolfestival_modoki\schoolidolfestival_modoki\main.cpp(148): warning C4101: 'MoveX' : ローカル変数は 1 度も使われていません。
-     1>c:\users\k-hamamoto\documents\github\schoolidolfestival_modoki\schoolidolfestival_modoki\main.cpp(148): warning C4101: 'MemY' : ローカル変数は 1 度も使われていません。
-     1>c:\users\k-hamamoto\documents\github\schoolidolfestival_modoki\schoolidolfestival_modoki\main.cpp(145): warning C4101: 'k' : ローカル変数は 1 度も使われていません。
-     1>c:\users\k-hamamoto\documents\github\schoolidolfestival_modoki\schoolidolfestival_modoki\main.cpp(148): warning C4101: 'MoveY' : ローカル変数は 1 度も使われていません。
-     1>c:\users\k-hamamoto\documents\github\schoolidolfestival_modoki\schoolidolfestival_modoki\main.cpp(145): warning C4101: 'j' : ローカル変数は 1 度も使われていません。
-     1>c:\users\k-hamamoto\documents\github\schoolidolfestival_modoki\schoolidolfestival_modoki\main.cpp(480): warning C4244: 'return' : 'double' から 'int' への変換です。データが失われる可能性があります。
-     1>c:\users\k-hamamoto\documents\github\schoolidolfestival_modoki\schoolidolfestival_modoki\main.cpp(508): warning C4305: '*=' : 'double' から 'float' へ切り詰めます。
-     1>c:\users\k-hamamoto\documents\github\schoolidolfestival_modoki\schoolidolfestival_modoki\main.cpp(511): warning C4305: '*=' : 'double' から 'float' へ切り詰めます。
-     1>c:\users\k-hamamoto\documents\github\schoolidolfestival_modoki\schoolidolfestival_modoki\main.cpp(514): warning C4305: '*=' : 'double' から 'float' へ切り詰めます。
-     1>c:\users\k-hamamoto\documents\github\schoolidolfestival_modoki\schoolidolfestival_modoki\main.cpp(522): warning C4305: '*=' : 'double' から 'float' へ切り詰めます。
-     1>c:\users\k-hamamoto\documents\github\schoolidolfestival_modoki\schoolidolfestival_modoki\main.cpp(523): warning C4305: '*=' : 'double' から 'float' へ切り詰めます。
-     1>c:\users\k-hamamoto\documents\github\schoolidolfestival_modoki\schoolidolfestival_modoki\main.cpp(524): warning C4305: '*=' : 'double' から 'float' へ切り詰めます。
-     1>c:\users\k-hamamoto\documents\github\schoolidolfestival_modoki\schoolidolfestival_modoki\main.cpp(526): warning C4305: '*=' : 'double' から 'float' へ切り詰めます。
-     1>c:\users\k-hamamoto\documents\github\schoolidolfestival_modoki\schoolidolfestival_modoki\main.cpp(527): warning C4305: '*=' : 'double' から 'float' へ切り詰めます。
-     1>c:\users\k-hamamoto\documents\github\schoolidolfestival_modoki\schoolidolfestival_modoki\main.cpp(529): warning C4244: 'return' : 'float' から 'int' への変換です。データが失われる可能性があります。
-     1>c:\users\k-hamamoto\documents\github\schoolidolfestival_modoki\schoolidolfestival_modoki\main.cpp(533): warning C4101: 'fullnotes' : ローカル変数は 1 度も使われていません。
-     1>c:\users\k-hamamoto\documents\github\schoolidolfestival_modoki\schoolidolfestival_modoki\main.cpp(533): warning C4101: 'times' : ローカル変数は 1 度も使われていません。
-     1>c:\users\k-hamamoto\documents\github\schoolidolfestival_modoki\schoolidolfestival_modoki\main.cpp(665): warning C4101: 'Y' : ローカル変数は 1 度も使われていません。
-     1>c:\users\k-hamamoto\documents\github\schoolidolfestival_modoki\schoolidolfestival_modoki\main.cpp(665): warning C4101: 'X' : ローカル変数は 1 度も使われていません。
-     1>c:\users\k-hamamoto\documents\github\schoolidolfestival_modoki\schoolidolfestival_modoki\main.cpp(664): warning C4101: 'j' : ローカル変数は 1 度も使われていません。
-     1>c:\users\k-hamamoto\documents\github\schoolidolfestival_modoki\schoolidolfestival_modoki\main.cpp(785): warning C4552: '+' : 演算子にプログラム上の作用がありません。作用を伴う演算子を使用してください
-     1>c:\users\k-hamamoto\documents\github\schoolidolfestival_modoki\schoolidolfestival_modoki\main.cpp(788): warning C4552: '+' : 演算子にプログラム上の作用がありません。作用を伴う演算子を使用してください
-     1>c:\users\k-hamamoto\documents\github\schoolidolfestival_modoki\schoolidolfestival_modoki\main.cpp(756): warning C4101: 'j' : ローカル変数は 1 度も使われていません。
-     1>c:\users\k-hamamoto\documents\github\schoolidolfestival_modoki\schoolidolfestival_modoki\main.cpp(497): warning C4715: 'NoteHit' : 値を返さないコントロール パスがあります。
-       Link:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\K-Hamamoto\Documents\GitHub\SchoolIdolFestival_MoDoKi\Debug\SchoolIdolFestival_MoDoKi.exe" /INCREMENTAL /NOLOGO /LIBPATH:"C:\DxLib_VC\プロジェクトに追加すべきファイル_VC用" kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\K-Hamamoto\Documents\GitHub\SchoolIdolFestival_MoDoKi\Debug\SchoolIdolFestival_MoDoKi.pdb" /SUBSYSTEM:WINDOWS /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\K-Hamamoto\Documents\GitHub\SchoolIdolFestival_MoDoKi\Debug\SchoolIdolFestival_MoDoKi.lib" /MACHINE:X86 Debug\Main.obj
-         SchoolIdolFestival_MoDoKi.vcxproj -> C:\Users\K-Hamamoto\Documents\GitHub\SchoolIdolFestival_MoDoKi\Debug\SchoolIdolFestival_MoDoKi.exe
-     1>プロジェクト "C:\Users\K-Hamamoto\Documents\GitHub\SchoolIdolFestival_MoDoKi\SchoolIdolFestival_MoDoKi\SchoolIdolFestival_MoDoKi.vcxproj" (Build ターゲット) のビルドが完了しました。
-
-ビルドに成功しました。
-
-経過時間 00:00:07.39
+﻿  Main.cpp
+g:\documents\github\schoolidolfestival_modoki\schoolidolfestival_modoki\main.cpp(245): warning C4244: '=' : 'int' から 'float' への変換です。データが失われる可能性があります。
+g:\documents\github\schoolidolfestival_modoki\schoolidolfestival_modoki\main.cpp(258): warning C4244: '引数' : 'float' から 'int' への変換です。データが失われる可能性があります。
+g:\documents\github\schoolidolfestival_modoki\schoolidolfestival_modoki\main.cpp(258): warning C4244: '=' : 'float' から 'int' への変換です。データが失われる可能性があります。
+g:\documents\github\schoolidolfestival_modoki\schoolidolfestival_modoki\main.cpp(148): warning C4101: 'MoveX' : ローカル変数は 1 度も使われていません。
+g:\documents\github\schoolidolfestival_modoki\schoolidolfestival_modoki\main.cpp(148): warning C4101: 'MemY' : ローカル変数は 1 度も使われていません。
+g:\documents\github\schoolidolfestival_modoki\schoolidolfestival_modoki\main.cpp(145): warning C4101: 'k' : ローカル変数は 1 度も使われていません。
+g:\documents\github\schoolidolfestival_modoki\schoolidolfestival_modoki\main.cpp(148): warning C4101: 'MoveY' : ローカル変数は 1 度も使われていません。
+g:\documents\github\schoolidolfestival_modoki\schoolidolfestival_modoki\main.cpp(145): warning C4101: 'j' : ローカル変数は 1 度も使われていません。
+g:\documents\github\schoolidolfestival_modoki\schoolidolfestival_modoki\main.cpp(486): warning C4244: 'return' : 'double' から 'int' への変換です。データが失われる可能性があります。
+g:\documents\github\schoolidolfestival_modoki\schoolidolfestival_modoki\main.cpp(514): warning C4305: '*=' : 'double' から 'float' へ切り詰めます。
+g:\documents\github\schoolidolfestival_modoki\schoolidolfestival_modoki\main.cpp(517): warning C4305: '*=' : 'double' から 'float' へ切り詰めます。
+g:\documents\github\schoolidolfestival_modoki\schoolidolfestival_modoki\main.cpp(520): warning C4305: '*=' : 'double' から 'float' へ切り詰めます。
+g:\documents\github\schoolidolfestival_modoki\schoolidolfestival_modoki\main.cpp(528): warning C4305: '*=' : 'double' から 'float' へ切り詰めます。
+g:\documents\github\schoolidolfestival_modoki\schoolidolfestival_modoki\main.cpp(529): warning C4305: '*=' : 'double' から 'float' へ切り詰めます。
+g:\documents\github\schoolidolfestival_modoki\schoolidolfestival_modoki\main.cpp(530): warning C4305: '*=' : 'double' から 'float' へ切り詰めます。
+g:\documents\github\schoolidolfestival_modoki\schoolidolfestival_modoki\main.cpp(532): warning C4305: '*=' : 'double' から 'float' へ切り詰めます。
+g:\documents\github\schoolidolfestival_modoki\schoolidolfestival_modoki\main.cpp(533): warning C4305: '*=' : 'double' から 'float' へ切り詰めます。
+g:\documents\github\schoolidolfestival_modoki\schoolidolfestival_modoki\main.cpp(535): warning C4244: 'return' : 'float' から 'int' への変換です。データが失われる可能性があります。
+g:\documents\github\schoolidolfestival_modoki\schoolidolfestival_modoki\main.cpp(539): warning C4101: 'fullnotes' : ローカル変数は 1 度も使われていません。
+g:\documents\github\schoolidolfestival_modoki\schoolidolfestival_modoki\main.cpp(539): warning C4101: 'times' : ローカル変数は 1 度も使われていません。
+g:\documents\github\schoolidolfestival_modoki\schoolidolfestival_modoki\main.cpp(671): warning C4101: 'Y' : ローカル変数は 1 度も使われていません。
+g:\documents\github\schoolidolfestival_modoki\schoolidolfestival_modoki\main.cpp(671): warning C4101: 'X' : ローカル変数は 1 度も使われていません。
+g:\documents\github\schoolidolfestival_modoki\schoolidolfestival_modoki\main.cpp(670): warning C4101: 'j' : ローカル変数は 1 度も使われていません。
+g:\documents\github\schoolidolfestival_modoki\schoolidolfestival_modoki\main.cpp(791): warning C4552: '+' : 演算子にプログラム上の作用がありません。作用を伴う演算子を使用してください
+g:\documents\github\schoolidolfestival_modoki\schoolidolfestival_modoki\main.cpp(794): warning C4552: '+' : 演算子にプログラム上の作用がありません。作用を伴う演算子を使用してください
+g:\documents\github\schoolidolfestival_modoki\schoolidolfestival_modoki\main.cpp(762): warning C4101: 'j' : ローカル変数は 1 度も使われていません。
+g:\documents\github\schoolidolfestival_modoki\schoolidolfestival_modoki\main.cpp(503): warning C4715: 'NoteHit' : 値を返さないコントロール パスがあります。
+  SchoolIdolFestival_MoDoKi.vcxproj -> G:\Documents\GitHub\SchoolIdolFestival_MoDoKi\Debug\SchoolIdolFestival_MoDoKi.exe

@@ -204,9 +204,15 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 				if (Cp[j].flag == 0){
 					for (i = 0; i <= Player.Notes; i++)
 					{
-						if (Note[i].flag == 1 && Status.ElapsedTime / 60000 == Note[i].min
+						if (Note[i].flag == 1 &&
+							(Status.ElapsedTime / 60000 == Note[i].min
 							&& Status.ElapsedTime % 60000 / 1000 == Note[i].sec
 							&& Status.ElapsedTime % 1000 / 10 >= Note[i].mill)
+							||
+							(Note[i].mill >= 98 && Status.ElapsedTime / 60000 == Note[i].min
+							&& Status.ElapsedTime % 60000 / 1000 == Note[i].sec + 1
+							&& (Status.ElapsedTime - 5) % 1000 / 10 >= Note[i].mill)
+							)
 						{
 							Cp[j].flag = 1;
 //							Cp[j].button = j % 9;
