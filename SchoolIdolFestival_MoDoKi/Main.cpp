@@ -17,7 +17,7 @@ typedef struct tagGRAPH
 {
 	int Circle_Blue, Circle_Green, Circle_Red, Circle_Yellow;
 	int Onpu;
-	int Number[10], combo;
+	int Number[10], Number_m[10], Combo;
 	int Perfect, Great, Good, Bad, Miss;
 	int Gameover;
 	int Scare;
@@ -31,7 +31,8 @@ typedef struct tagGRAPHSIZE
 	int Circle_X, Circle_Y;
 	int Onpu_X, Onpu_Y;
 	int Number_X, Number_Y;
-	int combo_X, combo_Y;
+	int Number_mX, Number_mY;
+	int Combo_X, Combo_Y;
 	int Perfect_X, Great_X, Good_X, Bad_X, Miss_X;
 	int Perfect_Y, Great_Y, Good_Y, Bad_Y, Miss_Y;
 	int Gameover_X, Gameover_Y;
@@ -44,7 +45,7 @@ typedef struct tagGRAPHPOINT
 {
 	int Circle_X, Circle_Y;
 	int Onpu_X, Onpu_Y;
-	int combo_X, combo_Y;
+	int Combo_X, Combo_Y;
 	int Perfect_X, Great_X, Good_X, Bad_X, Miss_X;
 	int Perfect_Y, Great_Y, Good_Y, Bad_Y, Miss_Y;
 	int Gameover_X, Gameover_Y;
@@ -112,7 +113,7 @@ void DrawCirclExtendGraph(int X, int Y, int Graph, int Radius);
 int UpdateKey(char Key []);
 int Pythagorean(int Ax, int Ay, int Bx, int By);
 int NoteHit(int circle, int button);
-int ScoreCalcu(int judge, int combo);
+int ScoreCalcu(int judge, int Combo);
 void ChartRead();
 
 DATEDATA Date;
@@ -184,11 +185,17 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 		DrawCirclExtendGraph(Gp.Circle_X, Gp.Circle_Y, Graph.Circle_Blue, Gs.Circle_X / 2);
 
 		DrawGraph(Gp.Score_X, Gp.Score_Y, Graph.Scare, TRUE);
-		DrawGraph(Gp.Score_X + Gs.Score_X + Gs.Number_X, Gp.Score_Y, Graph.Number[Player.Score / 10000], TRUE);
+		DrawGraph(Gp.Score_X + Gs.Score_X + Gs.Number_X * 1, Gp.Score_Y, Graph.Number[Player.Score / 10000], TRUE);
 		DrawGraph(Gp.Score_X + Gs.Score_X + Gs.Number_X * 2, Gp.Score_Y, Graph.Number[(Player.Score % 10000) / 1000], TRUE);
 		DrawGraph(Gp.Score_X + Gs.Score_X + Gs.Number_X * 3, Gp.Score_Y, Graph.Number[(Player.Score % 1000) / 100], TRUE);
 		DrawGraph(Gp.Score_X + Gs.Score_X + Gs.Number_X * 4, Gp.Score_Y, Graph.Number[(Player.Score % 100) / 10], TRUE);
 		DrawGraph(Gp.Score_X + Gs.Score_X + Gs.Number_X * 5, Gp.Score_Y, Graph.Number[Player.Score % 10], TRUE);
+
+		DrawGraph(Gp.Combo_X, Gp.Combo_Y, Graph.Combo, TRUE);
+//		DrawGraph(Gp.Combo_X + Gs.Combo_X + Gs.Number_mX, Gp.Combo_Y, Graph.Number_m[Player.Combo / 1000], TRUE);
+		DrawGraph(Gp.Combo_X + Gs.Combo_X + Gs.Number_mX * 1, Gp.Combo_Y, Graph.Number_m[(Player.Combo % 1000) / 100], TRUE);
+		DrawGraph(Gp.Combo_X + Gs.Combo_X + Gs.Number_mX * 2, Gp.Combo_Y, Graph.Number_m[(Player.Combo % 100) / 10], TRUE);
+		DrawGraph(Gp.Combo_X + Gs.Combo_X + Gs.Number_mX * 3, Gp.Combo_Y, Graph.Number_m[Player.Combo % 10], TRUE);
 
 
 		for (i = 0; i < 9; i++){
@@ -522,7 +529,7 @@ int NoteHit(int circle, int button){
 	if (Z > judge[4] && Z > judge[4])	return 5;
 }
 
-int ScoreCalcu(int judge, int combo){
+int ScoreCalcu(int judge, int Combo){
 	float score = 221;
 
 	switch (judge)
@@ -544,13 +551,13 @@ int ScoreCalcu(int judge, int combo){
 		break;
 	}
 
-	if (combo <= 50)	score *= 1.0;
-	else if (combo <= 100)	score *= 1.1;
-	else if (combo <= 200)	score *= 1.15;
-	else if (combo <= 400)	score *= 1.2;
-	else if (combo <= 600)	score *= 1.25;
-	else if (combo <= 800)	score *= 1.3;
-	else if (combo <= 1000)	score *= 1.35;
+	if (Combo <= 50)	score *= 1.0;
+	else if (Combo <= 100)	score *= 1.1;
+	else if (Combo <= 200)	score *= 1.15;
+	else if (Combo <= 400)	score *= 1.2;
+	else if (Combo <= 600)	score *= 1.25;
+	else if (Combo <= 800)	score *= 1.3;
+	else if (Combo <= 1000)	score *= 1.35;
 
 	return score;
 }
@@ -710,7 +717,8 @@ void Format(){
 	Graph.Circle_Yellow = LoadGraph("Graph/Circle_Yellow.png");
 	Graph.Onpu = LoadGraph("Graph/Onpu.png");
 	LoadDivGraph("Graph/Number.png", 10, 5, 2, 90, 86, Graph.Number);
-	Graph.combo = LoadGraph("Graph/combo.png");
+	LoadDivGraph("Graph/Number_mini.png", 10, 5, 2, 59, 57, Graph.Number_m);
+	Graph.Combo = LoadGraph("Graph/Combo.png");
 	Graph.Perfect = LoadGraph("Graph/Perfect.png");
 	Graph.Great = LoadGraph("Graph/Great.png");
 	Graph.Good = LoadGraph("Graph/Good.png");
@@ -727,7 +735,8 @@ void Format(){
 	GetGraphSize(Graph.Circle_Blue, &Gs.Circle_X, &Gs.Circle_Y);
 	GetGraphSize(Graph.Onpu, &Gs.Onpu_X, &Gs.Onpu_Y);
 	GetGraphSize(Graph.Number[0], &Gs.Number_X, &Gs.Number_Y);
-	GetGraphSize(Graph.combo, &Gs.combo_X, &Gs.combo_Y);
+	GetGraphSize(Graph.Number_m[0], &Gs.Number_mX, &Gs.Number_mY);
+	GetGraphSize(Graph.Combo, &Gs.Combo_X, &Gs.Combo_Y);
 	GetGraphSize(Graph.Perfect, &Gs.Perfect_X, &Gs.Perfect_Y);
 	GetGraphSize(Graph.Great, &Gs.Great_X, &Gs.Great_Y);
 	GetGraphSize(Graph.Good, &Gs.Good_X, &Gs.Good_Y);
@@ -757,6 +766,8 @@ void Format(){
 	Gp.Gameover_Y = 523;
 	Gp.Score_X = Center(Gs.Score_X, 'X') - Gs.Number_X * 3;
 	Gp.Score_Y = 30;
+	Gp.Combo_X = Center(Gs.Combo_X, 'X') - Gs.Number_mX * 2;
+	Gp.Combo_Y = Gp.Perfect_Y - Gs.Combo_Y - 15;
 
 	Bp[0].x = 179;
 	Bp[0].y = 164;
