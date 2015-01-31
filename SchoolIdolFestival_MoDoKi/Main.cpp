@@ -15,11 +15,15 @@
 //構造体
 typedef struct tagGRAPH
 {
-	int Circle_Blue, Circle_Green, Circle_Red;
+	int Circle_Blue, Circle_Green, Circle_Red, Circle_Yellow;
 	int Onpu;
 	int Number[10], combo;
 	int Perfect, Great, Good, Bad, Miss;
 	int Gameover;
+	int Scare;
+	int Library;
+	int Fade;
+	int Technyan[9];
 } GRAPH;
 
 typedef struct tagGRAPHSIZE
@@ -31,7 +35,9 @@ typedef struct tagGRAPHSIZE
 	int Perfect_X, Great_X, Good_X, Bad_X, Miss_X;
 	int Perfect_Y, Great_Y, Good_Y, Bad_Y, Miss_Y;
 	int Gameover_X, Gameover_Y;
+	int Score_X, Score_Y;
 	int Radius;
+	int Technyan_X, Technyan_Y;
 } GRAPHSIZE;
 
 typedef struct tagGRAPHPOINT
@@ -42,6 +48,7 @@ typedef struct tagGRAPHPOINT
 	int Perfect_X, Great_X, Good_X, Bad_X, Miss_X;
 	int Perfect_Y, Great_Y, Good_Y, Bad_Y, Miss_Y;
 	int Gameover_X, Gameover_Y;
+	int Score_X, Score_Y;
 } GRAPHPOINT;
 
 typedef struct tagSOUND
@@ -129,11 +136,11 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	// タイトルを変更
 	SetMainWindowText("test");
 	// ウインドウモードに変更
-	ChangeWindowMode( TRUE ) ;
+//	ChangeWindowMode( TRUE ) ;
 	//ウインドウの大きさ設定
 	SetGraphMode(Screen_X, Screen_Y, 32);
 	//ウインドウの大きさを自由に変更出来るかどうかのフラグ
-		SetWindowSizeChangeEnableFlag( TRUE ) ;
+	SetWindowSizeChangeEnableFlag( TRUE ) ;
 	// 裏画面を使用
 	SetDrawScreen(DX_SCREEN_BACK);
 	// ＤＸライブラリの初期化
@@ -166,6 +173,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
 		// 画面左上の領域に四角を描き,前に描いてあった文字列を消す
 		DrawBox(0, 0, Screen_X , Screen_Y, Status.White, TRUE);
+		DrawExtendGraph(0, 0, Screen_X, Screen_Y, Graph.Library, TRUE);
+		DrawGraph(0, 0, Graph.Fade, TRUE);
 
 		Struct(MouseX, MouseY);
 
@@ -174,9 +183,20 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 		DrawCirclExtendGraph(Gp.Onpu_X, Gp.Onpu_Y, Graph.Onpu, Gs.Onpu_X / 2);
 		DrawCirclExtendGraph(Gp.Circle_X, Gp.Circle_Y, Graph.Circle_Blue, Gs.Circle_X / 2);
 
+		DrawGraph(Gp.Score_X, Gp.Score_Y, Graph.Scare, TRUE);
+		DrawGraph(Gp.Score_X + Gs.Score_X + Gs.Number_X, Gp.Score_Y, Graph.Number[Player.Score / 10000], TRUE);
+		DrawGraph(Gp.Score_X + Gs.Score_X + Gs.Number_X * 2, Gp.Score_Y, Graph.Number[(Player.Score % 10000) / 1000], TRUE);
+		DrawGraph(Gp.Score_X + Gs.Score_X + Gs.Number_X * 3, Gp.Score_Y, Graph.Number[(Player.Score % 1000) / 100], TRUE);
+		DrawGraph(Gp.Score_X + Gs.Score_X + Gs.Number_X * 4, Gp.Score_Y, Graph.Number[(Player.Score % 100) / 10], TRUE);
+		DrawGraph(Gp.Score_X + Gs.Score_X + Gs.Number_X * 5, Gp.Score_Y, Graph.Number[Player.Score % 10], TRUE);
+
+
 		for (i = 0; i < 9; i++){
-			DrawCirclGraph(Bp[i].x, Bp[i].y, Graph.Circle_Green, Gs.Circle_X, Gs.Circle_Y);
+			DrawCirclGraph(Bp[i].x, Bp[i].y, Graph.Technyan[i], Gs.Technyan_X, Gs.Technyan_Y);
+			DrawCirclGraph(Bp[i].x, Bp[i].y, Graph.Circle_Yellow, Gs.Circle_X, Gs.Circle_Y);
 		}
+
+		
 
 		if (Key[KEY_INPUT_A] == 1){
 			Reset();
@@ -503,7 +523,7 @@ int NoteHit(int circle, int button){
 }
 
 int ScoreCalcu(int judge, int combo){
-	float score = 200;
+	float score = 221;
 
 	switch (judge)
 	{
@@ -687,6 +707,7 @@ void Format(){
 	Graph.Circle_Blue = LoadGraph("Graph/Circle_Blue.png");
 	Graph.Circle_Green = LoadGraph("Graph/Circle_Green.png");
 	Graph.Circle_Red = LoadGraph("Graph/Circle_Red.png");
+	Graph.Circle_Yellow = LoadGraph("Graph/Circle_Yellow.png");
 	Graph.Onpu = LoadGraph("Graph/Onpu.png");
 	LoadDivGraph("Graph/Number.png", 10, 5, 2, 90, 86, Graph.Number);
 	Graph.combo = LoadGraph("Graph/combo.png");
@@ -696,6 +717,11 @@ void Format(){
 	Graph.Bad = LoadGraph("Graph/Bad.png");
 	Graph.Miss = LoadGraph("Graph/Miss.png");
 	Graph.Gameover = LoadGraph("Graph/Gameover.png");
+	Graph.Scare = LoadGraph("Graph/Score.png");
+	Graph.Library = LoadGraph("Graph/library.jpg");
+	Graph.Fade = LoadGraph("Graph/Fade_All.png");
+	LoadDivGraph("Graph/Technyan_icon.png", 9, 3, 3, 200, 200, Graph.Technyan);
+
 
 	//画像のサイズを得る
 	GetGraphSize(Graph.Circle_Blue, &Gs.Circle_X, &Gs.Circle_Y);
@@ -708,7 +734,10 @@ void Format(){
 	GetGraphSize(Graph.Bad, &Gs.Bad_X, &Gs.Bad_Y);
 	GetGraphSize(Graph.Miss, &Gs.Miss_X, &Gs.Miss_Y);
 	GetGraphSize(Graph.Gameover, &Gs.Gameover_X, &Gs.Gameover_Y);
+	GetGraphSize(Graph.Scare, &Gs.Score_X, &Gs.Score_Y);
 	Gs.Radius = Gs.Circle_X / 2;
+	GetGraphSize(Graph.Technyan[6], &Gs.Technyan_X, &Gs.Technyan_Y);
+
 
 	Gp.Circle_X = Screen_X / 2;
 	Gp.Circle_Y = 164 + Gs.Circle_X / 2;
@@ -726,6 +755,8 @@ void Format(){
 	Gp.Miss_Y = 523;
 	Gp.Gameover_X = Center(Gs.Gameover_X, 'X');
 	Gp.Gameover_Y = 523;
+	Gp.Score_X = Center(Gs.Score_X, 'X') - Gs.Number_X * 3;
+	Gp.Score_Y = 30;
 
 	Bp[0].x = 179;
 	Bp[0].y = 164;
