@@ -177,13 +177,15 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 		DrawExtendGraph(0, 0, Screen_X, Screen_Y, Graph.Library, TRUE);
 		DrawGraph(0, 0, Graph.Fade, TRUE);
 
-		Struct(MouseX, MouseY);
+		//•¶Žš•\Ž¦
+//		Struct(MouseX, MouseY);
 
 //		DrawCirclGraph(Gp.Onpu_X, Gp.Onpu_Y, Graph.Onpu, Gs.Onpu_X, Gs.Onpu_Y);
 //		DrawCirclGraph(Gp.Circle_X, Gp.Circle_Y, Graph.Circle_Blue, Gs.Circle_X, Gs.Circle_Y);
 		DrawCirclExtendGraph(Gp.Onpu_X, Gp.Onpu_Y, Graph.Onpu, Gs.Onpu_X / 2);
 		DrawCirclExtendGraph(Gp.Circle_X, Gp.Circle_Y, Graph.Circle_Blue, Gs.Circle_X / 2);
 
+		Player.Score = 15793;
 		DrawGraph(Gp.Score_X, Gp.Score_Y, Graph.Scare, TRUE);
 		DrawGraph(Gp.Score_X + Gs.Score_X + Gs.Number_X * 1, Gp.Score_Y, Graph.Number[Player.Score / 10000], TRUE);
 		DrawGraph(Gp.Score_X + Gs.Score_X + Gs.Number_X * 2, Gp.Score_Y, Graph.Number[(Player.Score % 10000) / 1000], TRUE);
@@ -191,6 +193,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 		DrawGraph(Gp.Score_X + Gs.Score_X + Gs.Number_X * 4, Gp.Score_Y, Graph.Number[(Player.Score % 100) / 10], TRUE);
 		DrawGraph(Gp.Score_X + Gs.Score_X + Gs.Number_X * 5, Gp.Score_Y, Graph.Number[Player.Score % 10], TRUE);
 
+		Player.Combo = 137;
 		DrawGraph(Gp.Combo_X, Gp.Combo_Y, Graph.Combo, TRUE);
 //		DrawGraph(Gp.Combo_X + Gs.Combo_X + Gs.Number_mX, Gp.Combo_Y, Graph.Number_m[Player.Combo / 1000], TRUE);
 		DrawGraph(Gp.Combo_X + Gs.Combo_X + Gs.Number_mX * 1, Gp.Combo_Y, Graph.Number_m[(Player.Combo % 1000) / 100], TRUE);
@@ -240,10 +243,11 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 							&& Status.ElapsedTime % 60000 / 1000 == Note[i].sec + 1
 							&& (Status.ElapsedTime - 5) % 1000 / 10 >= Note[i].mill)
 							)
+						
 						{
 							Cp[j].flag = 1;
 //							Cp[j].button = j % 9;
-							//Cp[j].button = GetRand(9);
+							Cp[j].button = GetRand(8);
 							//Cp[j].button = j % 2 + 2;
 							Cp[j].button = Note[i].button -1;
 							Note[i].flag++;
@@ -567,7 +571,7 @@ void ChartRead(){
 	char read[256], *token, *nexttoken;
 	char cut [] = "[:.]; \n";
 	char Add[64];
-	char Songname [] = "Mizugame_short";
+	char Songname [] = "kaidan";
 
 	sprintf_s(Add, "Chart/%s.txt", Songname);
 	puts(Add);
