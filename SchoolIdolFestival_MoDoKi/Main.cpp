@@ -185,7 +185,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 		DrawCirclExtendGraph(Gp.Onpu_X, Gp.Onpu_Y, Graph.Onpu, Gs.Onpu_X / 2);
 		DrawCirclExtendGraph(Gp.Circle_X, Gp.Circle_Y, Graph.Circle_Blue, Gs.Circle_X / 2);
 
-		Player.Score = 15793;
+//		Player.Score = 15793;
 		DrawGraph(Gp.Score_X, Gp.Score_Y, Graph.Scare, TRUE);
 		DrawGraph(Gp.Score_X + Gs.Score_X + Gs.Number_X * 1, Gp.Score_Y, Graph.Number[Player.Score / 10000], TRUE);
 		DrawGraph(Gp.Score_X + Gs.Score_X + Gs.Number_X * 2, Gp.Score_Y, Graph.Number[(Player.Score % 10000) / 1000], TRUE);
@@ -193,7 +193,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 		DrawGraph(Gp.Score_X + Gs.Score_X + Gs.Number_X * 4, Gp.Score_Y, Graph.Number[(Player.Score % 100) / 10], TRUE);
 		DrawGraph(Gp.Score_X + Gs.Score_X + Gs.Number_X * 5, Gp.Score_Y, Graph.Number[Player.Score % 10], TRUE);
 
-		Player.Combo = 137;
+//		Player.Combo = 137;
 		DrawGraph(Gp.Combo_X, Gp.Combo_Y, Graph.Combo, TRUE);
 //		DrawGraph(Gp.Combo_X + Gs.Combo_X + Gs.Number_mX, Gp.Combo_Y, Graph.Number_m[Player.Combo / 1000], TRUE);
 		DrawGraph(Gp.Combo_X + Gs.Combo_X + Gs.Number_mX * 1, Gp.Combo_Y, Graph.Number_m[(Player.Combo % 1000) / 100], TRUE);
@@ -571,7 +571,7 @@ void ChartRead(){
 	char read[256], *token, *nexttoken;
 	char cut [] = "[:.]; \n";
 	char Add[64];
-	char Songname [] = "kaidan";
+	char Songname [] = "Mizugame_short";
 
 	sprintf_s(Add, "Chart/%s.txt", Songname);
 	puts(Add);
