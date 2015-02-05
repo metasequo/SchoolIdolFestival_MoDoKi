@@ -79,6 +79,7 @@ typedef struct tagNOTE
 typedef struct tagFLAG
 {
 	int Title , Select, Game, End;
+	int Click;
 } FLAG;
 
 typedef struct tagPLAYER
@@ -124,6 +125,7 @@ GRAPHPOINT Gp;
 BUTTONPOINT Bp[9];
 CIRCLEPOINT Cp[64];
 NOTE Note[800];
+FLAG Flag;
 PLAYER Player;
 STATUS Status;
 
@@ -150,6 +152,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	SetMouseDispFlag(TRUE);
 
 	int MouseX, MouseY;
+	int ClickX, ClickY, Button;
 	int i, j, k;
 //	char StrBuf[128], StrBuf2[32];
 	char Key[256];
@@ -170,6 +173,14 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 		ClearDrawScreen();
 		// マウスの位置を取得
 		GetMousePoint(&MouseX, &MouseY);
+		//マウスのクリック情報
+		if (GetMouseInputLog(&Button, &ClickX, &ClickY, TRUE) == 0){
+			Flag.Click = 1;
+		}
+		else{
+			Flag.Click = 0;
+		}
+		//ボタンの押下情報
 		UpdateKey(Key);
 
 		// 画面左上の領域に四角を描き,前に描いてあった文字列を消す
@@ -178,7 +189,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 		DrawGraph(0, 0, Graph.Fade, TRUE);
 
 		//文字表示
-//		Struct(MouseX, MouseY);
+		Struct(MouseX, MouseY);
 
 //		DrawCirclGraph(Gp.Onpu_X, Gp.Onpu_Y, Graph.Onpu, Gs.Onpu_X, Gs.Onpu_Y);
 //		DrawCirclGraph(Gp.Circle_X, Gp.Circle_Y, Graph.Circle_Blue, Gs.Circle_X, Gs.Circle_Y);
@@ -206,7 +217,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 			DrawCirclGraph(Bp[i].x, Bp[i].y, Graph.Circle_Yellow, Gs.Circle_X, Gs.Circle_Y);
 		}
 
-		
+
 
 		if (Key[KEY_INPUT_A] == 1){
 			Reset();
@@ -220,11 +231,13 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 		//↑ or → でBPMプラス
 		if (Key[KEY_INPUT_UP] != 0 || Key[KEY_INPUT_RIGHT] == 1){
 			Status.Timing += 10;
+			BPM += 10;
 		}
 		//↓ or ← でBPMマイナス
 		if (Key[KEY_INPUT_DOWN] != 0 || Key[KEY_INPUT_LEFT] == 1){
 			Status.Timing -= 10;
-			if (BPM < 1)	BPM = 1;
+			BPM -= 10;
+			if (BPM < 60)	BPM = 60;
 		}
 
 
@@ -243,7 +256,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 							&& Status.ElapsedTime % 60000 / 1000 == Note[i].sec + 1
 							&& (Status.ElapsedTime - 5) % 1000 / 10 >= Note[i].mill)
 							)
-						
+
 						{
 							Cp[j].flag = 1;
 //							Cp[j].button = j % 9;
@@ -319,60 +332,88 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 			}
 		}
 
+
 		//ボタン判定
 		for (i = 0; i < 64; i++){
 			if (Cp[i].flag && Bp[Cp[i].button].flag == 0){
 				switch (Cp[i].button){
 				case 0:
-					if (Key[KEY_INPUT_4] == 1){
+					if (Key[KEY_INPUT_4] == 1
+							|| (CircleHit(ClickX, ClickY, 1, Bp[0].x, Bp[0].y, Cp[i].Radius) &&
+							Flag.Click == 1 && (Button & MOUSE_INPUT_LEFT) == 1)
+						){
 						Cp[i].judge = NoteHit(i, Cp[i].button);
 						Bp[Cp[i].button].flag = 1;
 					}
 					break;
 				case 1:
-					if (Key[KEY_INPUT_R] == 1){
+					if (Key[KEY_INPUT_R] == 1
+							|| (CircleHit(MouseX, MouseY, 1, Bp[1].x, Bp[1].y, Cp[i].Radius) &&
+							Flag.Click == 1 && (Button & MOUSE_INPUT_LEFT) == 1)
+						){
 						Cp[i].judge = NoteHit(i, Cp[i].button);
 						Bp[Cp[i].button].flag = 1;
 					}
 					break;
 				case 2:
-					if (Key[KEY_INPUT_F] == 1){
+					if (Key[KEY_INPUT_F] == 1
+							|| (CircleHit(MouseX, MouseY, 1, Bp[2].x, Bp[2].y, Cp[i].Radius) &&
+							Flag.Click == 1 && (Button & MOUSE_INPUT_LEFT) == 1)
+						){
 						Cp[i].judge = NoteHit(i, Cp[i].button);
 						Bp[Cp[i].button].flag = 1;
 					}
 					break;
 				case 3:
-					if (Key[KEY_INPUT_V] == 1){
+					if (Key[KEY_INPUT_V] == 1
+							|| (CircleHit(MouseX, MouseY, 1, Bp[3].x, Bp[3].y, Cp[i].Radius) &&
+							Flag.Click == 1 && (Button & MOUSE_INPUT_LEFT) == 1)
+						){
 						Cp[i].judge = NoteHit(i, Cp[i].button);
 						Bp[Cp[i].button].flag = 1;
 					}
 					break;
 				case 4:
-					if (Key[KEY_INPUT_SPACE] == 1 || Key[KEY_INPUT_B] == 1){
+					if (Key[KEY_INPUT_SPACE] == 1 || Key[KEY_INPUT_B] == 1
+							|| (CircleHit(MouseX, MouseY, 1, Bp[4].x, Bp[4].y, Cp[i].Radius) &&
+							Flag.Click == 1 && (Button & MOUSE_INPUT_LEFT) == 1)
+						){
 						Cp[i].judge = NoteHit(i, Cp[i].button);
 						Bp[Cp[i].button].flag = 1;
 					}
 					break;
 				case 5:
-					if (Key[KEY_INPUT_N] == 1){
+					if (Key[KEY_INPUT_N] == 1
+							|| (CircleHit(MouseX, MouseY, 1, Bp[5].x, Bp[5].y, Cp[i].Radius) &&
+							Flag.Click == 1 && (Button & MOUSE_INPUT_LEFT) == 1)
+						){
 						Cp[i].judge = NoteHit(i, Cp[i].button);
 						Bp[Cp[i].button].flag = 1;
 					}
 					break;
 				case 6:
-					if (Key[KEY_INPUT_J] == 1){
+					if (Key[KEY_INPUT_J] == 1
+							|| (CircleHit(MouseX, MouseY, 1, Bp[6].x, Bp[6].y, Cp[i].Radius) &&
+							Flag.Click == 1 && (Button & MOUSE_INPUT_LEFT) == 1)
+						){
 						Cp[i].judge = NoteHit(i, Cp[i].button);
 						Bp[Cp[i].button].flag = 1;
 					}
 					break;
 				case 7:
-					if (Key[KEY_INPUT_I] == 1){
+					if (Key[KEY_INPUT_I] == 1
+							|| (CircleHit(MouseX, MouseY, 1, Bp[7].x, Bp[7].y, Cp[i].Radius) &&
+							Flag.Click == 1 && (Button & MOUSE_INPUT_LEFT) == 1)
+						){
 						Cp[i].judge = NoteHit(i, Cp[i].button);
 						Bp[Cp[i].button].flag = 1;
 					}
 					break;
 				case 8:
-					if (Key[KEY_INPUT_9] == 1){
+					if (Key[KEY_INPUT_9] == 1
+							|| (CircleHit(MouseX, MouseY, 1, Bp[8].x, Bp[8].y, Cp[i].Radius) &&
+							Flag.Click == 1 && (Button & MOUSE_INPUT_LEFT) == 1)
+						){
 						Cp[i].judge = NoteHit(i, Cp[i].button);
 						Bp[Cp[i].button].flag = 1;
 					}
@@ -380,7 +421,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 				}
 			}
 		}
-		
+
 		//判定ごとの処理
 		for (i = 0; i < 64; i++){
 			if (Cp[i].judge != 0){
@@ -611,7 +652,7 @@ void Struct(int MouseX, int MouseY){	// 表示する文字列を作成
 	char StrBuf[128], StrBuf2[32];
 	int i, j;
 
-	lstrcpy(StrBuf, "座標 Ｘ"); // 文字列"座標 Ｘ"をStrBufにコピー	
+	lstrcpy(StrBuf, "座標 Ｘ"); // 文字列"座標 Ｘ"をStrBufにコピー
 	_itoa_s(MouseX, StrBuf2, 10); // MouseXの値を文字列にしてStrBuf2に格納
 	lstrcat(StrBuf, StrBuf2); // StrBufの内容にStrBuf2の内容を付け足す
 	lstrcat(StrBuf, "　Ｙ "); // StrBufの内容に文字列"　Ｙ "を付け足す
