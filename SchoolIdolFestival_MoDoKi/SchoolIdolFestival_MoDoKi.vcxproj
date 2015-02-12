@@ -95,6 +95,7 @@
     <Media Include="Sound\perfect.mp3" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Common.h" />
     <ClInclude Include="Function.h" />
     <ClInclude Include="Game.h" />
   </ItemGroup>
