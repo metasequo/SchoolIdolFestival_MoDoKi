@@ -1,4 +1,4 @@
-#include "Common.h"
+ï»¿#include "Common.h"
 
 extern DATEDATA Date;
 extern GRAPH Graph;
@@ -39,8 +39,8 @@ void MovePoint(int Before_X, int Before_Y, int After_X, int After_Y, int *Move_X
 }
 
 int UpdateKey(char Key []){
-	char tmpKey[256]; // Œ»İ‚ÌƒL[‚Ì“ü—Íó‘Ô‚ğŠi”[‚·‚é
-	GetHitKeyStateAll(tmpKey); // ‘S‚Ä‚ÌƒL[‚Ì“ü—Íó‘Ô‚ğ“¾‚é
+	char tmpKey[256]; // ç¾åœ¨ã®ã‚­ãƒ¼ã®å…¥åŠ›çŠ¶æ…‹ã‚’æ ¼ç´ã™ã‚‹
+	GetHitKeyStateAll(tmpKey); // å…¨ã¦ã®ã‚­ãƒ¼ã®å…¥åŠ›çŠ¶æ…‹ã‚’å¾—ã‚‹
 	for (int i = 0; i<256; i++){
 		if (tmpKey[i] != 0)		Key[i]++;
 		else	Key[i] = 0;
@@ -150,16 +150,16 @@ void ChartRead(){
 	FileRead_close(Chart);
 }
 
-void Struct(int MouseX, int MouseY){	// •\¦‚·‚é•¶š—ñ‚ğì¬
+void Struct(int MouseX, int MouseY){	// è¡¨ç¤ºã™ã‚‹æ–‡å­—åˆ—ã‚’ä½œæˆ
 	char StrBuf[128], StrBuf2[32];
 	int i, j;
 
-	lstrcpy(StrBuf, "À•W ‚w"); // •¶š—ñ"À•W ‚w"‚ğStrBuf‚ÉƒRƒs[
-	_itoa_s(MouseX, StrBuf2, 10); // MouseX‚Ì’l‚ğ•¶š—ñ‚É‚µ‚ÄStrBuf2‚ÉŠi”[
-	lstrcat(StrBuf, StrBuf2); // StrBuf‚Ì“à—e‚ÉStrBuf2‚Ì“à—e‚ğ•t‚¯‘«‚·
-	lstrcat(StrBuf, "@‚x "); // StrBuf‚Ì“à—e‚É•¶š—ñ"@‚x "‚ğ•t‚¯‘«‚·
-	_itoa_s(MouseY, StrBuf2, 10); // MouseY‚Ì’l‚ğ•¶š—ñ‚É‚µ‚ÄStrBuf2‚ÉŠi”[
-	lstrcat(StrBuf, StrBuf2); // StrBuf‚Ì“à—e‚ÉStrBuf2‚Ì“à—e‚ğ•t‚¯‘«‚·
+	lstrcpy(StrBuf, "åº§æ¨™ ï¼¸"); // æ–‡å­—åˆ—"åº§æ¨™ ï¼¸"ã‚’StrBufã«ã‚³ãƒ”ãƒ¼
+	_itoa_s(MouseX, StrBuf2, 10); // MouseXã®å€¤ã‚’æ–‡å­—åˆ—ã«ã—ã¦StrBuf2ã«æ ¼ç´
+	lstrcat(StrBuf, StrBuf2); // StrBufã®å†…å®¹ã«StrBuf2ã®å†…å®¹ã‚’ä»˜ã‘è¶³ã™
+	lstrcat(StrBuf, "ã€€ï¼¹ "); // StrBufã®å†…å®¹ã«æ–‡å­—åˆ—"ã€€ï¼¹ "ã‚’ä»˜ã‘è¶³ã™
+	_itoa_s(MouseY, StrBuf2, 10); // MouseYã®å€¤ã‚’æ–‡å­—åˆ—ã«ã—ã¦StrBuf2ã«æ ¼ç´
+	lstrcat(StrBuf, StrBuf2); // StrBufã®å†…å®¹ã«StrBuf2ã®å†…å®¹ã‚’ä»˜ã‘è¶³ã™
 
 	DrawString(0, 0, StrBuf, GetColor(0, 0, 0));
 
@@ -243,21 +243,21 @@ void Struct(int MouseX, int MouseY){	// •\¦‚·‚é•¶š—ñ‚ğì¬
 void Format(){
 	int i, j;
 	double X, Y;
-	// F‚Ì’l‚ğæ“¾
+	// è‰²ã®å€¤ã‚’å–å¾—
 	Status.White = GetColor(255, 255, 255);
 	Status.Black = GetColor(0, 0, 0);
 	Status.Gray = GetColor(123, 123, 123);
-	//—”‚Ì‰Šúİ’è(Œ³‹¥)
+	//ä¹±æ•°ã®åˆæœŸè¨­å®š(å…ƒå‡¶)
 	GetDateTime(&Date);
 	Status.DateSum = Date.Year + Date.Mon + Date.Day + Date.Hour + Date.Min + Date.Sec;
 	SRand(Status.DateSum);
 
-	//‰¹º“Ç‚İ‚İ
+	//éŸ³å£°èª­ã¿è¾¼ã¿
 	Sound.Mizugame = LoadSoundMem("Sound/Mizugame_short.mp3");
 	Sound.pefect = LoadSoundMem("Sound/perfect.mp3");
 	Sound.great = LoadSoundMem("Sound/great.mp3");
 
-	//‰æ‘œ“Ç‚İ‚İ
+	//ç”»åƒèª­ã¿è¾¼ã¿
 	Graph.Circle_Blue = LoadGraph("Graph/Circle_Blue.png");
 	Graph.Circle_Green = LoadGraph("Graph/Circle_Green.png");
 	Graph.Circle_Red = LoadGraph("Graph/Circle_Red.png");
@@ -278,7 +278,7 @@ void Format(){
 	LoadDivGraph("Graph/Technyan_icon.png", 9, 3, 3, 200, 200, Graph.Technyan);
 
 
-	//‰æ‘œ‚ÌƒTƒCƒY‚ğ“¾‚é
+	//ç”»åƒã®ã‚µã‚¤ã‚ºã‚’å¾—ã‚‹
 	GetGraphSize(Graph.Circle_Blue, &Gs.Circle_X, &Gs.Circle_Y);
 	GetGraphSize(Graph.Onpu, &Gs.Onpu_X, &Gs.Onpu_Y);
 	GetGraphSize(Graph.Number[0], &Gs.Number_X, &Gs.Number_Y);

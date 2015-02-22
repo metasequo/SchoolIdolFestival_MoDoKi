@@ -1,4 +1,4 @@
-#include "Common.h"
+ï»¿#include "Common.h"
 
 extern DATEDATA Date;
 extern GRAPH Graph;
@@ -54,12 +54,12 @@ void Game()
 	Status.NowTime = GetNowCount();
 	Status.ElapsedTime = Status.NowTime - Status.StartTime;
 
-	//ª or ¨ ‚ÅBPMƒvƒ‰ƒX
+	//â†‘ or â†’ ã§BPMãƒ—ãƒ©ã‚¹
 	if (Global.Key[KEY_INPUT_UP] != 0 || Global.Key[KEY_INPUT_RIGHT] == 1){
 		//	Status.Timing += 10;
 		Status.BPM += 10;
 	}
-	//« or © ‚ÅBPMƒ}ƒCƒiƒX
+	//â†“ or â† ã§BPMãƒã‚¤ãƒŠã‚¹
 	if (Global.Key[KEY_INPUT_DOWN] != 0 || Global.Key[KEY_INPUT_LEFT] == 1){
 		//	Status.Timing -= 10;
 		Status.BPM -= 10;
@@ -98,7 +98,7 @@ void Game()
 		}
 	}
 
-	//ƒm[ƒgiƒT[ƒNƒ‹j“®ì
+	//ãƒãƒ¼ãƒˆï¼ˆã‚µãƒ¼ã‚¯ãƒ«ï¼‰å‹•ä½œ
 	for (i = 0; i < 64; i++){
 		int button = Cp[i].button;
 
@@ -159,7 +159,7 @@ void Game()
 	}
 
 
-	//ƒ{ƒ^ƒ“”»’è
+	//ãƒœã‚¿ãƒ³åˆ¤å®š
 	for (i = 0; i < 64; i++){
 		if (Cp[i].flag && Bp[Cp[i].button].flag == 0){
 			switch (Cp[i].button){
@@ -248,7 +248,7 @@ void Game()
 		}
 	}
 
-	//”»’è‚²‚Æ‚Ìˆ—
+	//åˆ¤å®šã”ã¨ã®å‡¦ç†
 	for (i = 0; i < 64; i++){
 		if (Cp[i].judge != 0){
 			switch (Cp[i].judge){

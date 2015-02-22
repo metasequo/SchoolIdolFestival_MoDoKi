@@ -1,4 +1,4 @@
-#include "DxLib.h"
+Ôªø#include "DxLib.h"
 #include <math.h>
 #include <string.h>
 
@@ -12,7 +12,7 @@
 #define Screen_Y 720
 #endif
 
-//ç\ë¢ëÃ
+//ÊßãÈÄ†‰Ωì
 typedef struct tagGRAPH
 {
 	int Circle_Blue, Circle_Green, Circle_Red, Circle_Yellow;

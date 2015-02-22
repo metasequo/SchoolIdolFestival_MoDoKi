@@ -1,4 +1,4 @@
-#include "Common.h"
+ï»¿#include "Common.h"
 
 DATEDATA Date;
 GRAPH Graph;
@@ -13,72 +13,72 @@ PLAYER Player;
 STATUS Status;
 GLOBAL Global;
 
-// WinMain ŠÖ”
+// WinMain é–¢æ•°
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	LPSTR lpCmdLine, int nCmdShow)
 {
-	//ƒƒO‚ª‚È‚ñ‚½‚ç
+	//ãƒ­ã‚°ãŒãªã‚“ãŸã‚‰
 	SetOutApplicationLogValidFlag(FALSE);
-	// ƒ^ƒCƒgƒ‹‚ğ•ÏX
+	// ã‚¿ã‚¤ãƒˆãƒ«ã‚’å¤‰æ›´
 	SetMainWindowText("test");
-	// ƒEƒCƒ“ƒhƒEƒ‚[ƒh‚É•ÏX
+	// ã‚¦ã‚¤ãƒ³ãƒ‰ã‚¦ãƒ¢ãƒ¼ãƒ‰ã«å¤‰æ›´
 //	ChangeWindowMode( TRUE ) ;
-	//ƒEƒCƒ“ƒhƒE‚Ì‘å‚«‚³İ’è
+	//ã‚¦ã‚¤ãƒ³ãƒ‰ã‚¦ã®å¤§ãã•è¨­å®š
 	SetGraphMode(Screen_X, Screen_Y, 32);
-	//ƒEƒCƒ“ƒhƒE‚Ì‘å‚«‚³‚ğ©—R‚É•ÏXo—ˆ‚é‚©‚Ç‚¤‚©‚Ìƒtƒ‰ƒO
+	//ã‚¦ã‚¤ãƒ³ãƒ‰ã‚¦ã®å¤§ãã•ã‚’è‡ªç”±ã«å¤‰æ›´å‡ºæ¥ã‚‹ã‹ã©ã†ã‹ã®ãƒ•ãƒ©ã‚°
 	SetWindowSizeChangeEnableFlag( TRUE ) ;
-	// — ‰æ–Ê‚ğg—p
+	// è£ç”»é¢ã‚’ä½¿ç”¨
 	SetDrawScreen(DX_SCREEN_BACK);
-	// ‚c‚wƒ‰ƒCƒuƒ‰ƒŠ‚Ì‰Šú‰»
+	// ï¼¤ï¼¸ãƒ©ã‚¤ãƒ–ãƒ©ãƒªã®åˆæœŸåŒ–
 	if (DxLib_Init() == -1) return -1;
-	// ƒ}ƒEƒX‚ğ•\¦ó‘Ô‚É‚·‚é
+	// ãƒã‚¦ã‚¹ã‚’è¡¨ç¤ºçŠ¶æ…‹ã«ã™ã‚‹
 	SetMouseDispFlag(TRUE);
 
 	Format();
 
-	// “Ç‚İ‚±‚ñ‚¾‰¹‚ğƒ‹[ƒvÄ¶‚µ‚Ü‚·(wPlaySoundMemxŠÖ”g—p)
+	// èª­ã¿ã“ã‚“ã éŸ³ã‚’ãƒ«ãƒ¼ãƒ—å†ç”Ÿã—ã¾ã™(ã€PlaySoundMemã€é–¢æ•°ä½¿ç”¨)
 //	PlaySoundMem(Sound.Mizugame, DX_PLAYTYPE_LOOP);
 
 
-	// ƒQ[ƒ€ƒ‹[ƒvŠJn@ƒGƒXƒP[ƒvƒL[‚ª‰Ÿ‚³‚ê‚½‚çI—¹‚·‚é
+	// ã‚²ãƒ¼ãƒ ãƒ«ãƒ¼ãƒ—é–‹å§‹ã€€ã‚¨ã‚¹ã‚±ãƒ¼ãƒ—ã‚­ãƒ¼ãŒæŠ¼ã•ã‚ŒãŸã‚‰çµ‚äº†ã™ã‚‹
 	while (ProcessMessage() == 0 && CheckHitKey(KEY_INPUT_ESCAPE) == 0)
 	{
-		// ‰æ–Ê‚Ì‰Šú‰»
+		// ç”»é¢ã®åˆæœŸåŒ–
 		ClearDrawScreen();
-		// ƒ}ƒEƒX‚ÌˆÊ’u‚ğæ“¾
+		// ãƒã‚¦ã‚¹ã®ä½ç½®ã‚’å–å¾—
 		GetMousePoint(&Global.MouseX, &Global.MouseY);
-		//ƒ}ƒEƒX‚ÌƒNƒŠƒbƒNî•ñ
+		//ãƒã‚¦ã‚¹ã®ã‚¯ãƒªãƒƒã‚¯æƒ…å ±
 		if (GetMouseInputLog(&Global.Button, &Global.ClickX, &Global.ClickY, TRUE) == 0){
 			Flag.Click = 1;
 		}
 		else{
 			Flag.Click = 0;
 		}
-		//ƒ{ƒ^ƒ“‚Ì‰Ÿ‰ºî•ñ
+		//ãƒœã‚¿ãƒ³ã®æŠ¼ä¸‹æƒ…å ±
 		UpdateKey(Global.Key);
 
-		// ‰æ–Ê¶ã‚Ì—Ìˆæ‚ÉlŠp‚ğ•`‚«,‘O‚É•`‚¢‚Ä‚ ‚Á‚½•¶š—ñ‚ğÁ‚·
+		// ç”»é¢å·¦ä¸Šã®é ˜åŸŸã«å››è§’ã‚’æã,å‰ã«æã„ã¦ã‚ã£ãŸæ–‡å­—åˆ—ã‚’æ¶ˆã™
 		DrawBox(0, 0, Screen_X , Screen_Y, Status.White, TRUE);
 		DrawExtendGraph(0, 0, Screen_X, Screen_Y, Graph.Library, TRUE);
 		DrawGraph(0, 0, Graph.Fade, TRUE);
 
-		//•¶š•\¦
+		//æ–‡å­—è¡¨ç¤º
 		Struct(Global.MouseX, Global.MouseY);
 
-		//ƒQ[ƒ€’†g
+		//ã‚²ãƒ¼ãƒ ä¸­èº«
 		Game();
 
-		//— ‰æ–Ê•`‰æ
+		//è£ç”»é¢æç”»
 		ScreenFlip();
 
-		// ƒƒbƒZ[ƒWˆ—
-		if (ProcessMessage() == -1)	break;	// ƒGƒ‰[‚ª‹N‚«‚½‚çƒ‹[ƒv‚ğ”²‚¯‚é
+		// ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸å‡¦ç†
+		if (ProcessMessage() == -1)	break;	// ã‚¨ãƒ©ãƒ¼ãŒèµ·ããŸã‚‰ãƒ«ãƒ¼ãƒ—ã‚’æŠœã‘ã‚‹
 	}
 
-	// ‚c‚wƒ‰ƒCƒuƒ‰ƒŠ‚Ìg—pI—¹
+	// ï¼¤ï¼¸ãƒ©ã‚¤ãƒ–ãƒ©ãƒªã®ä½¿ç”¨çµ‚äº†
 	DxLib_End();
 
-	// ƒ\ƒtƒg‚ÌI—¹
+	// ã‚½ãƒ•ãƒˆã®çµ‚äº†
 	return 0;
 }
 
