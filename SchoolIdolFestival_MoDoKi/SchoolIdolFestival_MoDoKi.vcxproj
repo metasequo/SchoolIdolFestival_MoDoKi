@@ -88,6 +88,8 @@
     <ClCompile Include="Function.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="Select.cpp" />
+    <ClCompile Include="Title.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Media Include="..\Debug\Sound\Here are Dice.mp3" />
@@ -98,6 +100,8 @@
     <ClInclude Include="Common.h" />
     <ClInclude Include="Function.h" />
     <ClInclude Include="Game.h" />
+    <ClInclude Include="Select.h" />
+    <ClInclude Include="Title.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

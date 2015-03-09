@@ -105,6 +105,9 @@ int ScoreCalcu(int judge, int Combo){
 	else if (Combo <= 600)	score *= 1.25;
 	else if (Combo <= 800)	score *= 1.3;
 	else if (Combo <= 1000)	score *= 1.35;
+//	else if (Combo <= 1200)	score *= 1.4;
+//	else if (Combo <= 1400)	score *= 1.45;
+	else score *= 1.5;
 
 	return score;
 }
@@ -244,7 +247,7 @@ void Format(){
 	int i, j;
 	double X, Y;
 	// 色の値を取得
-	Status.White = GetColor(255, 255, 255);
+	Status.White = GetColor(239, 239, 239);
 	Status.Black = GetColor(0, 0, 0);
 	Status.Gray = GetColor(123, 123, 123);
 	//乱数の初期設定(元凶)
@@ -256,6 +259,7 @@ void Format(){
 	Sound.Mizugame = LoadSoundMem("Sound/Mizugame_short.mp3");
 	Sound.pefect = LoadSoundMem("Sound/perfect.mp3");
 	Sound.great = LoadSoundMem("Sound/great.mp3");
+	Sound.Push = LoadSoundMem("Sound/botan_b25.mp3");
 
 	//画像読み込み
 	Graph.Circle_Blue = LoadGraph("Graph/Circle_Blue.png");
@@ -276,7 +280,18 @@ void Format(){
 	Graph.Library = LoadGraph("Graph/library.jpg");
 	Graph.Fade = LoadGraph("Graph/Fade_All.png");
 	LoadDivGraph("Graph/Technyan_icon.png", 9, 3, 3, 200, 200, Graph.Technyan);
-
+	Graph.Title_technyan = LoadGraph("Graph/Title_technyan.png");
+	Graph.Title = LoadGraph("Graph/Title.png");
+	Graph.Start = LoadGraph("Graph/Start.png");
+	Graph.Select = LoadGraph("Graph/Select.png");
+	Graph.Button_Red = LoadGraph("Graph/button_red.png");
+	Graph.Button_Blue = LoadGraph("Graph/button_blue.png");
+	Graph.Button_Green = LoadGraph("Graph/button_green.png");
+	Graph.Button_Yellow = LoadGraph("Graph/button_yellow.png");
+	Graph.Button_White = LoadGraph("Graph/button_white.png");
+	Graph.Medal_Gold = LoadGraph("Graph/medal_gold.png");
+	Graph.Medal_Silver = LoadGraph("Graph/medal_silver.png");
+	Graph.Medal_Bronze = LoadGraph("Graph/medal_bronze.png");
 
 	//画像のサイズを得る
 	GetGraphSize(Graph.Circle_Blue, &Gs.Circle_X, &Gs.Circle_Y);
@@ -293,7 +308,14 @@ void Format(){
 	GetGraphSize(Graph.Scare, &Gs.Score_X, &Gs.Score_Y);
 	Gs.Radius = Gs.Circle_X / 2;
 	GetGraphSize(Graph.Technyan[6], &Gs.Technyan_X, &Gs.Technyan_Y);
+	GetGraphSize(Graph.Title, &Gs.Title_X, &Gs.Title_Y);
+	GetGraphSize(Graph.Start, &Gs.Start_X, &Gs.Start_Y);
+	GetGraphSize(Graph.Select, &Gs.Select_X, &Gs.Select_Y);
+	GetGraphSize(Graph.Button_Red, &Gs.Button_X, &Gs.Button_Y);
+	GetGraphSize(Graph.Medal_Gold, &Gs.Medal_X, &Gs.Medal_Y);
 
+	Gs.Button_X /= 3;
+	Gs.Button_Y /= 3;
 
 	Gp.Circle_X = Screen_X / 2;
 	Gp.Circle_Y = 164 + Gs.Circle_X / 2;
@@ -357,6 +379,10 @@ void Reset(){
 		Cp[i].Radius = 76;
 	}
 
+	Flag.Title = 1;
+	Flag.Select = 0;
+	Flag.Game = 0;
+
 	Player.Score = 0;
 	Player.Combo = 0;
 	Player.HP = 20;
@@ -386,5 +412,15 @@ void Reset(){
 			}
 		}
 	}
+
+	Gp.Title_technyan_X = 0;
+	Gp.Title_technyan_Y = 0;
+	Gp.Title_X = Center(Gs.Title_X, 'X');
+	Gp.Title_Y = 150;
+	Gp.Start_X = Center(Gs.Start_X, 'X');
+	Gp.Start_Y = Gp.Title_Y + Gs.Title_Y + Gs.Start_Y * 2;
+	Gp.Select_X = Center(Gs.Select_X, 'X');
+	Gp.Select_Y = 100;
+
 
 }

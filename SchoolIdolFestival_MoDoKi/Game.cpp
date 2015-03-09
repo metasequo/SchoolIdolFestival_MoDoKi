@@ -45,7 +45,7 @@ void Game()
 
 
 
-	if (Global.Key[KEY_INPUT_A] == 1){
+	if (Global.Key[KEY_INPUT_F1] == 1){
 		Reset();
 		StopSoundMem(Sound.Mizugame);
 		PlaySoundMem(Sound.Mizugame, DX_PLAYTYPE_BACK);

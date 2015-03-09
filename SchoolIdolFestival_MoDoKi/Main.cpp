@@ -33,6 +33,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	if (DxLib_Init() == -1) return -1;
 	// マウスを表示状態にする
 	SetMouseDispFlag(TRUE);
+	//透過色の設定
+	SetTransColor(255, 0, 255);
 
 	Format();
 
@@ -65,8 +67,24 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 		//文字表示
 		Struct(Global.MouseX, Global.MouseY);
 
+		//Title
+
+		if (Flag.Title == 1 && Flag.Select == 0 && Flag.Game == 0){
+			Title();
+		}
+		
+		if (Flag.Title == 2 && Flag.Select == 1 && Flag.Game == 0){
+			TitleToSelect();
+		}
+
+		if (Flag.Title == 0 && Flag.Select == 1 && Flag.Game == 0){
+			Select();
+		}
+
 		//ゲーム中身
-		Game();
+		if (Flag.Title == 0 && Flag.Select == 0 && Flag.Game >= 1){
+			Game();
+		}
 
 		//裏画面描画
 		ScreenFlip();

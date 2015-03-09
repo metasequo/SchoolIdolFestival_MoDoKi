@@ -24,6 +24,10 @@ typedef struct tagGRAPH
 	int Library;
 	int Fade;
 	int Technyan[9];
+	int Title_technyan;
+	int Title, Start, Select;
+	int Button_Red, Button_Blue, Button_Green, Button_Yellow, Button_White;
+	int Medal_Gold, Medal_Silver, Medal_Bronze;
 } GRAPH;
 
 typedef struct tagGRAPHSIZE
@@ -39,6 +43,9 @@ typedef struct tagGRAPHSIZE
 	int Score_X, Score_Y;
 	int Radius;
 	int Technyan_X, Technyan_Y;
+	int Title_X, Title_Y, Start_X, Start_Y, Select_X, Select_Y;
+	int Button_X, Button_Y;
+	int Medal_X, Medal_Y;
 } GRAPHSIZE;
 
 typedef struct tagGRAPHPOINT
@@ -50,12 +57,15 @@ typedef struct tagGRAPHPOINT
 	int Perfect_Y, Great_Y, Good_Y, Bad_Y, Miss_Y;
 	int Gameover_X, Gameover_Y;
 	int Score_X, Score_Y;
+	int Title_technyan_X, Title_technyan_Y;
+	int Title_X, Title_Y, Start_X, Start_Y, Select_X, Select_Y;
 } GRAPHPOINT;
 
 typedef struct tagSOUND
 {
 	int Dice, Mizugame;
 	int pefect, great;
+	int Push;
 } SOUND;
 
 typedef struct tagBUTTONPOINT
@@ -108,6 +118,10 @@ typedef struct tagGLOBAL
 	int ClickX, ClickY, Button;
 	char Key[256];
 	int Frame;
+	int StartCounter;
+	int SelectCounter;
+	int Mem_X[16], Mem_Y[16];
+	int Move_X[16], Move_Y[16];
 } GLOBAL;
 
 // Function.cpp //
@@ -129,5 +143,11 @@ void Reset();
 // Game.cpp //
 void Game();
 
+// Title.cpp //
+void Title();
+void TitleToSelect();
+
 #include "Function.h"
 #include "Game.h"
+#include "Title.h"
+#include "Select.h"
