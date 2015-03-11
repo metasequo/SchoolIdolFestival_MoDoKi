@@ -12,6 +12,7 @@ FLAG Flag;
 PLAYER Player;
 STATUS Status;
 GLOBAL Global;
+MUSIC Music[MusicNum];
 
 // WinMain 関数
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
@@ -32,7 +33,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	// ＤＸライブラリの初期化
 	if (DxLib_Init() == -1) return -1;
 	// マウスを表示状態にする
-	SetMouseDispFlag(TRUE);
+//	SetMouseDispFlag(TRUE);
 	//透過色の設定
 	SetTransColor(255, 0, 255);
 
@@ -61,14 +62,13 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
 		// 画面左上の領域に四角を描き,前に描いてあった文字列を消す
 		DrawBox(0, 0, Screen_X , Screen_Y, Status.White, TRUE);
-		DrawExtendGraph(0, 0, Screen_X, Screen_Y, Graph.Library, TRUE);
+//		DrawExtendGraph(0, 0, Screen_X, Screen_Y, Graph.Library, TRUE);
 		DrawGraph(0, 0, Graph.Fade, TRUE);
 
 		//文字表示
-		Struct(Global.MouseX, Global.MouseY);
+//		Struct(Global.MouseX, Global.MouseY);
 
 		//Title
-
 		if (Flag.Title == 1 && Flag.Select == 0 && Flag.Game == 0){
 			Title();
 		}
@@ -77,12 +77,20 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 			TitleToSelect();
 		}
 
+		//Select
 		if (Flag.Title == 0 && Flag.Select == 1 && Flag.Game == 0){
 			Select();
+		}
+		if (Flag.Title == 0 && Flag.Select == 2 && Flag.Game == 0){
+			MusicConfirm();
 		}
 
 		//ゲーム中身
 		if (Flag.Title == 0 && Flag.Select == 0 && Flag.Game >= 1){
+			Game();
+		}
+
+		if (Global.Key[KEY_INPUT_F2] == 1){
 			Game();
 		}
 

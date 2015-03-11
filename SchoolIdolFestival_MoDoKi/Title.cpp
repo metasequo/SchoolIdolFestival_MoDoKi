@@ -12,6 +12,7 @@ extern FLAG Flag;
 extern PLAYER Player;
 extern STATUS Status;
 extern GLOBAL Global;
+extern MUSIC Music[MusicNum];
 
 void Title()
 {
@@ -32,7 +33,7 @@ void Title()
 
 	Global.StartCounter++;
 
-	if (Global.Key[KEY_INPUT_F1] == 1){
+	if (Global.Key[KEY_INPUT_F1] == 1 || Global.Key[KEY_INPUT_B] == 1){
 		PlaySoundMem(Sound.Push, DX_PLAYTYPE_NORMAL);
 		Flag.Title++;
 		Flag.Select++;
@@ -49,7 +50,7 @@ void TitleToSelect()
 			&Global.Move_X[1], &Global.Move_Y[1], 30);
 
 		Gp.Select_Y = -Gs.Select_Y;
-		MovePoint(Gp.Select_X, Gp.Select_Y, Gp.Select_X, 50,
+		MovePoint(Gp.Select_X, Gp.Select_Y, Gp.Select_X, 25,
 			&Global.Move_X[2], &Global.Move_Y[2], 30);
 	}
 	if (Global.StartCounter < 30){

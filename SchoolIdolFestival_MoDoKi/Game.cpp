@@ -12,10 +12,13 @@ extern FLAG Flag;
 extern PLAYER Player;
 extern STATUS Status;
 extern GLOBAL Global;
+extern MUSIC Music[MusicNum];
 
 void Game()
 {
 	int i, j, k;
+	DrawExtendGraph(0, 0, Screen_X, Screen_Y, Graph.Library, TRUE);
+	DrawExtendGraph(0, 0, Screen_X, Screen_Y, Graph.Fade, TRUE);
 
 	//		DrawCirclGraph(Gp.Onpu_X, Gp.Onpu_Y, Graph.Onpu, Gs.Onpu_X, Gs.Onpu_Y);
 	//		DrawCirclGraph(Gp.Circle_X, Gp.Circle_Y, Graph.Circle_Blue, Gs.Circle_X, Gs.Circle_Y);
@@ -45,12 +48,20 @@ void Game()
 
 
 
-	if (Global.Key[KEY_INPUT_F1] == 1){
+/*	if (Global.Key[KEY_INPUT_F1] == 1){
 		Reset();
 		StopSoundMem(Sound.Mizugame);
 		PlaySoundMem(Sound.Mizugame, DX_PLAYTYPE_BACK);
 		Status.StartTime = GetNowCount();
 	}
+	*/
+	if (Flag.Game == 1)
+	{
+		Status.StartTime = GetNowCount();
+		PlaySoundMem(Music[Global.TargetSong].MusicData, DX_PLAYTYPE_BACK);
+		Flag.Game++;
+	}
+
 	Status.NowTime = GetNowCount();
 	Status.ElapsedTime = Status.NowTime - Status.StartTime;
 
@@ -296,9 +307,9 @@ void Game()
 		}
 	}
 
-	if (Player.HP <= 0){
-		Player.HP = 0;
-		DrawGraph(Gp.Gameover_X, Gp.Gameover_Y, Graph.Gameover, TRUE);
+	if (Player.HP  < 1){
+		Player.HP = 1;
+/*		DrawGraph(Gp.Gameover_X, Gp.Gameover_Y, Graph.Gameover, TRUE);
 		for (i = 0; i < 64; i++){
 			Cp[i].flag = 0;
 			Cp[i].frame = 0;
@@ -306,13 +317,17 @@ void Game()
 			Cp[i].X = Gp.Circle_X;
 			Cp[i].Y = Gp.Circle_Y;
 		}
+		
 		StopSoundMem(Sound.Mizugame);
+		StopSoundMem(Music[Global.TargetSong].MusicData);
 		Reset();
 		Status.StartTime = 0;
+	*/
 	}
 
 	if (Player.sMin * 60000 + Player.sSec * 1000 + Player.sMill < Status.ElapsedTime - 2500){
-		StopSoundMem(Sound.Mizugame);
+//		StopSoundMem(Sound.Mizugame);
+		StopSoundMem(Music[Global.TargetSong].MusicData);
 		Reset();
 		Status.StartTime = 0;
 	}

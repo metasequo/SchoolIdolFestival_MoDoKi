@@ -13,3 +13,4 @@
 #endif
 
 void Select();
+void MusicConfirm();

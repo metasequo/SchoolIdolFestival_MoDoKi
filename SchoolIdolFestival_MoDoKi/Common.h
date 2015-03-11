@@ -12,6 +12,8 @@
 #define Screen_Y 720
 #endif
 
+#define MusicNum 5
+
 //構造体
 typedef struct tagGRAPH
 {
@@ -28,6 +30,7 @@ typedef struct tagGRAPH
 	int Title, Start, Select;
 	int Button_Red, Button_Blue, Button_Green, Button_Yellow, Button_White;
 	int Medal_Gold, Medal_Silver, Medal_Bronze;
+	int Easy, Normal, Hard, Diff[3];
 } GRAPH;
 
 typedef struct tagGRAPHSIZE
@@ -46,6 +49,10 @@ typedef struct tagGRAPHSIZE
 	int Title_X, Title_Y, Start_X, Start_Y, Select_X, Select_Y;
 	int Button_X, Button_Y;
 	int Medal_X, Medal_Y;
+	int CentrJacket_X, CentrJacket_Y;
+	int LeftJacket_X, LeftJacket_Y;
+	int RightJacket_X, RightJacket_Y;
+	int Easy_X, Easy_Y, Normal_X, Normal_Y, Hard_X, Hard_Y;
 } GRAPHSIZE;
 
 typedef struct tagGRAPHPOINT
@@ -59,6 +66,10 @@ typedef struct tagGRAPHPOINT
 	int Score_X, Score_Y;
 	int Title_technyan_X, Title_technyan_Y;
 	int Title_X, Title_Y, Start_X, Start_Y, Select_X, Select_Y;
+	int CentrJacket_X, CentrJacket_Y;
+	int LeftJacket_X, LeftJacket_Y;
+	int RightJacket_X, RightJacket_Y;
+	int Easy_X, Easy_Y, Normal_X, Normal_Y, Hard_X, Hard_Y;
 } GRAPHPOINT;
 
 typedef struct tagSOUND
@@ -120,9 +131,23 @@ typedef struct tagGLOBAL
 	int Frame;
 	int StartCounter;
 	int SelectCounter;
+	int TargetSong;
+	int TargetDiff;
 	int Mem_X[16], Mem_Y[16];
 	int Move_X[16], Move_Y[16];
 } GLOBAL;
+
+typedef struct tagMUSIC
+{
+	char MusicName[64];
+	char Artist[64];
+	int MusicData;
+	int Notes;
+	int MMin, MSec, MMill;
+	int Ranking[5];
+	int Jacket;
+	int Easy, Normal, Hard;
+} MUSIC;
 
 // Function.cpp //
 int BoxHit(int Al, int Ar, int At, int Au, int Bl, int Br, int Bt, int Bu);
@@ -135,7 +160,8 @@ void DrawCirclExtendGraph(int X, int Y, int Graph, int Radius);
 int Pythagorean(int Ax, int Ay, int Bx, int By);
 int NoteHit(int circle, int button);
 int ScoreCalcu(int judge, int Combo);
-void ChartRead();
+void ListRead();
+void ChartRead(char *MusicName, char Type); 
 void Struct(int MouseX, int MouseY);
 void Format();
 void Reset();
@@ -146,6 +172,10 @@ void Game();
 // Title.cpp //
 void Title();
 void TitleToSelect();
+
+// Select.cpp //
+void Select();
+void MusicConfirm();
 
 #include "Function.h"
 #include "Game.h"
