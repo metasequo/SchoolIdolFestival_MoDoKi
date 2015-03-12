@@ -16,16 +16,17 @@ extern MUSIC Music[MusicNum];
 
 void Game()
 {
+	DrawBox(0, 0, Screen_X, Screen_Y, Status.White, TRUE);
+
 	int i, j, k;
 	DrawExtendGraph(0, 0, Screen_X, Screen_Y, Graph.Library, TRUE);
 	DrawExtendGraph(0, 0, Screen_X, Screen_Y, Graph.Fade, TRUE);
 
-	//		DrawCirclGraph(Gp.Onpu_X, Gp.Onpu_Y, Graph.Onpu, Gs.Onpu_X, Gs.Onpu_Y);
-	//		DrawCirclGraph(Gp.Circle_X, Gp.Circle_Y, Graph.Circle_Blue, Gs.Circle_X, Gs.Circle_Y);
+//	DrawCirclGraph(Gp.Onpu_X, Gp.Onpu_Y, Graph.Onpu, Gs.Onpu_X, Gs.Onpu_Y);
+//	DrawCirclGraph(Gp.Circle_X, Gp.Circle_Y, Graph.Circle_Blue, Gs.Circle_X, Gs.Circle_Y);
 	DrawCirclExtendGraph(Gp.Onpu_X, Gp.Onpu_Y, Graph.Onpu, Gs.Onpu_X / 2);
 	DrawCirclExtendGraph(Gp.Circle_X, Gp.Circle_Y, Graph.Circle_Blue, Gs.Circle_X / 2);
 
-	//		Player.Score = 15793;
 	DrawGraph(Gp.Score_X, Gp.Score_Y, Graph.Scare, TRUE);
 	DrawGraph(Gp.Score_X + Gs.Score_X + Gs.Number_X * 1, Gp.Score_Y, Graph.Number[Player.Score / 10000], TRUE);
 	DrawGraph(Gp.Score_X + Gs.Score_X + Gs.Number_X * 2, Gp.Score_Y, Graph.Number[(Player.Score % 10000) / 1000], TRUE);
@@ -33,16 +34,15 @@ void Game()
 	DrawGraph(Gp.Score_X + Gs.Score_X + Gs.Number_X * 4, Gp.Score_Y, Graph.Number[(Player.Score % 100) / 10], TRUE);
 	DrawGraph(Gp.Score_X + Gs.Score_X + Gs.Number_X * 5, Gp.Score_Y, Graph.Number[Player.Score % 10], TRUE);
 
-	//		Player.Combo = 137;
 	DrawGraph(Gp.Combo_X, Gp.Combo_Y, Graph.Combo, TRUE);
-	//		DrawGraph(Gp.Combo_X + Gs.Combo_X + Gs.Number_mX, Gp.Combo_Y, Graph.Number_m[Player.Combo / 1000], TRUE);
+//	DrawGraph(Gp.Combo_X + Gs.Combo_X + Gs.Number_mX, Gp.Combo_Y, Graph.Number_m[Player.Combo / 1000], TRUE);
 	DrawGraph(Gp.Combo_X + Gs.Combo_X + Gs.Number_mX * 1, Gp.Combo_Y, Graph.Number_m[(Player.Combo % 1000) / 100], TRUE);
 	DrawGraph(Gp.Combo_X + Gs.Combo_X + Gs.Number_mX * 2, Gp.Combo_Y, Graph.Number_m[(Player.Combo % 100) / 10], TRUE);
 	DrawGraph(Gp.Combo_X + Gs.Combo_X + Gs.Number_mX * 3, Gp.Combo_Y, Graph.Number_m[Player.Combo % 10], TRUE);
 
 
 	for (i = 0; i < 9; i++){
-		DrawCirclGraph(Bp[i].x, Bp[i].y, Graph.Technyan[i], Gs.Technyan_X, Gs.Technyan_Y);
+		DrawCirclGraph(Bp[i].x, Bp[i].y, Graph.Technyan[Global.TechRand[i]], Gs.Technyan_X, Gs.Technyan_Y);
 		DrawCirclGraph(Bp[i].x, Bp[i].y, Graph.Circle_Yellow, Gs.Circle_X, Gs.Circle_Y);
 	}
 
@@ -59,6 +59,9 @@ void Game()
 	{
 		Status.StartTime = GetNowCount();
 		PlaySoundMem(Music[Global.TargetSong].MusicData, DX_PLAYTYPE_BACK);
+		for (i = 0; i < 9; i++){
+			Global.TechRand[i] = GetRand(8);
+		}
 		Flag.Game++;
 	}
 
@@ -66,15 +69,24 @@ void Game()
 	Status.ElapsedTime = Status.NowTime - Status.StartTime;
 
 	//↑ or → でBPMプラス
-	if (Global.Key[KEY_INPUT_UP] != 0 || Global.Key[KEY_INPUT_RIGHT] == 1){
-		//	Status.Timing += 10;
+	if (Global.Key[KEY_INPUT_UP] != 0
+	//	|| Global.Key[KEY_INPUT_RIGHT] == 1
+		){
 		Status.BPM += 10;
 	}
 	//↓ or ← でBPMマイナス
-	if (Global.Key[KEY_INPUT_DOWN] != 0 || Global.Key[KEY_INPUT_LEFT] == 1){
-		//	Status.Timing -= 10;
+	if (Global.Key[KEY_INPUT_DOWN] != 0
+	//	|| Global.Key[KEY_INPUT_LEFT] == 1
+		){
 		Status.BPM -= 10;
 		if (Status.BPM < 60)	Status.BPM = 60;
+	}
+
+	if (Global.Key[KEY_INPUT_RIGHT] != 0){
+		Status.Timing += 10;
+	}
+	if (Global.Key[KEY_INPUT_LEFT] != 0){
+		Status.Timing -= 10;
 	}
 
 

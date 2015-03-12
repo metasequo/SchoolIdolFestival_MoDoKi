@@ -63,7 +63,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 		// 画面左上の領域に四角を描き,前に描いてあった文字列を消す
 		DrawBox(0, 0, Screen_X , Screen_Y, Status.White, TRUE);
 //		DrawExtendGraph(0, 0, Screen_X, Screen_Y, Graph.Library, TRUE);
-		DrawGraph(0, 0, Graph.Fade, TRUE);
+//		DrawGraph(0, 0, Graph.Fade, TRUE);
 
 		//文字表示
 //		Struct(Global.MouseX, Global.MouseY);

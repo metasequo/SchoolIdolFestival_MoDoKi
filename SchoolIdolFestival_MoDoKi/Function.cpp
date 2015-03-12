@@ -177,13 +177,13 @@ void ChartRead(char *MusicName, char Type){
 		}
 		else{
 			token = strtok_s(read, cut, &nexttoken);
-//			Player.sMin = atoi(token);
-			token = strtok_s(NULL, cut, &nexttoken);
 			Player.sMin = atoi(token);
 			token = strtok_s(NULL, cut, &nexttoken);
 			Player.sSec = atoi(token);
 			token = strtok_s(NULL, cut, &nexttoken);
 			Player.sMill = atoi(token);
+//			token = strtok_s(NULL, cut, &nexttoken);
+//			Player.Notes = atoi(token);
 		}
 		i++;
 	}

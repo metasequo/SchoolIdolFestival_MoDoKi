@@ -16,6 +16,8 @@ extern MUSIC Music[MusicNum];
 
 void Title()
 {
+	DrawBox(0, 0, Screen_X, Screen_Y, Status.White, TRUE);
+
 	DrawGraph(Gp.Title_technyan_X, Gp.Title_technyan_Y, Graph.Title_technyan, TRUE);
 	DrawGraph(Gp.Title_X, Gp.Title_Y, Graph.Title, TRUE);
 

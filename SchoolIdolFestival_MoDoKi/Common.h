@@ -133,6 +133,7 @@ typedef struct tagGLOBAL
 	int SelectCounter;
 	int TargetSong;
 	int TargetDiff;
+	int TechRand[9];
 	int Mem_X[16], Mem_Y[16];
 	int Move_X[16], Move_Y[16];
 } GLOBAL;
