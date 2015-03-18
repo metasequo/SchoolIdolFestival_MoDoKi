@@ -90,10 +90,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 			Game();
 		}
 
-		if (Global.Key[KEY_INPUT_F2] == 1){
-			Game();
-		}
-
 		//裏画面描画
 		ScreenFlip();
 
