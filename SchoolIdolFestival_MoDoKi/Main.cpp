@@ -12,7 +12,7 @@ FLAG Flag;
 PLAYER Player;
 STATUS Status;
 GLOBAL Global;
-MUSIC Music[MusicNum];
+MUSIC Music[MusicCntMax];
 
 // WinMain 関数
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
@@ -66,7 +66,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 //		DrawGraph(0, 0, Graph.Fade, TRUE);
 
 		//文字表示
-//		Struct(Global.MouseX, Global.MouseY);
+		Struct(Global.MouseX, Global.MouseY);
 
 		//Title
 		if (Flag.Title == 1 && Flag.Select == 0 && Flag.Game == 0){
@@ -90,12 +90,16 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 			Game();
 		}
 
+		Struct(Global.MouseX, Global.MouseY);
+
 		//裏画面描画
 		ScreenFlip();
 
 		// メッセージ処理
 		if (ProcessMessage() == -1)	break;	// エラーが起きたらループを抜ける
+
 	}
+
 
 	// ＤＸライブラリの使用終了
 	DxLib_End();

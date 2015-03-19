@@ -12,7 +12,7 @@ extern FLAG Flag;
 extern PLAYER Player;
 extern STATUS Status;
 extern GLOBAL Global;
-extern MUSIC Music[MusicNum];
+extern MUSIC Music[MusicCntMax];
 
 void Game()
 {
@@ -58,7 +58,7 @@ void Game()
 	if (Flag.Game == 1)
 	{
 		Status.StartTime = GetNowCount();
-		PlaySoundMem(Music[Global.TargetSong].MusicData, DX_PLAYTYPE_BACK);
+		PlaySoundMem(Music[Global.TargetMusic].MusicData, DX_PLAYTYPE_BACK);
 		for (i = 0; i < 9; i++){
 			Global.TechRand[i] = GetRand(8);
 		}
@@ -331,7 +331,7 @@ void Game()
 		}
 		
 		StopSoundMem(Sound.Mizugame);
-		StopSoundMem(Music[Global.TargetSong].MusicData);
+		StopSoundMem(Music[Global.TargetMusic].MusicData);
 		Reset();
 		Status.StartTime = 0;
 	*/
@@ -339,7 +339,7 @@ void Game()
 
 	if (Player.sMin * 60000 + Player.sSec * 1000 + Player.sMill < Status.ElapsedTime - 2500){
 //		StopSoundMem(Sound.Mizugame);
-		StopSoundMem(Music[Global.TargetSong].MusicData);
+		StopSoundMem(Music[Global.TargetMusic].MusicData);
 		Reset();
 		Status.StartTime = 0;
 	}

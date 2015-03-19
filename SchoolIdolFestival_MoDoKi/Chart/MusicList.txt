@@ -1,7 +1,6 @@
-Mizugame.0.1.0
+Mizugame.0.1.2
 scars_of_fauna.1.1.1
 アルストロメリア.1.1.1
 朧.1.1.1
 ちくわパフェだよ☆CKP.1.1.1
-
 

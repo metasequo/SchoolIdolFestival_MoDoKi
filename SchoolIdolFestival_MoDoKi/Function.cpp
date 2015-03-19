@@ -12,7 +12,7 @@ extern FLAG Flag;
 extern PLAYER Player;
 extern STATUS Status;
 extern GLOBAL Global;
-extern MUSIC Music[MusicNum];
+extern MUSIC Music[MusicCntMax];
 
 int BoxHit(int Al, int Ar, int At, int Au, int Bl, int Br, int Bt, int Bu){
 	int Flag;
@@ -122,30 +122,36 @@ void ListRead()
 	char Add [] = "Chart/MusicList.txt";
 
 	List = FileRead_open(Add);
+	Global.MusicCnt = 0;
 
 	while (FileRead_gets(read, 255, List) != NULL){
- 		token = strtok_s(read, cut, &nexttoken);
-//		char *convert = token;
-//		len = strlen(convert);
-		strcpy_s(Music[i].MusicName, token);
-		token = strtok_s(read, cut, &nexttoken);
-		Music[i].Easy = atoi(token);
-		token = strtok_s(read, cut, &nexttoken);
-		Music[i].Normal = atoi(token);
-		token = strtok_s(read, cut, &nexttoken);
-		Music[i].Hard = atoi(token);
-		i++;
+//		if (i){
+			token = strtok_s(read, cut, &nexttoken);
+			strcpy_s(Music[i].MusicName, token);
+			token = strtok_s(read, cut, &nexttoken);
+			Music[i].Easy = atoi(token);
+			token = strtok_s(read, cut, &nexttoken);
+			Music[i].Normal = atoi(token);
+			token = strtok_s(read, cut, &nexttoken);
+			Music[i].Hard = atoi(token);
+//		}
+/*		else{
+			token = strtok_s(read, cut, &nexttoken);
+			Global.MusicCnt = atoi(token);
+		}
+*/		i++;
+			Global.MusicCnt++;
 	}
 
 	FileRead_close(List);
 }
 
 void ChartRead(char *MusicName, char Type){
-	int i, Chart, fullnotes, times[8];
+	int i, j,  Chart, fullnotes, times[8];
 	char read[256], *token, *nexttoken;
 	char cut [] = "[:.]; \n";
 	char Add[64];
-//	char Songname [] = "Mizugame_short";
+//	char Musicname [] = "Mizugame_short";
 
 	switch (Type)
 	{
@@ -164,6 +170,8 @@ void ChartRead(char *MusicName, char Type){
 
 	i = 0;
 	while (FileRead_gets(read, 255, Chart) != NULL){
+		j = 0;
+
 		if (i){
 			token = strtok_s(read, cut, &nexttoken);
 			Note[i].min = atoi(token);
@@ -172,7 +180,36 @@ void ChartRead(char *MusicName, char Type){
 			token = strtok_s(NULL, cut, &nexttoken);
 			Note[i].mill = atoi(token);
 			token = strtok_s(NULL, cut, &nexttoken);
+			if (Note[i - 1].min == Note[i].min && Note[i - 1].sec == Note[i].sec && Note[i - 1].mill == Note[i].mill){
+				Global.Simultaneously++;
+			}
+			else{
+				Global.Simultaneously = 0;
+			}
+
 			Note[i].button = atoi(token);
+			if (Type == 'E'){
+				do
+				{
+					Note[i].button = GetRand(5) + 2;
+					Simultaneous(i, 5);
+				}
+				while (Note[i].button == 1 || Note[i].button == 2 || Note[i].button == 8 || Note[i].button == 9);
+			}
+			else if (Type == 'N'){
+				do
+				{
+					Note[i].button = GetRand(7) + 1;
+					Simultaneous(i, 7);
+				}
+				while (Note[i].button == 1 || Note[i].button == 9);
+			}
+			if (Type == 'H' && Music[Global.TargetMusic].Hard == 2){
+				Simultaneous(i, 9);
+			}
+
+
+
 			Note[i].flag = 1;
 		}
 		else{
@@ -202,6 +239,19 @@ void ChartRead(char *MusicName, char Type){
 	}
 
 	FileRead_close(Chart);
+}
+
+void Simultaneous(int num, int ButtonNum){
+	int j = 0;
+	for (int cnt = 1; cnt <= Global.Simultaneously; cnt++){
+		while (Note[num - cnt].button == Note[num].button){
+			if (ButtonNum == 5)	Note[num].button = GetRand(ButtonNum) + 2;
+			if (ButtonNum == 7)	Note[num].button = GetRand(ButtonNum) + 1;
+			if (ButtonNum == 9)	Note[num].button = GetRand(8) + 1;
+			j++;
+			if (j == ButtonNum)	break;
+		}
+	}
 }
 
 void Struct(int MouseX, int MouseY){	// 表示する文字列を作成
@@ -293,7 +343,7 @@ void Struct(int MouseX, int MouseY){	// 表示する文字列を作成
 		}
 	}
 
-	for (i = 0; i < MusicNum; i++){
+	for (i = 0; i < Global.MusicCnt; i++){
 		lstrcpy(StrBuf, "Name :");
 //		_itoa_s(i, StrBuf2, 10);
 		strcpy_s(StrBuf2, Music[i].MusicName);
@@ -445,12 +495,13 @@ void Format(){
 	}
 
 	Status.Timing = -1500;
+	Global.TargetMusic = 0;
 
 	//楽曲リスト読み取り
 	ListRead();
 
 /*	//譜面読み取り
-	for (i = 0; i < MusicNum; i++){
+	for (i = 0; i < Global.MusicCnt; i++){
 		if (Music[i].Easy != 0)
 			ChartRead(Music[i].MusicName, 'E');
 		if (Music[i].Normal != 0)
@@ -459,7 +510,7 @@ void Format(){
 			ChartRead(Music[i].MusicName, 'H');
 	}
 	*/
-	for (i = 0; i < MusicNum; i++){
+	for (i = 0; i < Global.MusicCnt; i++){
 		char Add[64];
 		sprintf_s(Add, "Graph/Jacket/%s.jpg", Music[i].MusicName);
 		Music[i].Jacket = LoadGraph(Add);
@@ -501,8 +552,8 @@ void Reset(){
 	Player.pMin = 0;
 	Player.pMill = 0;
 
-	Global.TargetSong = 0;
 	Global.TargetDiff = 1;
+	Global.Simultaneously = 0;
 
 	Status.BPM = 80;
 
@@ -510,7 +561,7 @@ void Reset(){
 	ListRead();
 
 	//譜面読み取り
-/*	for (i = 0; i < MusicNum; i++){
+/*	for (i = 0; i < Global.MusicCnt; i++){
 		if (Music[i].Easy != 0)
 			ChartRead(Music[i].MusicName, 'E');
 		if (Music[i].Normal != 0)

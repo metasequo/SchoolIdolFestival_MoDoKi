@@ -12,7 +12,7 @@
 #define Screen_Y 720
 #endif
 
-#define MusicNum 5
+#define MusicCntMax 256
 
 //構造体
 typedef struct tagGRAPH
@@ -111,7 +111,7 @@ typedef struct tagPLAYER
 	int Score, Combo, HP;
 	int Perfect, Great, Good, Bad, Miss;
 	int jPerfect, jGreat, jGood, jBad, jMiss;
-	char SongName[64];
+	char MusicName[64];
 } PLAYER;
 
 typedef struct tagSTATUS
@@ -129,13 +129,15 @@ typedef struct tagGLOBAL
 	int ClickX, ClickY, Button;
 	char Key[256];
 	int Frame;
+	int MusicCnt;
 	int StartCounter;
 	int SelectCounter;
-	int TargetSong;
+	int TargetMusic;
 	int TargetDiff;
 	int TechRand[9];
 	int Mem_X[16], Mem_Y[16];
 	int Move_X[16], Move_Y[16];
+	int Simultaneously;	//同時押し
 } GLOBAL;
 
 typedef struct tagMUSIC
@@ -163,6 +165,7 @@ int NoteHit(int circle, int button);
 int ScoreCalcu(int judge, int Combo);
 void ListRead();
 void ChartRead(char *MusicName, char Type); 
+void Simultaneous(int num, int ButtonNum);
 void Struct(int MouseX, int MouseY);
 void Format();
 void Reset();

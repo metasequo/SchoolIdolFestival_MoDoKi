@@ -12,7 +12,7 @@ extern FLAG Flag;
 extern PLAYER Player;
 extern STATUS Status;
 extern GLOBAL Global;
-extern MUSIC Music[MusicNum];
+extern MUSIC Music[MusicCntMax];
 
 void Title()
 {

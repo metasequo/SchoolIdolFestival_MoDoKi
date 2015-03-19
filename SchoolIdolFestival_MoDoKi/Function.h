@@ -2,16 +2,6 @@
 #include <math.h>
 #include <string.h>
 
-#define FULLHD
-
-#ifdef FULLHD
-#define Screen_X 1920
-#define Screen_Y 1080
-#else
-#define Screen_X 1280
-#define Screen_Y 720
-#endif
-
 int BoxHit(int Al, int Ar, int At, int Au, int Bl, int Br, int Bt, int Bu);
 int CircleHit(float Ax, float Ay, float Ar, float Bx, float By, float Br);
 int Center(int GraphSize, char Tipe);
@@ -24,6 +14,7 @@ int NoteHit(int circle, int button);
 int ScoreCalcu(int judge, int Combo);
 void ListRead();
 void ChartRead(char *MusicName, char Type);
+void Simultaneous(int num, int ButtonNum);
 void Struct(int MouseX, int MouseY);
 void Format();
 void Reset();
