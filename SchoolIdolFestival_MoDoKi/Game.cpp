@@ -6,7 +6,7 @@ extern GRAPHSIZE Gs;
 extern SOUND Sound;
 extern GRAPHPOINT Gp;
 extern BUTTONPOINT Bp[9];
-extern CIRCLEPOINT Cp[64];
+extern CIRCLEPOINT Cp[128];
 extern NOTE Note[800];
 extern FLAG Flag;
 extern PLAYER Player;
@@ -22,12 +22,10 @@ void Game()
 	DrawExtendGraph(0, 0, Screen_X, Screen_Y, Graph.Library, TRUE);
 	DrawExtendGraph(0, 0, Screen_X, Screen_Y, Graph.Fade, TRUE);
 
-//	DrawCirclGraph(Gp.Onpu_X, Gp.Onpu_Y, Graph.Onpu, Gs.Onpu_X, Gs.Onpu_Y);
-//	DrawCirclGraph(Gp.Circle_X, Gp.Circle_Y, Graph.Circle_Blue, Gs.Circle_X, Gs.Circle_Y);
 	DrawCirclExtendGraph(Gp.Onpu_X, Gp.Onpu_Y, Graph.Onpu, Gs.Onpu_X / 2);
 	DrawCirclExtendGraph(Gp.Circle_X, Gp.Circle_Y, Graph.Circle_Blue, Gs.Circle_X / 2);
 
-	DrawGraph(Gp.Score_X, Gp.Score_Y, Graph.Scare, TRUE);
+//	DrawGraph(Gp.Score_X, Gp.Score_Y, Graph.Scare, TRUE);
 	DrawGraph(Gp.Score_X + Gs.Score_X + Gs.Number_X * 1, Gp.Score_Y, Graph.Number[Player.Score / 10000], TRUE);
 	DrawGraph(Gp.Score_X + Gs.Score_X + Gs.Number_X * 2, Gp.Score_Y, Graph.Number[(Player.Score % 10000) / 1000], TRUE);
 	DrawGraph(Gp.Score_X + Gs.Score_X + Gs.Number_X * 3, Gp.Score_Y, Graph.Number[(Player.Score % 1000) / 100], TRUE);
@@ -92,7 +90,7 @@ void Game()
 
 	//		if (Global.Key[KEY_INPUT_A]==1 || CheckKeyInput(KEY_INPUT_A) == 0)
 	{
-		for (int j = 0; j < 64; j++){
+		for (int j = 0; j < 128; j++){
 			if (Cp[j].flag == 0){
 				for (i = 0; i <= Player.Notes; i++)
 				{
@@ -101,17 +99,34 @@ void Game()
 						&& Status.ElapsedTime % 60000 / 1000 == Note[i].sec
 						&& Status.ElapsedTime % 1000 / 10 >= Note[i].mill)
 						||
-						(Note[i].mill >= 98 && Status.ElapsedTime / 60000 == Note[i].min
+						(Note[i].mill >= 95 &&
+						(Status.ElapsedTime / 60000 == Note[i].min
 						&& Status.ElapsedTime % 60000 / 1000 == Note[i].sec + 1
-						&& (Status.ElapsedTime - 5) % 1000 / 10 >= Note[i].mill)
+						&& (Status.ElapsedTime - 6) % 1000 / 10 >= Note[i].mill)
+						)
 						)
 
 					{
 						Cp[j].flag = 1;
-						//							Cp[j].button = j % 9;
-						Cp[j].button = GetRand(8);
-						//Cp[j].button = j % 2 + 2;
 						Cp[j].button = Note[i].button - 1;
+						Bp[Cp[j].button].num++ ;
+
+						if (Bp[Cp[j].button].num > 1){
+							Cp[j].flag = 0;
+							Cp[j].button = 0;
+							while (1)
+							{
+								if (Cp[j + Bp[Cp[j].button].num * 9].flag == 0)
+								{
+									j += Bp[Cp[j].button].num * 9;
+									Cp[j].flag = 1;
+									Cp[j].button = Note[i].button - 1;
+									break;
+								}
+								else Bp[Cp[j].button].num++;
+							}
+						}
+
 						Note[i].flag++;
 						break;
 					}
@@ -122,7 +137,7 @@ void Game()
 	}
 
 	//ノート（サークル）動作
-	for (i = 0; i < 64; i++){
+	for (i = 0; i < 128; i++){
 		int button = Cp[i].button;
 
 		if (Cp[i].flag != 0){
@@ -135,7 +150,7 @@ void Game()
 
 			if (Cp[i].flag == 2){
 				Global.Frame = 60 / (Status.BPM / 60) - Cp[i].frame;
-				//					Global.Frame = 60 - Cp[i].frame;
+				//Global.Frame = 60 - Cp[i].frame;
 				if (Global.Frame < 5)	Cp[i].flag = 3;
 				MovePoint(Cp[i].X, Cp[i].Y, Bp[button].x, Bp[button].y, &Cp[i].MoveX, &Cp[i].MoveY, (int) Global.Frame);
 			}
@@ -148,7 +163,7 @@ void Game()
 
 			if (Cp[i].flag >= 1){
 				Cp[i].Radius = (float) Gs.Circle_X * ((Bp[Cp[i].button].r - Pythagorean((float) Cp[i].X, Cp[i].Y, (float) Bp[Cp[i].button].x, (float) Bp[Cp[i].button].y)) / (float) Bp[Cp[i].button].r);
-				//					DrawCirclGraph(Cp[i].X, Cp[i].Y, Graph.Circle_Red, Gs.Circle_X, Gs.Circle_Y);
+				//DrawCirclGraph(Cp[i].X, Cp[i].Y, Graph.Circle_Red, Gs.Circle_X, Gs.Circle_Y);
 				DrawCirclExtendGraph(Cp[i].X, Cp[i].Y, Graph.Circle_Red, Cp[i].Radius);
 
 				if (Cp[i].button == 0 || Cp[i].button == 1 || Cp[i].button == 2 || Cp[i].button == 3){
@@ -183,8 +198,9 @@ void Game()
 
 
 	//ボタン判定
-	for (i = 0; i < 64; i++){
+	for (i = 0; i < 128; i++){
 		if (Cp[i].flag && Bp[Cp[i].button].flag == 0){
+			Bp[Cp[i].button].num++;
 			switch (Cp[i].button){
 			case 0:
 				if (Global.Key[KEY_INPUT_4] == 1
@@ -272,7 +288,7 @@ void Game()
 	}
 
 	//判定ごとの処理
-	for (i = 0; i < 64; i++){
+	for (i = 0; i < 128; i++){
 		if (Cp[i].judge != 0){
 			switch (Cp[i].judge){
 			case 1:
@@ -280,37 +296,35 @@ void Game()
 				DrawGraph(Gp.Perfect_X, Gp.Perfect_Y, Graph.Perfect, TRUE);
 				Player.Combo++;
 				Player.Score += ScoreCalcu(Cp[i].judge, Player.Combo);
-				Bp[Cp[i].button].flag = 0;
 				break;
 			case 2:
 				PlaySoundMem(Sound.great, DX_PLAYTYPE_BACK);
 				DrawGraph(Gp.Great_X, Gp.Great_Y, Graph.Great, TRUE);
 				Player.Combo++;
 				Player.Score += ScoreCalcu(Cp[i].judge, Player.Combo);
-				Bp[Cp[i].button].flag = 0;
 				break;
 			case 3:
-				PlaySoundMem(Sound.pefect, DX_PLAYTYPE_BACK);
+				PlaySoundMem(Sound.great, DX_PLAYTYPE_BACK);
 				DrawGraph(Gp.Good_X, Gp.Good_Y, Graph.Good, TRUE);
 				Player.Score += ScoreCalcu(Cp[i].judge, Player.Combo);
 				Player.Combo = 0;
-				Bp[Cp[i].button].flag = 0;
 				break;
 			case 4:
 				DrawGraph(Gp.Bad_X, Gp.Bad_Y, Graph.Bad, TRUE);
 				Player.Score += ScoreCalcu(Cp[i].judge, Player.Combo);
 				Player.Combo = 0;
 				Player.HP--;
-				Bp[Cp[i].button].flag = 0;
 				break;
 			case 5:
 				DrawGraph(Gp.Miss_X, Gp.Miss_Y, Graph.Miss, TRUE);
 				Player.Score += ScoreCalcu(Cp[i].judge, Player.Combo);
 				Player.Combo = 0;
 				Player.HP--;
-				Bp[Cp[i].button].flag = 0;
 				break;
 			}
+			Bp[Cp[i].button].flag = 0;
+			Bp[Cp[i].button].num--;
+			if (Bp[Cp[i].button].num < 0) Bp[Cp[i].button].num = 0;
 			Cp[i].flag = 0;
 			Cp[i].frame = 0;
 			Cp[i].judge = 0;
@@ -322,7 +336,7 @@ void Game()
 	if (Player.HP  < 1){
 		Player.HP = 1;
 /*		DrawGraph(Gp.Gameover_X, Gp.Gameover_Y, Graph.Gameover, TRUE);
-		for (i = 0; i < 64; i++){
+		for (i = 0; i < 128; i++){
 			Cp[i].flag = 0;
 			Cp[i].frame = 0;
 			Cp[i].judge = 0;
@@ -338,7 +352,6 @@ void Game()
 	}
 
 	if (Player.sMin * 60000 + Player.sSec * 1000 + Player.sMill < Status.ElapsedTime - 2500){
-//		StopSoundMem(Sound.Mizugame);
 		StopSoundMem(Music[Global.TargetMusic].MusicData);
 		Reset();
 		Status.StartTime = 0;

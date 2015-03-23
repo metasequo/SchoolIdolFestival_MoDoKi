@@ -83,6 +83,7 @@ typedef struct tagBUTTONPOINT
 {
 	int x, y, r;
 	int flag;
+	int num;
 } BUTTONPOINT;
 
 typedef struct tagCIRCLEPOINT
@@ -164,7 +165,7 @@ int Pythagorean(int Ax, int Ay, int Bx, int By);
 int NoteHit(int circle, int button);
 int ScoreCalcu(int judge, int Combo);
 void ListRead();
-void ChartRead(char *MusicName, char Type); 
+void ChartRead(char *MusicName, char Type);
 void Simultaneous(int num, int ButtonNum);
 void Struct(int MouseX, int MouseY);
 void Format();
