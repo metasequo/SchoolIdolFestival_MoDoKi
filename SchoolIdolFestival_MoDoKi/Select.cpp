@@ -20,7 +20,7 @@ void Select()
 
 	DrawGraph(Gp.Select_X, Gp.Select_Y, Graph.Select, TRUE);
 //	PlaySoundMem(Music[Global.TargetMusic].MusicData, DX_PLAYTYPE_BACK);
-	DrawGraph(Gp.CentrJacket_X, Gp.CentrJacket_Y, Music[Global.TargetMusic].Jacket, TRUE);
+	DrawExtendGraph(Gp.CentrJacket_X, Gp.CentrJacket_Y, Gp.CentrJacket_X + 500, Gp.CentrJacket_Y + 500, Music[Global.TargetMusic].Jacket, TRUE);
 
 	if (CheckSoundMem(Music[Global.TargetMusic].MusicData) != 1){
 		PlaySoundMem(Music[Global.TargetMusic].MusicData, DX_PLAYTYPE_LOOP);
@@ -85,7 +85,7 @@ void MusicConfirm()
 	DrawBox(0, 0, Screen_X, Screen_Y, Status.White, TRUE);
 
 	DrawGraph(Gp.Select_X, Gp.Select_Y, Graph.Select, TRUE);
-	DrawGraph(Gp.CentrJacket_X, Gp.CentrJacket_Y, Music[Global.TargetMusic].Jacket, TRUE);
+	DrawExtendGraph(Gp.CentrJacket_X, Gp.CentrJacket_Y, Gp.CentrJacket_X + 500, Gp.CentrJacket_Y + 500, Music[Global.TargetMusic].Jacket, TRUE);
 
 	switch (Global.TargetDiff)
 	{

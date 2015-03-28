@@ -321,7 +321,7 @@ void Struct(int MouseX, int MouseY){	// 表示する文字列を作成
 			_itoa_s(i, StrBuf2, 10);
 			lstrcat(StrBuf, StrBuf2);
 			lstrcat(StrBuf, " : ");
-			_itoa_s(Cp[i].judge, StrBuf2, 10);
+			_itoa_s(Cp[i].flag, StrBuf2, 10);
 			lstrcat(StrBuf, StrBuf2);
 			DrawString(0, 30 + i * 15, StrBuf, GetColor(0, 0, 0));
 		}
@@ -367,7 +367,7 @@ void Struct(int MouseX, int MouseY){	// 表示する文字列を作成
 		}
 	}
 
-	/*
+	
 	for (i = 0; i < Global.MusicCnt; i++){
 		lstrcpy(StrBuf, "Name :");
 		strcpy_s(StrBuf2, Music[i].MusicName);
@@ -377,7 +377,7 @@ void Struct(int MouseX, int MouseY){	// 表示する文字列を作成
 		lstrcat(StrBuf, StrBuf2);
 		DrawString(0, 60 + i * 15, StrBuf, GetColor(0, 0, 0));
 	}
-	*/
+	
 
 }
 
@@ -545,6 +545,15 @@ void Reset(){
 		Cp[i].frame = 0;
 		Cp[i].judge = 0;
 		Cp[i].Radius = 76;
+		Cp[i].button = 0;
+	}
+
+	for (i = 0; i < 800; i++){
+		Note[i].min = 0;
+		Note[i].sec = 0;
+		Note[i].mill = 0;
+		Note[i].button = 0;
+		Note[i].flag = 0;
 	}
 
 	Flag.Title = 1;

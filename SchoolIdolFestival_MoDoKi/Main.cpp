@@ -66,7 +66,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 //		DrawGraph(0, 0, Graph.Fade, TRUE);
 
 		//文字表示
-		Struct(Global.MouseX, Global.MouseY);
+//		Struct(Global.MouseX, Global.MouseY);
 
 		//Title
 		if (Flag.Title == 1 && Flag.Select == 0 && Flag.Game == 0){
@@ -89,6 +89,14 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 		if (Flag.Title == 0 && Flag.Select == 0 && Flag.Game >= 1){
 			Game();
 		}
+
+		if (Global.Key[KEY_INPUT_F1] == 1){
+			Reset();
+			StopSoundMem(Sound.Mizugame);
+			PlaySoundMem(Sound.Mizugame, DX_PLAYTYPE_BACK);
+			Status.StartTime = GetNowCount();
+		}
+
 
 		Struct(Global.MouseX, Global.MouseY);
 

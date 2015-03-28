@@ -33,7 +33,7 @@ void Game()
 	DrawGraph(Gp.Score_X + Gs.Score_X + Gs.Number_X * 5, Gp.Score_Y, Graph.Number[Player.Score % 10], TRUE);
 
 	DrawGraph(Gp.Combo_X, Gp.Combo_Y, Graph.Combo, TRUE);
-//	DrawGraph(Gp.Combo_X + Gs.Combo_X + Gs.Number_mX, Gp.Combo_Y, Graph.Number_m[Player.Combo / 1000], TRUE);
+	DrawGraph(Gp.Combo_X + Gs.Combo_X + Gs.Number_mX, Gp.Combo_Y, Graph.Number_m[Player.Combo / 1000], TRUE);
 	DrawGraph(Gp.Combo_X + Gs.Combo_X + Gs.Number_mX * 1, Gp.Combo_Y, Graph.Number_m[(Player.Combo % 1000) / 100], TRUE);
 	DrawGraph(Gp.Combo_X + Gs.Combo_X + Gs.Number_mX * 2, Gp.Combo_Y, Graph.Number_m[(Player.Combo % 100) / 10], TRUE);
 	DrawGraph(Gp.Combo_X + Gs.Combo_X + Gs.Number_mX * 3, Gp.Combo_Y, Graph.Number_m[Player.Combo % 10], TRUE);
@@ -102,7 +102,7 @@ void Game()
 						(Note[i].mill >= 95 &&
 						(Status.ElapsedTime / 60000 == Note[i].min
 						&& Status.ElapsedTime % 60000 / 1000 == Note[i].sec + 1
-						&& (Status.ElapsedTime - 6) % 1000 / 10 >= Note[i].mill)
+						&& (Status.ElapsedTime - 5) % 1000 / 10 >= Note[i].mill)
 						)
 						)
 
@@ -110,7 +110,7 @@ void Game()
 						Cp[j].flag = 1;
 						Cp[j].button = Note[i].button - 1;
 						Bp[Cp[j].button].num++ ;
-
+						/*
 						if (Bp[Cp[j].button].num > 1){
 							Cp[j].flag = 0;
 							Cp[j].button = 0;
@@ -126,7 +126,7 @@ void Game()
 								else Bp[Cp[j].button].num++;
 							}
 						}
-
+						*/
 						Note[i].flag++;
 						break;
 					}
