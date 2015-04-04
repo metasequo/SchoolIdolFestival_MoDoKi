@@ -19,7 +19,6 @@ void Select()
 	DrawBox(0, 0, Screen_X, Screen_Y, Status.White, TRUE);
 
 	DrawGraph(Gp.Select_X, Gp.Select_Y, Graph.Select, TRUE);
-//	PlaySoundMem(Music[Global.TargetMusic].MusicData, DX_PLAYTYPE_BACK);
 	DrawExtendGraph(Gp.CentrJacket_X, Gp.CentrJacket_Y, Gp.CentrJacket_X + 500, Gp.CentrJacket_Y + 500, Music[Global.TargetMusic].Jacket, TRUE);
 
 	if (CheckSoundMem(Music[Global.TargetMusic].MusicData) != 1){

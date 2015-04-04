@@ -4,7 +4,7 @@
 
 int BoxHit(int Al, int Ar, int At, int Au, int Bl, int Br, int Bt, int Bu);
 int CircleHit(float Ax, float Ay, float Ar, float Bx, float By, float Br);
-int Center(int GraphSize, char Tipe);
+int Center(int GraphSize, char Type);
 void MovePoint(int Before_X, int Before_Y, int After_X, int After_Y, int *Move_X, int *Move_Y, int Frame);
 int UpdateKey(char Key []);
 void DrawCirclGraph(int X, int Y, int Graph, int GsX, int GsY);

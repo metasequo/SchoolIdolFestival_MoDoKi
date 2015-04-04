@@ -28,9 +28,9 @@ int CircleHit(float Ax, float Ay, float Ar, float Bx, float By, float Br){
 	return Flag;
 }
 
-int Center(int GraphSize, char Tipe){
-	if (Tipe == 'X')	return((Screen_X - GraphSize) / 2);
-	if (Tipe == 'Y')	return((Screen_Y - GraphSize) / 2);
+int Center(int GraphSize, char Type){
+	if (Type == 'X')	return((Screen_X - GraphSize) / 2);
+	if (Type == 'Y')	return((Screen_Y - GraphSize) / 2);
 	else return 0;
 }
 
@@ -440,7 +440,7 @@ void Format(){
 	Graph.Bad = LoadGraph("Graph/Bad.png");
 	Graph.Miss = LoadGraph("Graph/Miss.png");
 	Graph.Gameover = LoadGraph("Graph/Gameover.png");
-	Graph.Scare = LoadGraph("Graph/Score.png");
+	Graph.Score = LoadGraph("Graph/Score.png");
 	Graph.Library = LoadGraph("Graph/library.jpg");
 	Graph.Fade = LoadGraph("Graph/Fade_All.png");
 	LoadDivGraph("Graph/Technyan_icon.png", 9, 3, 3, 200, 200, Graph.Technyan);
@@ -448,6 +448,7 @@ void Format(){
 	Graph.Title = LoadGraph("Graph/Title.png");
 	Graph.Start = LoadGraph("Graph/Start.png");
 	Graph.Select = LoadGraph("Graph/Select.png");
+	Graph.Result = LoadGraph("Graph/Result.png");
 	Graph.Button_Red = LoadGraph("Graph/button_red.png");
 	Graph.Button_Blue = LoadGraph("Graph/button_blue.png");
 	Graph.Button_Green = LoadGraph("Graph/button_green.png");
@@ -473,12 +474,13 @@ void Format(){
 	GetGraphSize(Graph.Bad, &Gs.Bad_X, &Gs.Bad_Y);
 	GetGraphSize(Graph.Miss, &Gs.Miss_X, &Gs.Miss_Y);
 	GetGraphSize(Graph.Gameover, &Gs.Gameover_X, &Gs.Gameover_Y);
-	GetGraphSize(Graph.Scare, &Gs.Score_X, &Gs.Score_Y);
+	GetGraphSize(Graph.Score, &Gs.Score_X, &Gs.Score_Y);
 	Gs.Radius = Gs.Circle_X / 2;
 	GetGraphSize(Graph.Technyan[6], &Gs.Technyan_X, &Gs.Technyan_Y);
 	GetGraphSize(Graph.Title, &Gs.Title_X, &Gs.Title_Y);
 	GetGraphSize(Graph.Start, &Gs.Start_X, &Gs.Start_Y);
 	GetGraphSize(Graph.Select, &Gs.Select_X, &Gs.Select_Y);
+	GetGraphSize(Graph.Result, &Gs.Result_X, &Gs.Result_Y);
 	GetGraphSize(Graph.Button_Red, &Gs.Button_X, &Gs.Button_Y);
 	GetGraphSize(Graph.Medal_Gold, &Gs.Medal_X, &Gs.Medal_Y);
 	GetGraphSize(Graph.Easy, &Gs.Easy_X, &Gs.Easy_Y);
@@ -583,6 +585,7 @@ void Reset(){
 	Flag.Title = 1;
 	Flag.Select = 0;
 	Flag.Game = 0;
+	Flag.Result = 0;
 
 	Player.Score = 0;
 	Player.Combo = 0;
@@ -592,6 +595,7 @@ void Reset(){
 	Player.Good = 0;
 	Player.Bad = 0;
 	Player.Miss = 0;
+	Player.MostCombo = 0;
 	Player.jPerfect = 50;
 	Player.jGreat = 100;
 	Player.jGood = 150;
@@ -601,6 +605,7 @@ void Reset(){
 
 	Global.TargetDiff = 1;
 	Global.Simultaneously = 0;
+	Global.ResultConter = 0;
 
 	Status.BPM = 80;
 
@@ -615,6 +620,8 @@ void Reset(){
 	Gp.Start_Y = Gp.Title_Y + Gs.Title_Y + Gs.Start_Y * 2;
 	Gp.Select_X = Center(Gs.Select_X, 'X');
 	Gp.Select_Y = 100;
+	Gp.Result_X = Center(Gs.Result_X, 'X');
+	Gp.Result_Y = 100;
 
 
 }

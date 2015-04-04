@@ -90,13 +90,18 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 			Game();
 		}
 
-		if (Global.Key[KEY_INPUT_F1] == 1){
-			Reset();
-			Status.StartTime = GetNowCount();
+		//Result
+		if (Flag.Game == 0 && Flag.Result != 0){
+			Result();
 		}
 
+		//if (Global.Key[KEY_INPUT_F1] == 1){
+		//	Reset();
+		//	Status.StartTime = GetNowCount();
+		//}
 
-		Struct(Global.MouseX, Global.MouseY);
+
+//		Struct(Global.MouseX, Global.MouseY);
 
 		//裏画面描画
 		ScreenFlip();

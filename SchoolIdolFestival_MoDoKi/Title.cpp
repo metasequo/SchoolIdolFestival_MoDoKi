@@ -23,7 +23,6 @@ void Title()
 		Flag.Title++;
 	}
 
-
 	DrawGraph(Gp.Title_technyan_X, Gp.Title_technyan_Y, Graph.Title_technyan, TRUE);
 	DrawGraph(Gp.Title_X, Gp.Title_Y, Graph.Title, TRUE);
 

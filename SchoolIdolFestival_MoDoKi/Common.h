@@ -23,12 +23,12 @@ typedef struct tagGRAPH
 	int Number[10], Number_m[10], Combo;
 	int Perfect, Great, Good, Bad, Miss;
 	int Gameover;
-	int Scare;
+	int Score;
 	int Library;
 	int Fade;
 	int Technyan[9];
 	int Title_technyan;
-	int Title, Start, Select;
+	int Title, Start, Select, Result;
 	int Button_Red, Button_Blue, Button_Green, Button_Yellow, Button_White;
 	int Medal_Gold, Medal_Silver, Medal_Bronze;
 	int Easy, Normal, Hard, Diff[3];
@@ -48,6 +48,7 @@ typedef struct tagGRAPHSIZE
 	int Radius;
 	int Technyan_X, Technyan_Y;
 	int Title_X, Title_Y, Start_X, Start_Y, Select_X, Select_Y;
+	int Result_X, Result_Y;
 	int Button_X, Button_Y;
 	int Medal_X, Medal_Y;
 	int CentrJacket_X, CentrJacket_Y;
@@ -67,6 +68,7 @@ typedef struct tagGRAPHPOINT
 	int Score_X, Score_Y;
 	int Title_technyan_X, Title_technyan_Y;
 	int Title_X, Title_Y, Start_X, Start_Y, Select_X, Select_Y;
+	int Result_X, Result_Y;
 	int CentrJacket_X, CentrJacket_Y;
 	int LeftJacket_X, LeftJacket_Y;
 	int RightJacket_X, RightJacket_Y;
@@ -101,7 +103,7 @@ typedef struct tagNOTE
 
 typedef struct tagFLAG
 {
-	int Title, Select, Game, End;
+	int Title, Select, Game, Result;
 	int Click;
 } FLAG;
 
@@ -110,7 +112,7 @@ typedef struct tagPLAYER
 	int Music, Level, Notes;
 	int pMin, pSec, pMill;
 	int sMin, sSec, sMill;
-	int Score, Combo, HP;
+	int Score, Combo, MostCombo, HP;
 	int Perfect, Great, Good, Bad, Miss;
 	int jPerfect, jGreat, jGood, jBad, jMiss;
 	char MusicName[64];
@@ -134,6 +136,7 @@ typedef struct tagGLOBAL
 	int MusicCnt;
 	int StartCounter;
 	int SelectCounter;
+	int ResultConter;
 	int TargetMusic;
 	int TargetDiff;
 	int TechRand[9];
@@ -157,7 +160,7 @@ typedef struct tagMUSIC
 // Function.cpp //
 int BoxHit(int Al, int Ar, int At, int Au, int Bl, int Br, int Bt, int Bu);
 int CircleHit(float Ax, float Ay, float Ar, float Bx, float By, float Br);
-int Center(int GraphSize, char Tipe);
+int Center(int GraphSize, char Type);
 void MovePoint(int Before_X, int Before_Y, int After_X, int After_Y, int *Move_X, int *Move_Y, int Frame);
 int UpdateKey(char Key []);
 void DrawCirclGraph(int X, int Y, int Graph, int GsX, int GsY);
@@ -185,7 +188,11 @@ void TitleToSelect();
 void Select();
 void MusicConfirm();
 
+// Result.cpp //
+void Result();
+
 #include "Function.h"
 #include "Game.h"
 #include "Title.h"
 #include "Select.h"
+#include "Result.h"

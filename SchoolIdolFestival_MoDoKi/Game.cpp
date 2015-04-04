@@ -25,7 +25,7 @@ void Game()
 	DrawCirclExtendGraph(Gp.Onpu_X, Gp.Onpu_Y, Graph.Onpu, Gs.Onpu_X / 2);
 	DrawCirclExtendGraph(Gp.Circle_X, Gp.Circle_Y, Graph.Circle_Blue, Gs.Circle_X / 2);
 
-//	DrawGraph(Gp.Score_X, Gp.Score_Y, Graph.Scare, TRUE);
+	DrawGraph(Gp.Score_X, Gp.Score_Y, Graph.Score, TRUE);
 	DrawGraph(Gp.Score_X + Gs.Score_X + Gs.Number_X * 1, Gp.Score_Y, Graph.Number[Player.Score / 10000], TRUE);
 	DrawGraph(Gp.Score_X + Gs.Score_X + Gs.Number_X * 2, Gp.Score_Y, Graph.Number[(Player.Score % 10000) / 1000], TRUE);
 	DrawGraph(Gp.Score_X + Gs.Score_X + Gs.Number_X * 3, Gp.Score_Y, Graph.Number[(Player.Score % 1000) / 100], TRUE);
@@ -278,32 +278,39 @@ void Game()
 				PlaySoundMem(Sound.pefect, DX_PLAYTYPE_BACK);
 				DrawGraph(Gp.Perfect_X, Gp.Perfect_Y, Graph.Perfect, TRUE);
 				Player.Combo++;
+				Player.Perfect++;
 				Player.Score += ScoreCalcu(Cp[i].judge, Player.Combo);
 				break;
 			case 2:
 				PlaySoundMem(Sound.great, DX_PLAYTYPE_BACK);
 				DrawGraph(Gp.Great_X, Gp.Great_Y, Graph.Great, TRUE);
 				Player.Combo++;
+				Player.Great++;
 				Player.Score += ScoreCalcu(Cp[i].judge, Player.Combo);
 				break;
 			case 3:
 				PlaySoundMem(Sound.great, DX_PLAYTYPE_BACK);
 				DrawGraph(Gp.Good_X, Gp.Good_Y, Graph.Good, TRUE);
-				Player.Score += ScoreCalcu(Cp[i].judge, Player.Combo);
 				Player.Combo = 0;
+				Player.Good++;
+				Player.Score += ScoreCalcu(Cp[i].judge, Player.Combo);
 				break;
 			case 4:
 				DrawGraph(Gp.Bad_X, Gp.Bad_Y, Graph.Bad, TRUE);
-				Player.Score += ScoreCalcu(Cp[i].judge, Player.Combo);
 				Player.Combo = 0;
+				Player.Bad++;
+				Player.Score += ScoreCalcu(Cp[i].judge, Player.Combo);
 				Player.HP--;
 				break;
 			case 5:
 				DrawGraph(Gp.Miss_X, Gp.Miss_Y, Graph.Miss, TRUE);
-				Player.Score += ScoreCalcu(Cp[i].judge, Player.Combo);
 				Player.Combo = 0;
-				Player.HP--;
+				Player.Miss++;
+				Player.Score += ScoreCalcu(Cp[i].judge, Player.Combo);Player.HP--;
 				break;
+			}
+			if (Player.MostCombo < Player.Combo){
+				Player.MostCombo = Player.Combo;
 			}
 			Bp[Cp[i].button].flag = 0;
 			Bp[Cp[i].button].num--;
@@ -340,9 +347,10 @@ void Game()
 	*/
 	}
 
-	if (Player.sMin * 60000 + Player.sSec * 1000 + Player.sMill < Status.ElapsedTime - 2500){
+	if (Player.sMin * 60000 + Player.sSec * 1000 + Player.sMill < Status.ElapsedTime - 2000){
 		StopSoundMem(Music[Global.TargetMusic].MusicData);
-		Reset();
 		Status.StartTime = 0;
+		Flag.Game = 0;
+		Flag.Result++;
 	}
 }
