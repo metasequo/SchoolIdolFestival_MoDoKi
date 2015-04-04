@@ -6,7 +6,7 @@ extern GRAPHSIZE Gs;
 extern SOUND Sound;
 extern GRAPHPOINT Gp;
 extern BUTTONPOINT Bp[9];
-extern CIRCLEPOINT Cp[128];
+extern CIRCLEPOINT Cp[CircleNum];
 extern NOTE Note[800];
 extern FLAG Flag;
 extern PLAYER Player;

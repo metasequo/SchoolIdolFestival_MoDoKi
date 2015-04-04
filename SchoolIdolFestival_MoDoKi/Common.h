@@ -13,6 +13,7 @@
 #endif
 
 #define MusicCntMax 256
+#define CircleNum 128
 
 //構造体
 typedef struct tagGRAPH
@@ -163,9 +164,11 @@ void DrawCirclGraph(int X, int Y, int Graph, int GsX, int GsY);
 void DrawCirclExtendGraph(int X, int Y, int Graph, int Radius);
 int Pythagorean(int Ax, int Ay, int Bx, int By);
 int NoteHit(int circle, int button);
+void CircleShift(); 
 int ScoreCalcu(int judge, int Combo);
 void ListRead();
 void ChartRead(char *MusicName, char Type);
+void CheckAllMusic();
 void Simultaneous(int num, int ButtonNum);
 void Struct(int MouseX, int MouseY);
 void Format();

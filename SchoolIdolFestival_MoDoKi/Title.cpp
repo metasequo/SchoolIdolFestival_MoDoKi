@@ -6,7 +6,7 @@ extern GRAPHSIZE Gs;
 extern SOUND Sound;
 extern GRAPHPOINT Gp;
 extern BUTTONPOINT Bp[9];
-extern CIRCLEPOINT Cp[128];
+extern CIRCLEPOINT Cp[CircleNum];
 extern NOTE Note[800];
 extern FLAG Flag;
 extern PLAYER Player;
@@ -17,6 +17,12 @@ extern MUSIC Music[MusicCntMax];
 void Title()
 {
 	DrawBox(0, 0, Screen_X, Screen_Y, Status.White, TRUE);
+	if (Flag.Title == 1){
+		CheckAllMusic();
+		PlaySoundMem(Music[Global.TargetMusic].MusicData, DX_PLAYTYPE_LOOP);
+		Flag.Title++;
+	}
+
 
 	DrawGraph(Gp.Title_technyan_X, Gp.Title_technyan_Y, Graph.Title_technyan, TRUE);
 	DrawGraph(Gp.Title_X, Gp.Title_Y, Graph.Title, TRUE);

@@ -6,7 +6,7 @@ extern GRAPHSIZE Gs;
 extern SOUND Sound;
 extern GRAPHPOINT Gp;
 extern BUTTONPOINT Bp[9];
-extern CIRCLEPOINT Cp[128];
+extern CIRCLEPOINT Cp[CircleNum];
 extern NOTE Note[800];
 extern FLAG Flag;
 extern PLAYER Player;
@@ -58,7 +58,7 @@ void DrawCirclExtendGraph(int X, int Y, int Graph, int Radius){
 }
 
 int Pythagorean(int Ax, int Ay, int Bx, int By){
-	return sqrt(pow(((double) Ax - (double) Bx), 2) + pow(((double) Ay - (double) By), 2));
+	return (int)sqrt(pow(((double) Ax - (double) Bx), 2) + pow(((double) Ay - (double) By), 2));
 }
 
 int NoteHit(int circle, int button){
@@ -74,7 +74,26 @@ int NoteHit(int circle, int button){
 
 	for (i = 0; i < 4; i++)
 		if (Z <= judge[i])	return i + 1;
-	if (Z > judge[4] && Z > judge[4])	return 5;
+	return 5;
+}
+
+void CircleShift(){
+	int i;
+
+	for (i = 0; i < CircleNum - 1; i++){
+		//if (Cp[i].flag == 0)
+		{
+			Cp[i].X = Cp[i + 1].X;
+			Cp[i].Y = Cp[i + 1].Y;
+			Cp[i].MoveX = Cp[i + 1].MoveX;
+			Cp[i].MoveY = Cp[i + 1].MoveY;
+			Cp[i].Radius = Cp[i + 1].Radius;
+			Cp[i].button = Cp[i + 1].button;
+			Cp[i].frame = Cp[i + 1].frame;
+			Cp[i].flag = Cp[i + 1].flag;
+			Cp[i].judge = Cp[i + 1].judge;
+		}
+	}
 }
 
 int ScoreCalcu(int judge, int Combo){
@@ -110,13 +129,12 @@ int ScoreCalcu(int judge, int Combo){
 	else if (Combo <= 180)	score *= 1.45;
 	else score *= 1.5;
 
-	return score;
+	return (int)score;
 }
 
 void ListRead()
 {
 	int i = 0, List;
-	int len;
 	char read[256], *token, *nexttoken;
 	char cut [] = "[:.]; \n";
 	char Add [] = "Chart/MusicList.txt";
@@ -141,7 +159,7 @@ void ListRead()
 }
 
 void ChartRead(char *MusicName, char Type){
-	int i, j,  Chart, fullnotes, times[8];
+	int i, j,  Chart;
 	char read[256], *token, *nexttoken;
 	char cut [] = "[:.]; \n";
 	char Add[64];
@@ -265,6 +283,14 @@ void ChartRead(char *MusicName, char Type){
 	FileRead_close(Chart);
 }
 
+void CheckAllMusic(){
+	for (int i = 0; i < Global.MusicCnt; i++){
+		if (CheckSoundMem(Music[i].MusicData)){
+			StopSoundMem(Music[i].MusicData);
+		}
+	}
+}
+
 void Simultaneous(int num, int ButtonNum){
 	int j = 0;
 	for (int cnt = 1; cnt <= Global.Simultaneously; cnt++){
@@ -315,7 +341,7 @@ void Struct(int MouseX, int MouseY){	// 表示する文字列を作成
 
 	DrawString(0, 15, StrBuf, GetColor(0, 0, 0));
 
-	for (i = 0; i < 128; i++){
+	for (i = 0; i < CircleNum; i++){
 		if (Cp[i].flag != 0){
 			lstrcpy(StrBuf, "judge ");
 			_itoa_s(i, StrBuf2, 10);
@@ -367,7 +393,7 @@ void Struct(int MouseX, int MouseY){	// 表示する文字列を作成
 		}
 	}
 
-	
+	/*
 	for (i = 0; i < Global.MusicCnt; i++){
 		lstrcpy(StrBuf, "Name :");
 		strcpy_s(StrBuf2, Music[i].MusicName);
@@ -377,13 +403,12 @@ void Struct(int MouseX, int MouseY){	// 表示する文字列を作成
 		lstrcat(StrBuf, StrBuf2);
 		DrawString(0, 60 + i * 15, StrBuf, GetColor(0, 0, 0));
 	}
-	
+	*/
 
 }
 
 void Format(){
-	int i, j;
-	double X, Y;
+	int i;
 
 	// 色の値を取得
 	Status.White = GetColor(239, 239, 239);
@@ -534,13 +559,12 @@ void Format(){
 	}
 
 	Reset();
-
 }
 
 void Reset(){
-	int i, j;
+	int i;
 
-	for (i = 0; i < 128; i++){
+	for (i = 0; i < CircleNum; i++){
 		Cp[i].flag = 0;
 		Cp[i].frame = 0;
 		Cp[i].judge = 0;

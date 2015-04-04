@@ -6,7 +6,7 @@ GRAPHSIZE Gs;
 SOUND Sound;
 GRAPHPOINT Gp;
 BUTTONPOINT Bp[9];
-CIRCLEPOINT Cp[128];
+CIRCLEPOINT Cp[CircleNum];
 NOTE Note[800];
 FLAG Flag;
 PLAYER Player;
@@ -69,11 +69,11 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 //		Struct(Global.MouseX, Global.MouseY);
 
 		//Title
-		if (Flag.Title == 1 && Flag.Select == 0 && Flag.Game == 0){
+		if ((Flag.Title == 1 || Flag.Title == 2) && Flag.Select == 0 && Flag.Game == 0){
 			Title();
 		}
 		
-		if (Flag.Title == 2 && Flag.Select == 1 && Flag.Game == 0){
+		if (Flag.Title == 3 && Flag.Select == 1 && Flag.Game == 0){
 			TitleToSelect();
 		}
 
@@ -92,8 +92,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
 		if (Global.Key[KEY_INPUT_F1] == 1){
 			Reset();
-			StopSoundMem(Sound.Mizugame);
-			PlaySoundMem(Sound.Mizugame, DX_PLAYTYPE_BACK);
 			Status.StartTime = GetNowCount();
 		}
 
